@@ -267,3 +267,24 @@ test_that("don't reload after initial load", {
   mockery::expect_called(mock_load_all, 0)
   mockery::expect_called(mock_load_ns, 1)
 })
+
+
+test_that("can run old orderly sources directly", {
+  unload_orderly2_support()
+  withr::defer(unload_orderly2_support())
+  path <- suppressMessages(orderly_example())
+  writeLines(
+    'minimum_orderly_version: "1.99.0"',
+    file.path(path, "orderly_config.yml"))
+
+  filename <- file.path(path, "src", "data", "data.R")
+  txt <- readLines(filename)
+  writeLines(sub("^orderly_", "orderly2::orderly_", txt),
+             filename)
+  id <- orderly_run_quietly("data", root = path)
+  expect_true("orderly2" %in% loadedNamespaces())
+  expect_true(cache$orderly2_support_is_loaded)
+  meta <- orderly_metadata(id, root = path)
+  expect_true("orderly" %in% meta$custom$orderly$session$packages$package)
+  expect_true("orderly2" %in% meta$custom$orderly$session$packages$package)
+})
