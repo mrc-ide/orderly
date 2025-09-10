@@ -141,4 +141,81 @@ install.packages(
 
 and you can work with the sources or outputs as you wish.  You will need to replace any namespaced calls `orderly::fn` with `orderly1::fn` (these might appear in your documentation, helper scripts, or similar).
 
-If you try to use `orderly` with version 1 sources, then you will get an error message that will direct you to this document to decide the best way forward.
+If you try to use `orderly` (>= 1.99.82) with an `orderly1` project, then you will get an error message that will direct you to this document to decide the best way forward.
+
+# Users of `orderly2`
+
+Users of the `orderly2` package have a little work to do; that package was the precursor to this one (`orderly2` version 1.99.81 and `orderly` 1.99.82 are functionally the same but with references to `orderly2` replaced with `orderly`).  You will likely have references to `orderly2` remaining in your code that will not necessarily work with the new version without a little work.
+
+First, you will want to upgrade from `orderly2` to the most recent version (`r packageVersion("orderly")`) of `orderly` by uninstalling `orderly2`:
+
+```r
+remove.packages("orderly2")
+```
+
+and installing `orderly`:
+
+```r
+install.packages(
+  "orderly",
+  repos = c("https://mrc-ide.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+As always, please do this in a fresh session.
+
+In the simplest cases there is nothing more to do!
+
+Most users will have references to `orderly2` in their code though, for example within an orderly source report you might have something like
+
+```r
+orderly2::orderly_parameter(...)
+```
+
+which needs updating to use `orderly`.  A few alternative solutions are available:
+
+* migrate your source code
+* use the built-in compatibility support
+* install the `orderly2` compatibility package
+
+## Migrate your source code
+
+The best solution to use if you are happy modifying your source code.  We require a clean clone of your repository (`git status` should report no modified or unknown files).  You can then run:
+
+```r
+orderly_migrate_source_from_orderly2()
+```
+
+which will rewrite some simple references to `orderly2` for you.  In particular it will replace
+
+* `orderly2::fn` with `orderly::fn`
+* `library(orderly2)` with `library(orderly)`
+
+It will also update the minimum required version in the `orderly_config.yml` to at least `r orderly:::ORDERLY_MINIMUM_VERSION`
+
+Review the changes that this function has made by running `git diff`, and if happy commit them.
+
+You might like to check for other missed occurrences of `orderly2`, by running something like
+
+```
+grep --exclude-dir .git -r orderly2 .
+```
+
+which will show you remaining occurrences in files that we do not scan or change.  Run this in the shell, not from R!
+
+## Use the built-in compatibility support
+
+Sometimes you will not be able to migrate the source code (e.g., working with an old project, or if you are working on a feature branch ahead of doing the migration).  In this case, so long as you have the new version of `orderly` installed along with [`pkgload`](https://pkgload.r-lib.org) (which is a dependency of `devtools`) then we will automatically load a compatibility package that will interpret all references to `orderly2` as references to `orderly` on the fly.
+
+We will retain this support within `orderly` for a few version, but will add a warning where it is used soon to encourage you to migrate.
+
+## Install the `orderly2` compatibility package
+
+Run
+
+```r
+install.packages(
+  "orderly2",
+  repos = c("https://mrc-ide.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+to install a package that will interpret references to `orderly2` as references to `orderly` on the fly.  This solution will be available for the foreseeable future.
