@@ -160,6 +160,8 @@ orderly_read_expr <- function(e, nms) {
     if (nm %in% nms) {
       return(list(is_orderly = TRUE, name = nm, expr = e))
     }
+  } else if (is_library_orderly2(e)) {
+    load_orderly2_support()
   } else {
     if (is.recursive(e) && is.name(e[[1]])) {
       nm <- deparse(e[[1]])
@@ -173,4 +175,10 @@ orderly_read_expr <- function(e, nms) {
 
 
 orderly_validate <- function(dat, path) {
+}
+
+
+is_library_orderly2 <- function(e) {
+  rlang::is_call(e, "library", 1) &&
+    is.symbol(e[[2]]) && deparse(e[[2]]) == "orderly2"
 }

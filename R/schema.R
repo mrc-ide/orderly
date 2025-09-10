@@ -1,5 +1,3 @@
-cache <- new.env(parent = emptyenv())
-
 outpack_schema_version <- function() {
   if (is.null(cache$schema_version)) {
     path <- orderly_file("schema/outpack/metadata.json")
