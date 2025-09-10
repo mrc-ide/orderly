@@ -1,0 +1,16 @@
+#!/usr/bin/env Rscript
+
+# Ensure this script is run from the 'orderly' root:
+stopifnot(read.dcf("DESCRIPTION", "Package") == "orderly")
+
+# We will not have to rerun this very often, if ever again, because
+# people using 'orderly2::fn' in their code won't expect new orderly1
+# functions to appear.  Nonetheless, the file *was* automatically
+# generated so we might as well save the script
+nms <- getNamespaceExports("orderly")
+
+fs::dir_create("inst/orderly2/R")
+fmt <- "#' @importFrom orderly %s\n#' @export\norderly::%s"
+writeLines(paste0(paste(sprintf(fmt, nms, nms), collapse = "\n\n"), "\nNULL"),
+           "inst/orderly2/R/zzz.R")
+roxygen2::roxygenise("inst/orderly2")
