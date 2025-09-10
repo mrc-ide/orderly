@@ -191,7 +191,7 @@ test_that("load library version if orderly2 installed and correct", {
   mock_load_ns <- mockery::mock()
   mock_load_all <- mockery::mock()
   mockery::stub(load_orderly2_support, "isNamespaceLoaded", FALSE)
-  mockery::stub(load_orderly2_support, "packageVersion", "1.99.99")
+  mockery::stub(load_orderly2_support, "utils::packageVersion", "1.99.99")
   mockery::stub(load_orderly2_support, "load_namespace", mock_load_ns)
   mockery::stub(load_orderly2_support, "pkgload::load_all", mock_load_all)
 
@@ -213,7 +213,7 @@ test_that("load bundled version if orderly2 installed but incorrect", {
   mock_load_ns <- mockery::mock()
   mock_load_all <- mockery::mock()
   mockery::stub(load_orderly2_support, "isNamespaceLoaded", FALSE)
-  mockery::stub(load_orderly2_support, "packageVersion", "1.99.98")
+  mockery::stub(load_orderly2_support, "utils::packageVersion", "1.99.98")
   mockery::stub(load_orderly2_support, "load_namespace", mock_load_ns)
   mockery::stub(load_orderly2_support, "pkgload::load_all", mock_load_all)
 
@@ -257,7 +257,7 @@ test_that("don't reload after initial load", {
   mock_load_ns <- mockery::mock()
   mock_load_all <- mockery::mock()
   mockery::stub(load_orderly2_support, "isNamespaceLoaded", FALSE)
-  mockery::stub(load_orderly2_support, "packageVersion", "1.99.99")
+  mockery::stub(load_orderly2_support, "utils::packageVersion", "1.99.99")
   mockery::stub(load_orderly2_support, "load_namespace", mock_load_ns)
   mockery::stub(load_orderly2_support, "pkgload::load_all", mock_load_all)
 
