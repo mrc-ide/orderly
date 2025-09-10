@@ -136,7 +136,7 @@ Install `orderly1` with:
 ```
 install.packages(
   "orderly1",
-  repos = c("https://vimc.r-universe.dev", "https://cloud.r-project.org"))
+  repos = c("https://mrc-ide.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
 and you can work with the sources or outputs as you wish.  You will need to replace any namespaced calls `orderly::fn` with `orderly1::fn` (these might appear in your documentation, helper scripts, or similar).
