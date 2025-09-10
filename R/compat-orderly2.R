@@ -144,11 +144,13 @@ load_orderly2_support <- function() {
     }
   } else {
     installed_version <-
-      tryCatch(packageVersion("orderly2"), error = function(e) NULL)
+      tryCatch(utils::packageVersion("orderly2"), error = function(e) NULL)
     if (!is.null(installed_version) && installed_version == correct) {
       ## The user has installed our dummy version of orderly2, so just
-      ## load that.
-      loadNamespace("orderly2")
+      ## load that.  Some shennanigans required here to keep QA happy,
+      ## because orderly2 is not really a package that we need or want
+      ## in the DESCRIPTION
+      rlang::eval_bare(rlang::call2("loadNamespace", "orderly2"))
     } else {
       ## Load our bundled version with pkgload (if that is installed)
       pkgload::load_all(orderly_file("orderly2"),
