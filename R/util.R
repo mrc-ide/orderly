@@ -856,3 +856,8 @@ find_calling_env <- function(fn) {
   i <- which(vlapply(calls, function(x) rlang::is_call(x, fn)))
   if (length(i) == 1) sys.frame(i) else globalenv()
 }
+
+
+load_namespace <- function(name) {
+  rlang::eval_bare(rlang::call2("loadNamespace", name))
+}

@@ -150,7 +150,7 @@ load_orderly2_support <- function() {
       ## load that.  Some shennanigans required here to keep QA happy,
       ## because orderly2 is not really a package that we need or want
       ## in the DESCRIPTION
-      rlang::eval_bare(rlang::call2("loadNamespace", "orderly2"))
+      load_namespace("orderly2")
     } else {
       ## Load our bundled version with pkgload (if that is installed)
       pkgload::load_all(orderly_file("orderly2"),
