@@ -281,7 +281,8 @@ test_that("can run old orderly sources directly", {
   txt <- readLines(filename)
   writeLines(sub("^orderly_", "orderly2::orderly_", txt),
              filename)
-  id <- orderly_run_quietly("data", root = path)
+  envir <- new.env()
+  id <- orderly_run_quietly("data", root = path, envir = envir)
   expect_true("orderly2" %in% loadedNamespaces())
   expect_true(cache$orderly2_support_is_loaded)
   meta <- orderly_metadata(id, root = path)
