@@ -206,7 +206,7 @@ which will show you remaining occurrences in files that we do not scan or change
 
 Sometimes you will not be able to migrate the source code (e.g., working with an old project, or if you are working on a feature branch ahead of doing the migration).  In this case, so long as you have the new version of `orderly` installed along with [`pkgload`](https://pkgload.r-lib.org) (which is a dependency of `devtools`) then we will automatically load a compatibility package that will interpret all references to `orderly2` as references to `orderly` on the fly.
 
-We will retain this support within `orderly` for a few version, but will add a warning where it is used soon to encourage you to migrate.
+We will retain this support within `orderly` for a few versions, but will add a warning where it is used soon to encourage you to migrate.
 
 ## Install the `orderly2` compatibility package
 
