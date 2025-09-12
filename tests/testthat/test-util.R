@@ -461,6 +461,7 @@ test_that("parse_json is not confused by ambiguity", {
 
 
 test_that("parse_json includes file path in its errors", {
+  skip_if_jsonlite_changes_error_messages("bad json", "lexical error")
   f <- file.path(withr::local_tempdir(), "contents.json")
   writeLines("bad json", f)
   expect_error(parse_json(file(f)),
@@ -469,6 +470,7 @@ test_that("parse_json includes file path in its errors", {
 
 
 test_that("parse_json includes name argument in its errors", {
+  skip_if_jsonlite_changes_error_messages("bad json", "lexical error")
   expect_error(parse_json("bad json", name = "my file"),
                "Error while reading my file.*lexical error")
 })
@@ -665,4 +667,15 @@ test_that("replace_ragged with an empty result preserves the input's type", {
   expect_vector(result, ptype = numeric(), size = 0)
   result <- replace_ragged("foo", 1, list(numeric(0)))
   expect_vector(result, ptype = character(), size = 0)
+})
+
+
+test_that("can load namespaces if required", {
+  skip_if_not_installed("mockery")
+  mock_eval <- mockery::mock()
+  mockery::stub(load_namespace, "rlang::eval_bare", mock_eval)
+  load_namespace("foo")
+  mockery::expect_called(mock_eval, 1)
+  expect_equal(mockery::mock_args(mock_eval)[[1]],
+               list(quote(loadNamespace("foo"))))
 })

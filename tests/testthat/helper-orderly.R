@@ -126,3 +126,12 @@ orderly_run_snippet <- function(root, name, expr, ...) {
              file.path(root$path, "src", name, sprintf("%s.R", name)))
   orderly_run_quietly(name, root = root, ...)
 }
+
+
+skip_if_jsonlite_changes_error_messages <- function(doc, pattern) {
+  tryCatch(jsonlite::parse_json(doc), error = function(e) {
+    if (!grepl(pattern, conditionMessage(e))) {
+      testthat::skip("update tests for change in jsonlite error")
+    }
+  })
+}

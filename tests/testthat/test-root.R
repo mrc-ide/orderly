@@ -64,6 +64,17 @@ test_that("can silently detect that git setup is ok", {
 })
 
 
+test_that("don't try and open root if git has been checked", {
+  mock_git_open <- mockery::mock()
+  mockery::stub(root_check_git, "git_open", mock_git_open)
+  root <- create_temporary_root()
+  dir.create(file.path(root$path, ".outpack", "r"))
+  file.create(file.path(root$path, ".outpack", "r", "git_ok"))
+  expect_silent(root_check_git(root, NULL))
+  mockery::expect_called(mock_git_open, 0)
+})
+
+
 test_that("can silently notice that git is not used", {
   root <- create_temporary_root()
   expect_false(file.exists(file.path(root$path, ".outpack", "r", "git_ok")))

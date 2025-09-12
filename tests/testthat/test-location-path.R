@@ -475,3 +475,20 @@ test_that("pull metadata after push", {
   plan <- orderly_location_push("parameter:a == 1", "server", root = client)
   expect_length(orderly_search(location = "server", root = client), 2)
 })
+
+
+test_that("push where no files have changed, only metadata", {
+  client <- create_temporary_root()
+  server <- create_temporary_root(use_file_store = TRUE, path_archive = NULL)
+  orderly_location_add_path("server", path = server$path, root = client)
+
+  id1 <- create_deterministic_packet(client)
+  id2 <- create_deterministic_packet(client)
+
+  orderly_location_push(id1, "server", root = client)
+  withr::local_options(orderly.quiet = FALSE)
+  res <- evaluate_promise(orderly_location_push(id2, "server", root = client))
+  expect_equal(res$result, list(packet_id = id2, files = character()))
+  expect_match(res$messages, "No files needed, all are available at location",
+               all = FALSE)
+})

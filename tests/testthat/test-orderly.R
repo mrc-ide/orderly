@@ -118,3 +118,18 @@ test_that("disallow template arguments", {
     "'template' must be 'NULL' or 'FALSE' for now")
   expect_false(file.exists(file.path(path, "src/foo")))
 })
+
+
+test_that("suggest possible call reordering if unnamed artefact call", {
+  w <- expect_warning(orderly_artefact("foo", "bar"),
+                      "Please use a named argument for the description")
+  expect_match(conditionMessage(w),
+               "Use 'orderly_artefact(..., description = \"foo\")'",
+               fixed = TRUE)
+  w <- expect_warning(
+    orderly_artefact(
+      "A very long description that would be too long to show in the hint",
+      "bar"),
+    "Please use a named argument for the description")
+  expect_false(grepl("Use 'orderly_artefact", conditionMessage(w)))
+})

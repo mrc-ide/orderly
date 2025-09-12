@@ -289,3 +289,21 @@ test_that("can run old orderly sources directly", {
   expect_true("orderly" %in% meta$custom$orderly$session$packages$package)
   expect_true("orderly2" %in% meta$custom$orderly$session$packages$package)
 })
+
+
+test_that("library orderly2 will load orderly support", {
+  skip_if_not_installed("mockery")
+  mock_load <- mockery::mock()
+  mockery::stub(orderly_read_expr, "load_orderly2_support", mock_load)
+
+  expect_equal(
+    orderly_read_expr(quote(library(orderly)), character()),
+    list(is_orderly = FALSE, expr = quote(library(orderly))))
+  mockery::expect_called(mock_load, 0)
+
+  expect_equal(
+    orderly_read_expr(quote(library(orderly2)), character()),
+    list(is_orderly = FALSE, expr = quote(library(orderly2))))
+  mockery::expect_called(mock_load, 1)
+  expect_equal(mockery::mock_args(mock_load)[[1]], list())
+})

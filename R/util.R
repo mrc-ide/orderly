@@ -414,11 +414,10 @@ parse_json <- function(json, ..., name = NULL) {
       if (is.null(name) && inherits(json, "connection")) {
         name <- summary(json)$description
       }
-      if (!is.null(name)) {
-        msg <- "Error while reading {name}"
-      } else {
-        msg <- "Error while reading JSON document"
-      }
+      ## Fallback name that will only happen in the case of an
+      ## unexpected failure:
+      name <- name %||% "JSON document"
+      msg <- "Error while reading {name}"
       cli::cli_abort(
         c(msg, i = "This usually suggests some corruption of the repository"),
         parent = cnd)
