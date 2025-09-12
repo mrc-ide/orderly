@@ -22,8 +22,17 @@ is_assignment <- function(x) {
 
 
 is_orderly_ns_call <- function(x) {
-  is.recursive(x) && is_call(x[[1]], "::") &&
-    as.character(x[[1]][[2]]) == "orderly2"
+  if (is.recursive(x) && is_call(x[[1]], "::")) {
+    ns <- as.character(x[[1]][[2]])
+    if (ns == "orderly") {
+      return(TRUE)
+    }
+    if (ns == "orderly2") {
+      load_orderly2_support()
+      return(TRUE)
+    }
+  }
+  FALSE
 }
 
 
@@ -235,7 +244,7 @@ ignore_errors <- function(expr) {
 
 
 current_orderly_version <- function() {
-  utils::packageVersion("orderly2")
+  utils::packageVersion("orderly")
 }
 
 
@@ -327,8 +336,8 @@ read_string <- function(path) {
 }
 
 
-orderly2_file <- function(path) {
-  system_file(path, package = "orderly2")
+orderly_file <- function(path) {
+  system_file(path, package = "orderly")
 }
 
 
@@ -846,4 +855,9 @@ find_calling_env <- function(fn) {
   calls <- sys.calls()
   i <- which(vlapply(calls, function(x) rlang::is_call(x, fn)))
   if (length(i) == 1) sys.frame(i) else globalenv()
+}
+
+
+load_namespace <- function(name) {
+  rlang::eval_bare(rlang::call2("loadNamespace", name))
 }
