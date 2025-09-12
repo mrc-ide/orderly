@@ -855,6 +855,7 @@ test_that("metadata files match their hash", {
 
 
 test_that("Files in the archive are read-only", {
+  skip_on_cran()
   src <- temp_file()
   fs::dir_create(src)
   writeLines(c(

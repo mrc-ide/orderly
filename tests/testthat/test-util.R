@@ -475,6 +475,7 @@ test_that("parse_json includes name argument in its errors", {
 
 
 describe("copy_files", {
+  skip_on_cran()
   src1 <- withr::local_tempfile()
   src2 <- withr::local_tempfile()
   writeLines("Hello", src1)
