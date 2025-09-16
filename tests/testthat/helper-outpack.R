@@ -184,6 +184,13 @@ forcibly_truncate_file <- function(path) {
   fs::file_chmod(path, permissions)
 }
 
+str_replace_all <- function(x, from, to) {
+  for (i in seq_along(from)) {
+    x <- gsub(from[[i]], to[[i]], x)
+  }
+  x
+}
+
 #' Scrub packets from an output.
 #'
 #' This returns a transformation suitable to be passed to `expect_snapshot`.
@@ -195,6 +202,5 @@ forcibly_truncate_file <- function(path) {
 scrub_packets <- function(...) {
   ids <- c(...)
   replacements <- sprintf("19700101-000000-%08x", seq_along(ids))
-  names(replacements) <- ids
-  function(x) stringr::str_replace_all(x, replacements)
+  function(x) str_replace_all(x, ids, replacements)
 }

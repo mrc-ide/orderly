@@ -50,7 +50,6 @@ Suggests:
     pkgload,
     processx,
     rmarkdown,
-    stringr,
     testthat (>= 3.0.0),
     webfakes
 Config/testthat/edition: 3

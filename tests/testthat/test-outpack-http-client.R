@@ -130,8 +130,6 @@ test_that("handle empty errors", {
 
 
 test_that("can use the client to make requests", {
-  skip_if_not_installed("mockery")
-
   mock <- local_mock_response(json_string("[1,2,3]"))
 
   cl <- outpack_http_client$new("http://example.com")
@@ -145,6 +143,7 @@ test_that("can use the client to make requests", {
 
 
 test_that("can add customization to the client", {
+  skip_if_not_installed("mockery")
   cl <- outpack_http_client$new("http://example.com", function(r) {
     httr2::req_auth_bearer_token(r, "yogi")
   })

@@ -11,6 +11,7 @@
 # the request. Similary, tokens are managed using the `/token/:name` and
 # `/count` endpoints.
 packit_app <- function() {
+  testthat::skip_if_not_installed("webfakes")
   app <- webfakes::new_app()
   app$locals$requests <- list()
   app$locals$tokens <- list()
@@ -62,14 +63,20 @@ packit_app <- function() {
 # across all tests in the file.  We need this to work where webfakes
 # is not available so create a fake webfake (!) that skips tests on
 # use in that case.
-if (requireNamespace("webfakes", quietly = TRUE)) {
-  packit <- webfakes::local_app_process(packit_app())
-} else {
+if (!requireNamespace("webfakes", quietly = TRUE)) {
   packit <- list(
     url = function(...) {
       testthat::skip("webfakes is not installed")
     }
   )
+} else if (!requireNamespace("callr", quietly = TRUE)) {
+  packit <- list(
+    url = function(...) {
+      testthat::skip("callr is not installed")
+    }
+  )
+} else {
+  packit <- webfakes::local_app_process(packit_app())
 }
 
 packit_url <- function(name = "default") {
@@ -195,6 +202,7 @@ test_that("Authentication cache is keyed by server URL", {
 # connect to Packit. The sub-processes are needed to make sure we aren't just
 # hitting the in-memory cache.
 test_that("Authentication cache persists across sessions", {
+  skip_if_not_installed("callr")
   local_oauth_cache()
 
   set_device_flow_token("first-token")
@@ -211,6 +219,7 @@ test_that("Authentication cache persists across sessions", {
 })
 
 test_that("On-disk authentication cache can be disabled", {
+  skip_if_not_installed("callr")
   local_oauth_cache()
 
   set_device_flow_token("first-token")

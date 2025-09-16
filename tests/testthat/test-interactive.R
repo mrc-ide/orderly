@@ -96,6 +96,7 @@ test_that("rstudio API is used to find current editor path", {
 })
 
 test_that("can validate interactive parameters", {
+  skip_if_not_installed("mockery")
   mock_readline <- mockery::mock("TRUE", "100", "1.23", '"string"')
   mockery::stub(get_parameter_interactive, "readline", mock_readline)
   expect_equal(get_parameter_interactive("foo"), TRUE)
@@ -106,6 +107,7 @@ test_that("can validate interactive parameters", {
 
 
 test_that("can prompt for parameter using defaults", {
+  skip_if_not_installed("mockery")
   mock_readline <- mockery::mock("", '"a"')
   mockery::stub(get_parameter_interactive, "readline", mock_readline)
 
@@ -122,6 +124,7 @@ test_that("can prompt for parameter using defaults", {
 
 
 test_that("can error when interactive parameters are invlid", {
+  skip_if_not_installed("mockery")
   mock_readline <- mockery::mock("", "hey ho", "string", "c(1, 2)")
   mockery::stub(get_parameter_interactive, "readline", mock_readline)
   err <- expect_error(
@@ -160,6 +163,7 @@ test_that("error if prompting for parameters in non-interactive session", {
 
 
 test_that("prompt for parameters interactively", {
+  skip_if_not_installed("mockery")
   rlang::local_interactive(TRUE)
   mock_get <- mockery::mock(1, 2, 3)
   testthat::local_mocked_bindings(get_parameter_interactive = mock_get)

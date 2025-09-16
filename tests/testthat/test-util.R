@@ -295,6 +295,8 @@ test_that("can collapse with special last case", {
 
 
 test_that("can gracefully cope with rds save failure", {
+  skip_on_cran()
+  skip_if_not_installed("mockery")
   mock_move <- mockery::mock(stop("some error"), cycle = TRUE)
   mockery::stub(saverds_atomic, "fs::file_move", mock_move)
   tmp <- withr::local_tempdir()

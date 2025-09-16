@@ -35,6 +35,16 @@ inline <- function(x) {
   sprintf("`%s`", format(x))
 }
 
+require_or_quit <- function(name) {
+  for (nm in name) {
+    if (!requireNamespace(nm, quietly = TRUE)) {
+      cli::cli_alert_danger(
+        "Optional package '{nm}' not available, stopping knitr")
+      knitr::knit_exit()
+    }
+  }
+}
+
 knitr::opts_chunk$set(
   collapse = TRUE)
 

@@ -9,6 +9,7 @@ vignette: >
 
 ```{r, include = FALSE}
 source("common.R")
+require_or_quit(c("DBI", "RSQLite", "pkgload"))
 ```
 
 **You may not need to read this: the intended readers are authors of `orderly` plugins, not users of such plugins.**

@@ -1,4 +1,6 @@
 outpack_server <- function(path, timeout = 10) {
+  testthat::skip_on_cran()
+  testthat::skip_if_not_installed("processx")
   outpack_server <- Sys.which("outpack")
   if (!nzchar(outpack_server)) {
     testthat::skip("outpack_server not installed")
