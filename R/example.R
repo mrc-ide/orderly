@@ -39,7 +39,7 @@ orderly_example <- function(..., names = NULL, example = "demo", dest = NULL) {
     fs::dir_copy(path_src, dest)
   } else {
     fs::dir_create(file.path(dest, "src"))
-    fs::dir_copy(file.path(path_src, names), file.path(dest, "src"))
+    fs::dir_copy(file.path(path_src, names), file.path(dest, "src", names))
   }
   if (file.exists(file.path(src, "shared"))) {
     fs::dir_copy(file.path(src, "shared"), dest)

@@ -76,6 +76,7 @@ test_that("can create a filename within the store", {
 
 
 test_that("files is the store are read-only", {
+  skip_on_cran()
   obj <- file_store$new(withr::local_tempdir())
 
   f <- withr::local_tempfile()

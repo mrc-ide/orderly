@@ -318,7 +318,7 @@ orderly_artefact <- function(description = NULL, files) {
 
   call <- sys.call()
   if (length(call) > 2 && !("description" %in% names(call))) {
-    description_str <- deparse1(call)
+    description_str <- deparse1(call[[2]])
     if (nchar(description_str) < 30) {
       hint <- c(
         i = "Use 'orderly_artefact(..., description = {description_str})'")

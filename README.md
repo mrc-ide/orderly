@@ -1,7 +1,7 @@
 # orderly
 
 <!-- badges: start -->
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R build status](https://github.com/mrc-ide/orderly/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/orderly/actions)
 [![CodeFactor](https://www.codefactor.io/repository/github/mrc-ide/orderly/badge)](https://www.codefactor.io/repository/github/mrc-ide/orderly)
 [![codecov.io](https://codecov.io/github/mrc-ide/orderly/coverage.svg?branch=main)](https://codecov.io/github/mrc-ide/orderly?branch=main)
@@ -28,16 +28,6 @@ Two vignettes provide an overview of the package, depending on your tastes:
 
 There is also an [orderly tutorial](https://mrc-ide.github.io/orderly-tutorial/) from a 3-hour interactive session.
 
-## Roadmap
-
-This package is a ground-up rewrite of our original [`orderly` version 1](https://vimc.github.io/orderly1/) package, which is now ready for use on all projects, including migrating projects created with the original package.
-
-The original `orderly` package has now been renamed `orderly1`, and will be preserved and installable for use with historical projects without the need to migrate.
-
-A migration path for existing users is described in `vignette("migrating")`.
-
-The web framework [`OrderlyWeb`](https://github.com/vimc/orderly-web) has been rewritten as [`packit`](https://github.com/mrc-ide/packit).
-
 ## Installation
 
 Please install from our [r-universe](https://mrc-ide.r-universe.dev/):
@@ -53,6 +43,16 @@ If you prefer, you can install from GitHub with `remotes`:
 ```r
 remotes::install_github("mrc-ide/orderly", upgrade = FALSE)
 ```
+
+## History
+
+This package is a ground-up rewrite of our original [`orderly` version 1](https://vimc.github.io/orderly1/) package, which is now ready for use on all projects, including migrating projects created with the original package.
+
+The original `orderly` package has now been renamed `orderly1`, and will be preserved and installable for use with historical projects without the need to migrate.
+
+A migration path for existing users is described in `vignette("migrating")`.
+
+The web framework [`OrderlyWeb`](https://github.com/vimc/orderly-web) has been rewritten as [`packit`](https://github.com/mrc-ide/packit).
 
 ## Testing
 

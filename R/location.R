@@ -499,13 +499,12 @@ orderly_location_pull <- function(expr,
   }
 
   if (length(ids) == 0 || (length(ids) == 1 && is.na(ids))) {
+    hint <- NULL
     if (!fetch_metadata) {
       hint <- c(i = paste("Did you forget to pull metadata? You can do this",
                           "by using the argument {.code fetch_metadata = TRUE}",
                           "in the call to 'orderly_location_pull()', or",
                           "by running 'orderly_location_fetch_metadata()'"))
-    } else {
-      hint <- NULL
     }
     cli::cli_abort(
       c("No packets found in query, so cannot pull anything",

@@ -48,3 +48,10 @@ test_that("can show files from the examples", {
                "Pull in the file 'shared/palette.R' as 'cols.R'",
                fixed = TRUE, all = FALSE)
 })
+
+
+test_that("can copy subset of reports from example", {
+  path <- withr::local_tempfile()
+  suppressMessages(orderly_example(names = c("data", "strict"), dest = path))
+  expect_setequal(orderly_list_src(path), c("data", "strict"))
+})
