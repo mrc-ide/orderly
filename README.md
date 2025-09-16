@@ -4,7 +4,7 @@
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R build status](https://github.com/mrc-ide/orderly/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/orderly/actions)
 [![CodeFactor](https://www.codefactor.io/repository/github/mrc-ide/orderly/badge)](https://www.codefactor.io/repository/github/mrc-ide/orderly)
-[![codecov.io](https://codecov.io/github/mrc-ide/orderly/coverage.svg?branch=main)](https://codecov.io/github/mrc-ide/orderly?branch=main)
+[![codecov.io](https://codecov.io/github/mrc-ide/orderly/coverage.svg?branch=main)](https://app.codecov.io/github/mrc-ide/orderly?branch=main)
 <!-- badges: end -->
 
 > 1. an attendant in a hospital responsible for the non-medical care of patients and the maintenance of order and cleanliness.

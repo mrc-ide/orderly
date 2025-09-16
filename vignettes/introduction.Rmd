@@ -13,7 +13,7 @@ source("common.R")
 
 This vignette provides a how-to style introduction to `orderly`, an overview of key ingredients to writing orderly reports, and a summary of key features and ideas. It may be useful to look at `vignette("orderly")` for a more roundabout discussion of what `orderly` is trying to achieve, or `vignette("migrating")` if you are familiar with version 1 of orderly as this explains concepts in terms of differences from the previous version.
 
-You might also prefer the [orderly tutorial](https://mrc-ide.github.io/orderly-tutorial) which works through similar material in slide form, or [watch a short talk](https://www.youtube.com/watch?v=lkPgihFQbrk) that describes the ideas in the package, and why it differs to other approaches to reproducibility and workflows.
+You might also prefer the [orderly tutorial](https://mrc-ide.github.io/orderly-tutorial/) which works through similar material in slide form, or [watch a short talk](https://www.youtube.com/watch?v=lkPgihFQbrk) that describes the ideas in the package, and why it differs to other approaches to reproducibility and workflows.
 
 # Installation
 
@@ -486,4 +486,4 @@ The files under `.outpack/files/` should never be modified or deleted. This appr
 
 # Relationship between `orderly` and `outpack`
 
-The `orderly` package is built on a metadata and file storage system called `outpack`; we will be implementing support for working with these metadata archives in other languages (see [`outpack_server`](https://github.com/mrc-ide/outpack_server) for our server implementation in Rust and [`outpack-py`](https://github.com/mrc-ide/outpack-py) in Python).  The metadata is discussed in more detail in `vignette("metadata")` and we will document the general ideas more fully at [`mrc-ide/outpack`](https://github.com/mrc-ide/outpack)
+The `orderly` package is built on a metadata and file storage system called `outpack`; we will be implementing support for working with these metadata archives in other languages (see [`outpack_server`](https://github.com/mrc-ide/outpack_server) for our server implementation in Rust and [`outpack-py`](https://github.com/mrc-ide/pyorderly) in Python).  The metadata is discussed in more detail in `vignette("metadata")` and we will document the general ideas more fully at [`mrc-ide/outpack`](https://github.com/mrc-ide/outpack)

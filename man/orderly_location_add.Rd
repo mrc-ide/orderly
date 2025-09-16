@@ -126,7 +126,7 @@ argument lists for these may vary between implementations. To
 allow this, you can pass a location of type "custom" with a list
 of arguments.  We expect an argument 'driver' to be present among
 this list.  For an example of this in action, see the
-\href{https://mrc-ide.github.io/outpack.sharepoint}{\code{outpack.sharepoint}}
+\href{https://mrc-ide.github.io/orderly.sharedfile/}{\code{orderly.sharedfile}}
 package.
 
 \emph{Be warned that we may change this interface in future, in which

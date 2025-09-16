@@ -114,7 +114,7 @@ Suppose we have two researchers, [Alice and Bob](https://en.wikipedia.org/wiki/A
 [`reside-ic/orderly-example`](https://github.com/reside-ic/orderly-example).
 -->
 
-Both Alice and Bob clone this repo onto their machines, using their favourite git client (at the terminal with `git`, via GitHub desktop, or as here with [`gert`](https://r-lib.github.io/gert))
+Both Alice and Bob clone this repo onto their machines, using their favourite git client (at the terminal with `git`, via GitHub desktop, or as here with [`gert`](https://docs.ropensci.org/gert/))
 
 At the moment, including hidden files (except `.git`), Alice sees:
 
