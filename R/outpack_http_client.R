@@ -52,26 +52,19 @@ http_client_request <- function(url, customize = identity, download = NULL,
 
 
 http_client_handle_error <- function(response) {
-  ## TODO: we can cope with timeouts here with some care; if we know
-  ## that an expired timeout produces a certain error code we watch
-  ## for that and then reauthenticate; that requires that a callback
-  ## is passed through here too.
-  if (httr2::resp_is_error(response)) {
-    if (identical(httr2::resp_content_type(response), "application/json")) {
-      res <- httr2::resp_body_json(response)
-      ## I am seeing Packit returning an element 'error' not a list of
-      ## errors
-      errors <- if ("error" %in% names(res)) list(res$error) else res$errors
-      stop(http_client_error(errors[[1]]$detail,
-                             httr2::resp_status(response),
-                             errors))
-    } else {
-      stop(http_client_error(httr2::resp_status_desc(response),
-                             httr2::resp_status(response),
-                             NULL))
-    }
+  if (identical(httr2::resp_content_type(response), "application/json")) {
+    res <- httr2::resp_body_json(response)
+    ## I am seeing Packit returning an element 'error' not a list of
+    ## errors
+    errors <- if ("error" %in% names(res)) list(res$error) else res$errors
+    stop(http_client_error(errors[[1]]$detail,
+                           httr2::resp_status(response),
+                           errors))
+  } else {
+    stop(http_client_error(httr2::resp_status_desc(response),
+                           httr2::resp_status(response),
+                           NULL))
   }
-  response
 }
 
 
