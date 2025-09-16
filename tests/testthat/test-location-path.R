@@ -492,3 +492,23 @@ test_that("push where no files have changed, only metadata", {
   expect_match(res$messages, "No files needed, all are available at location",
                all = FALSE)
 })
+
+
+test_that("pull where no files have changed, only metadata", {
+  client <- create_temporary_root()
+  server <- create_temporary_root(use_file_store = TRUE, path_archive = NULL)
+  orderly_location_add_path("server", path = server$path, root = client)
+
+  id1 <- create_deterministic_packet(server)
+  orderly_location_fetch_metadata(root = client)
+  orderly_location_pull(id1, root = client)
+
+  id2 <- create_deterministic_packet(server)
+  orderly_location_fetch_metadata(root = client)
+  withr::local_options(orderly.quiet = FALSE)
+  res <- evaluate_promise(orderly_location_pull(id2, root = client))
+  expect_equal(res$result, id2)
+  expect_match(res$messages,
+               "All files available locally, no need to fetch any",
+               all = FALSE)
+})

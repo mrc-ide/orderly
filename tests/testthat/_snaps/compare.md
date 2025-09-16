@@ -179,3 +179,46 @@
       * files
       i Use `orderly_comparison_explain(...)` to examine the differences in more detail.
 
+# Can compare packets with different files
+
+    Code
+      print(result)
+    Output
+      i Comparing packets 19700101-000000-00000001 and 19700101-000000-00000002...
+      i The following attributes are different across the two packets:
+      * files
+      i Use `orderly_comparison_explain(...)` to examine the differences in more detail.
+
+---
+
+    Code
+      orderly_comparison_explain(result, "files")
+    Message
+      i Comparing packets 19700101-000000-00000001 and 19700101-000000-00000002...
+      i The following files only exist in packet 19700101-000000-00000001
+        * a.txt
+      i The following files only exist in packet 19700101-000000-00000002
+        * c.txt
+      i The following files exist in both packets but have different contents:
+        * data.R
+      i Use `orderly_comparison_explain(..., "files", verbose = TRUE)` to compare the files' contents.
+
+---
+
+    Code
+      orderly_comparison_explain(result, "files", verbose = TRUE)
+    Message
+      i Comparing packets 19700101-000000-00000001 and 19700101-000000-00000002...
+      i The following files only exist in packet 19700101-000000-00000001
+        * a.txt
+      i The following files only exist in packet 19700101-000000-00000002
+        * c.txt
+      < 19700101-000000-00000001/data.R
+      > 19700101-000000-00000002/data.R
+      @@ 1,4 / 1,4 @@                 
+        {                             
+      <     writeLines("aaa", "a.txt")
+            writeLines("bbb", "b.txt")
+      >     writeLines("ccc", "c.txt")
+        }                             
+

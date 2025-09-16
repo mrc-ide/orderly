@@ -148,3 +148,30 @@ test_that("Handles new attributes gracefully", {
   expect_snapshot(print(result_swap),
                   transform = scrub_packets(id1, id2))
 })
+
+
+test_that("Can compare packets with different files", {
+  root <- create_temporary_root()
+
+  id1 <- orderly_run_snippet(root, "data", {
+    writeLines("aaa", "a.txt")
+    writeLines("bbb", "b.txt")
+  })
+  id2 <- orderly_run_snippet(root, "data", {
+    writeLines("bbb", "b.txt")
+    writeLines("ccc", "c.txt")
+  })
+
+  result <- orderly_compare_packets(id1, id2, root = root)
+
+  expect_false(orderly_comparison_explain(result, verbose = "silent"))
+  expect_false(orderly_comparison_explain(result, "files", verbose = "silent"))
+  expect_true(orderly_comparison_explain(result, "parameters",
+                                         verbose = "silent"))
+
+  expect_snapshot(print(result), transform = scrub_packets(id1, id2))
+  expect_snapshot(orderly_comparison_explain(result, "files"),
+                  transform = scrub_packets(id1, id2))
+  expect_snapshot(orderly_comparison_explain(result, "files", verbose = TRUE),
+                  transform = scrub_packets(id1, id2))
+})

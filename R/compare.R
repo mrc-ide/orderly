@@ -116,11 +116,6 @@ compare_files <- function(cmp, verbose) {
       cli::cli_alert_info("Use {.code {hint}} to compare the files' contents.")
     }
   }
-  if (nrow(modified) == 0 &&
-      nrow(target_only) == 0 &&
-      nrow(current_only) == 0) {
-    cli::cli_alert_info("The files across the two packets are identical.")
-  }
 }
 
 compare_file_contents <- function(cmp, files) {
