@@ -141,8 +141,7 @@ query_parse_expr <- function(expr, context, subquery_envir) {
                subquery = query_parse_subquery,
                dependency = query_parse_dependency,
                ## normally unreachable
-               cli::cli_abort(
-                 "Unhandled expression [outpack bug - please report]"))
+               query_unhandled_error("expression"))
   fn(expr, context, subquery_envir)
 }
 

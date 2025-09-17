@@ -117,12 +117,13 @@ test_that("File store is not added if a hash cannot be resolved", {
 
   expect_equal(root$index$unpacked(), id)
   fs::file_delete(file.path(root$path, "archive", "test", id, "data.rds"))
-  regex <- paste("Error adding file store:(.*)",
-                 "the following files were missing or corrupted: 'data.rds'")
 
-  expect_error(suppressMessages(
+  err <- expect_error(suppressMessages(
     orderly_config_set(core.use_file_store = TRUE, root = root)),
-    regex)
+    "Error adding file store")
+  expect_match(conditionMessage(err),
+               "the following files were missing or corrupted: 'data.rds'",
+               fixed = TRUE)
   expect_false(root$config$core$use_file_store)
   expect_null(root$config$files)
 })
@@ -257,8 +258,10 @@ test_that("Archive is not added if file store is corrupt", {
   id <- create_random_packet_chain(root, 3)
   hash <- outpack_metadata_core(id[["c"]], root)$files$hash
   fs::file_delete(root$files$filename(hash[[1]]))
-  expect_error(orderly_config_set(core.path_archive = "archive", root = root),
-               "Error adding 'path_archive': Hash not found in store:")
+  err <- expect_error(
+    orderly_config_set(core.path_archive = "archive", root = root),
+    "Error adding 'path_archive'")
+  expect_match(conditionMessage(err), "Hash not found in store")
 
   expect_null(root$config$core$path_archive)
   expect_false(fs::dir_exists(file.path(root$path, "archive")))

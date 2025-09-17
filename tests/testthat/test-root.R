@@ -5,7 +5,7 @@ test_that("Configuration must be empty", {
   writeLines(c(empty_config_contents(), "a: 1"),
              file.path(tmp, "orderly_config.yml"))
   expect_error(orderly_config_read(tmp),
-               "Unknown fields in .+: a")
+               "Unknown field in .+")
 })
 
 

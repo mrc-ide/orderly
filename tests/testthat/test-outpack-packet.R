@@ -648,12 +648,12 @@ test_that("validate that dependencies must evaluate to a single id", {
   outpack_packet_end_quietly(p1)
 
   p2 <- outpack_packet_start_quietly(path_src2, "b", root = root)
-  expect_error(
+  err <- expect_error(
     outpack_packet_use_dependency(p2, "parameter:x == 1",
                                   c("incoming.rds" = "data.rds")),
-    paste("The provided query is not guaranteed to return a single value:",
-          "'parameter:x == 1' Did you forget latest(...)?"),
-    fixed = TRUE)
+    "The provided query is not guaranteed to return a single value")
+  expect_match(conditionMessage(err),
+               "'parameter:x == 1'.+Did you forget latest\\(...\\)\\?")
 })
 
 

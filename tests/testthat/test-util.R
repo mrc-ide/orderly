@@ -48,20 +48,22 @@ test_that("can resolve environment variables", {
 
 test_that("can return meaningful errors if lookup fails", {
   variables <- c(V1 = "a", V2 = "b")
-  expect_error(
+  err <- expect_error(
     resolve_envvar(list(A = "$V3", B = "$V2", C = "c"), variables, "x"),
-    "Environment variable 'V3' is not set\n\t(used in x$A)",
-    fixed = TRUE)
-  expect_error(
+    "Environment variable 'V3' is not set")
+  expect_match(conditionMessage(err), "Used in x$A", fixed = TRUE)
+
+  err <- expect_error(
     resolve_envvar(list(list(A = "$V3", B = "$V2", C = "c")), variables, "x"),
-    "Environment variable 'V3' is not set\n\t(used in x[[1]]$A)",
-    fixed = TRUE)
-  expect_error(
+    "Environment variable 'V3' is not set")
+  expect_match(conditionMessage(err), "Used in x[[1]]$A", fixed = TRUE)
+
+  err <- expect_error(
     resolve_envvar(list(list(A = list(a = "$V1"),
                              B = list(b = "$V3"),
                              C = list(c = "c"))), variables, "x"),
-    "Environment variable 'V3' is not set\n\t(used in x[[1]]$B$b)",
-    fixed = TRUE)
+    "Environment variable 'V3' is not set")
+  expect_match(conditionMessage(err), "Used in x[[1]]$B$b", fixed = TRUE)
 })
 
 
@@ -94,7 +96,7 @@ test_that("sys_getenv", {
     c("SOME_VAR" = NA_character_), {
       expect_error(
         sys_getenv("SOME_VAR", "loc"),
-        "Environment variable 'SOME_VAR' is not set.*used in loc")
+        "Environment variable 'SOME_VAR' is not set")
       expect_null(sys_getenv("SOME_VAR", "loc", FALSE))
       expect_identical(sys_getenv("SOME_VAR", "loc", FALSE, NA_character_),
                        NA_character_)
@@ -103,9 +105,9 @@ test_that("sys_getenv", {
   ## On windows if environment variable is empty then windows will
   ## return NA from call to Sys.getenv
   if (is_windows()) {
-    expected_err <- "Environment variable 'SOME_VAR' is not set.*used in loc"
+    expected_err <- "Environment variable 'SOME_VAR' is not set"
   } else {
-    expected_err <- "Environment variable 'SOME_VAR' is empty.*used in loc"
+    expected_err <- "Environment variable 'SOME_VAR' is empty"
   }
 
   withr::with_envvar(
@@ -129,19 +131,23 @@ test_that("check fields", {
   expect_silent(check_fields(list(a = 1, b = 1), "x", c("a", "b"), character()))
   expect_silent(check_fields(list(a = 1, b = 1), "x", character(), letters))
 
-  expect_error(
+  err <- expect_error(
     check_fields(list(a = 1, b = 2), "x", c("a", "b", "c"), character()),
-    "Fields missing from x: c")
-  expect_error(
+    "Field missing from x")
+  expect_equal(err$body, c("*" = "c"))
+  err <- expect_error(
     check_fields(list(a = 1, b = 2), "x", c("a", "b", "c", "d"), character()),
-    "Fields missing from x: c, d")
+    "Fields missing from x")
+  expect_equal(err$body, c("*" = "c", "*" = "d"))
 
-  expect_error(
+  err <- expect_error(
     check_fields(list(a = 1, b = 2), "x", "a", character()),
-    "Unknown fields in x: b")
-  expect_error(
+    "Unknown field in x")
+  expect_equal(err$body, c("*" = "b"))
+  err <- expect_error(
     check_fields(list(a = 1, b = 2, c = 3, d = 4), "x", "a", "b"),
-    "Unknown fields in x: c, d")
+    "Unknown fields in x")
+  expect_equal(err$body, c("*" = "c", "*" = "d"))
 })
 
 

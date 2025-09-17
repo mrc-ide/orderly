@@ -212,7 +212,7 @@ config_set_path_archive <- function(value, root, call) {
       if (fs::dir_exists(path_archive)) {
         fs::dir_delete(path_archive)
       }
-      cli::cli_abort("Error adding 'path_archive'", parent = e$message)
+      cli::cli_abort("Error adding 'path_archive'", parent = e)
     })
   }
 

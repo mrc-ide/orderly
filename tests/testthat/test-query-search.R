@@ -180,22 +180,18 @@ test_that("switch statements will prevent regressions", {
   expr <- quote(some_function())
   expect_error(
     query_parse_expr(expr, expr),
-    "Unhandled expression [outpack bug - please report]",
-    fixed = TRUE)
+    "Unhandled expression.+please report")
 
   expect_error(
     query_eval(list(type = "other")),
-    "Unhandled expression [outpack bug - please report]",
-    fixed = TRUE)
+    "Unhandled expression.+please report")
   expect_error(
     query_eval_lookup(list(name = "custom:orderly:displayname"),
                       new.env(parent = emptyenv())),
-    "Unhandled lookup [outpack bug - please report]",
-    fixed = TRUE)
+    "Unhandled lookup.+please report")
   expect_error(
     query_eval_group(list(name = "operator")),
-    "Unhandled operator [outpack bug - please report]",
-    fixed = TRUE)
+    "Unhandled operator.+please report")
 })
 
 

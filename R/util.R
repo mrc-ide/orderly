@@ -290,8 +290,8 @@ check_fields <- function(x, name, required, optional) {
   extra <- setdiff(names(x), c(required, optional))
   if (length(extra) > 0L) {
     n <- cli::qty(length(extra))
-    cli::cli_abort("{n}Unknown field{?s} in {name}",
-                   set_names(extra, "*"))
+    cli::cli_abort(c("{n}Unknown field{?s} in {name}",
+                     set_names(extra, "*")))
   }
 }
 
@@ -503,7 +503,7 @@ check_symbol_from_str <- function(str, name) {
   dat <- strsplit(str, "(?<=[^:])::(?=[^:])", perl = TRUE)[[1]]
   if (length(dat) != 2) {
     ## TODO: namespace-qualified, not fully qualified?
-    cli::cli_abort("Expected a fully qualified name for '{name}'")
+    cli::cli_abort("Expected fully qualified name for '{name}'")
   }
   list(namespace = dat[[1]], symbol = dat[[2]])
 }
