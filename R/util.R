@@ -249,6 +249,7 @@ current_orderly_version <- function() {
 
 
 yaml_read <- function(filename) {
+  ## TODO: chain properly
   catch_yaml <- function(e) {
     stop(sprintf("while reading '%s'\n%s", filename, e$message),
          call. = FALSE)
@@ -282,13 +283,15 @@ file_exists <- function(..., workdir = NULL) {
 check_fields <- function(x, name, required, optional) {
   msg <- setdiff(required, names(x))
   if (length(msg) > 0L) {
-    stop(sprintf("Fields missing from %s: %s",
-                 name, paste(msg, collapse = ", ")))
+    n <- cli::qty(length(msg))
+    cli::cli_abort(c("{n}Field{?s} missing from {name}",
+                     set_names(msg, "*")))
   }
   extra <- setdiff(names(x), c(required, optional))
   if (length(extra) > 0L) {
-    stop(sprintf("Unknown fields in %s: %s",
-                 name, paste(extra, collapse = ", ")))
+    n <- cli::qty(length(extra))
+    cli::cli_abort("{n}Unknown field{?s} in {name}",
+                   set_names(extra, "*"))
   }
 }
 
@@ -307,9 +310,9 @@ sys_getenv <- function(x, used_in, error = TRUE, default = NULL) {
   v <- Sys.getenv(x, NA_character_)
   if (is.na(v) || !nzchar(v)) {
     if (error) {
-      reason <- if (!nzchar(v)) "empty" else "not set"
-      stop(sprintf("Environment variable '%s' is %s\n\t(used in %s)",
-                   x, reason, used_in), call. = FALSE)
+      problem <- if (!nzchar(v)) "empty" else "not set"
+      cli::cli_abort(c("Environment variable '{x}' is {problem}",
+                       i = "Used in {used_in}"))
     } else {
       v <- default
     }
@@ -499,7 +502,8 @@ check_symbol_from_str <- function(str, name) {
   assert_scalar_character(str, name)
   dat <- strsplit(str, "(?<=[^:])::(?=[^:])", perl = TRUE)[[1]]
   if (length(dat) != 2) {
-    stop(sprintf("Expected fully qualified name for '%s'", name))
+    ## TODO: namespace-qualified, not fully qualified?
+    cli::cli_abort("Expected a fully qualified name for '{name}'")
   }
   list(namespace = dat[[1]], symbol = dat[[2]])
 }

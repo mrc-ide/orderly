@@ -207,7 +207,7 @@ query_eval <- function(query, query_env) {
          subquery = query_eval_subquery(query, query_env),
          dependency = query_eval_dependency(query, query_env),
          ## Normally unreachable
-         stop("Unhandled expression [outpack bug - please report]"))
+         query_unhandled_error("expression"))
 }
 
 
@@ -282,7 +282,7 @@ query_eval_lookup <- function(query, query_env) {
            query$query, query_env$envir, "environment",
            query$expr, query$context),
          ## Normally unreachable
-         stop("Unhandled lookup [outpack bug - please report]"))
+         query_unhandled_error("lookup"))
 }
 
 
@@ -299,7 +299,7 @@ query_eval_group <- function(query, query_env) {
          "!" = setdiff(query_env$index$index$id, args[[1]]),
          "(" = args[[1]],
          ## Normally unreachable
-         stop("Unhandled operator [outpack bug - please report]"))
+         query_unhandled_error("operator"))
 }
 
 
@@ -354,7 +354,7 @@ query_eval_lookup_get <- function(name, data, data_name, expr, context) {
     data_name,
     parameters = query_eval_lookup_parameter(name, data),
     environment = query_eval_lookup_environment(name, data),
-    stop("unreachable [orderly bug]")) # nocov
+    query_unhandled_error("lookup fetch")) # nocov
   if (!value$found) {
     msg <- sprintf("Did not find '%s' within given %s (containing %s)",
                    name, data_name,
@@ -384,4 +384,10 @@ query_eval_lookup_parameter <- function(name, list) {
   list(found = name %in% names(list),
        value = value,
        valid = is_simple_scalar_atomic(value))
+}
+
+
+query_unhandled_error <- function(type) {
+  cli::cli_abort(c("Unhandled {type}",
+                   i = "This is an orderly bug, please report"))
 }

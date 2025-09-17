@@ -237,8 +237,8 @@ add_file_store <- function(root) {
         "the following files were missing or corrupted: '%s'",
         paste(missing, collapse = ", ")
       )
-      stop(sprintf("Failed to import packet '%s': %s",
-                   id, message))
+      cli::cli_abort("Failed to import packet '{id}'",
+                     x = message)
     }
     path <- vcapply(path, identity)
     file_import_store(root, NULL, path, meta$files$hash)

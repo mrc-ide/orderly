@@ -93,12 +93,12 @@ query_parse <- function(expr, context, subquery_envir) {
     } else {
       expr <- parse(text = expr, keep.source = FALSE)
       if (length(expr) != 1L) {
-        stop("Expected a single expression")
+        cli::cli_abort("Expected a single expression")
       }
       expr <- expr[[1L]]
     }
   } else if (!(is.null(expr) || is.language(expr))) {
-    stop("Invalid input for query")
+    cli::cli_abort("Invalid input for query")
   }
 
   ## This is used extensively in orderly, so we'll support it here
@@ -141,7 +141,8 @@ query_parse_expr <- function(expr, context, subquery_envir) {
                subquery = query_parse_subquery,
                dependency = query_parse_dependency,
                ## normally unreachable
-               stop("Unhandled expression [outpack bug - please report]"))
+               cli::cli_abort(
+                 "Unhandled expression [outpack bug - please report]"))
   fn(expr, context, subquery_envir)
 }
 
@@ -180,7 +181,8 @@ query_parse_single <- function(expr, context, subquery_envir) {
 query_parse_add_scope <- function(expr_parsed, scope) {
   if (!is.language(scope)) {
     ## I don't think this is correct:
-    stop("Invalid input for `scope`, it must be a language expression.")
+    cli::cli_abort(
+      "Invalid input for `scope`, it must be a language expression.")
   }
 
   ## Can the scope not access subqueries?
@@ -324,6 +326,7 @@ as_logical <- function(expr) {
   ret
 }
 
+## TODO: think about this...
 query_error <- function(msg, expr, context, prefix) {
   if (identical(expr, context)) {
     stop(sprintf("%s\n  - %s %s", msg, prefix, deparse_query(expr, NULL, NULL)),

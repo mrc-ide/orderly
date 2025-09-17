@@ -24,8 +24,8 @@ orderly_location_path <- R6::R6Class(
       ## ids are all found within our data.
       msg <- setdiff(packet_ids, private$root$index$location(local)$packet)
       if (length(msg) > 0) {
-        stop("Some packet ids not found: ",
-             paste(squote(msg), collapse = ", "))
+        cli::cli_abort(c("Some packet ids not found:",
+                         set_names(msg, "*")))
       }
       paths <- file.path(private$root$path, ".outpack", "metadata", packet_ids)
       ret <- vcapply(paths, read_string)
@@ -40,12 +40,12 @@ orderly_location_path <- R6::R6Class(
       if (private$root$config$core$use_file_store) {
         path <- private$root$files$filename(hash)
         if (!file.exists(path)) {
-          stop(sprintf("Hash '%s' not found at location", hash))
+          cli::cli_abort("Hash '{hash}' not found at location")
         }
       } else {
         path <- find_file_by_hash(private$root, hash)
         if (is.null(path)) {
-          stop(sprintf("Hash '%s' not found at location", hash))
+          cli::cli_abort("Hash '{hash}' not found at location")
         }
       }
       copy_files(path, dest, overwrite = TRUE)
@@ -79,15 +79,15 @@ location_path_import_metadata <- function(str, hash, root) {
 
   unknown_files <- root_list_unknown_files(meta$files$hash, root)
   if (length(unknown_files) > 0) {
-    stop(
-      sprintf("Can't import metadata for '%s', as files missing:\n%s",
-              id, paste(sprintf("  - %s", unknown_files), collapse = "\n")))
+    cli::cli_abort(
+      c("Can't import metadata for '{id}', as files missing",
+        set_names(unknown_files, "*")))
   }
   unknown_packets <- root_list_unknown_packets(meta$depends$packet, root)
   if (length(unknown_packets) > 0) {
-    stop(sprintf(
-      "Can't import metadata for '%s', as dependencies missing:\n%s",
-      id, paste(sprintf("  - %s", unknown_packets), collapse = "\n")))
+    cli::cli_abort(
+      c("Can't import metadata for '{id}', as dependencies missing",
+        set_names(unknown_packets, "*")))
   }
 
   if (!is.null(root$config$core$path_archive)) {
@@ -104,7 +104,8 @@ location_path_import_metadata <- function(str, hash, root) {
 
 location_path_import_file <- function(path, hash, root) {
   if (!root$config$core$use_file_store) {
-    stop("Can't push files into this server, as it does not have a file store")
+    cli::cli_abort(
+      "Can't push files into this server, as it does not have a file store")
   }
   root$files$put(path, hash)
 }

@@ -78,7 +78,7 @@ load_orderly_plugin <- function(name) {
   }
   plugin <- .plugins[[name]]
   if (is.null(plugin)) {
-    stop(sprintf("Plugin '%s' not found", name))
+    cli::cli_abort("Plugin '{name}' not found")
   }
 
   plugin
@@ -259,8 +259,8 @@ plugin_no_cleanup <- function() {
 plugin_no_serialise <- function(data) {
   empty <- is.null(data) || all(vlapply(data, is.null))
   if (!empty) {
-    stop(paste("Your plugin produced output to be serialise but",
-               "has no serialise method"))
+    cli::cli_abort(paste("Your plugin produced output to be serialise but",
+                         "has no serialise method"))
   }
   to_json(NULL, NULL)
 }

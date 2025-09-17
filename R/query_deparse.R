@@ -32,15 +32,17 @@
 #' format(orderly_query("latest", name = "a"))
 orderly_query_format <- function(query, subquery = NULL, envir = NULL) {
   if (!is_deparseable_query(query)) {
-    stop("Cannot format query, it must be a language object or be length 1.")
+    cli::cli_abort(
+      "Cannot format query, it must be a language object or be length 1.")
   }
 
   if (length(subquery) > 0) {
     assert_named(subquery)
     ok <- vlapply(subquery, is_deparseable_query)
     if (!all(ok)) {
-      stop(sprintf("Invalid subquery, it must be deparseable: error for %s",
-                   paste(squote(names(subquery)[!ok]), collapse = ", ")))
+      err <- names(subquery)[!ok]
+      cli::cli_abort(
+        "Invalid subquery, it must be deparseable: error for {squote(err)}")
     }
   }
 
