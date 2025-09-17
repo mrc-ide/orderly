@@ -28,9 +28,9 @@ file_store <- R6::R6Class(
       src <- self$filename(hash)
       if (any(!file.exists(src))) {
         missing <- hash[!file.exists(src)]
-        message <- sprintf("Hash not found in store:\n%s",
-                           paste(sprintf("  - %s", missing), collapse = "\n"))
-        stop(not_found_error(message, missing))
+        cli::cli_abort(c("Hash not found in store",
+                         set_names(missing, "x")),
+                       class = "not_found_error")
       }
 
       copy_files(src, dst, overwrite = overwrite)

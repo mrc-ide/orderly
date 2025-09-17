@@ -2,9 +2,10 @@ test_that("Can create file store", {
   tmp <- temp_file()
   obj <- file_store$new(tmp)
   expect_equal(obj$list(), character(0))
-  expect_error(
+  err <- expect_error(
     obj$get("md5:abcde"),
-    "Hash not found in store:\n  - md5:abcde")
+    "Hash not found in store")
+  expect_match(conditionMessage(err), "md5:abcde")
 })
 
 

@@ -23,12 +23,6 @@ validate_outpack_id <- function(id, call = NULL) {
 }
 
 
-not_found_error <- function(message, data) {
-  structure(list(message = message, data = data),
-            class = c("not_found_error", "error", "condition"))
-}
-
-
 ## In orderly we also add the result of git status --porcelain here,
 ## but we've never really used this and it's quite slow for big
 ## repos. More problematic, the format looks hard to replicate with
