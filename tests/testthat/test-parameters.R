@@ -99,6 +99,7 @@ test_that("set defaults into environment if missing", {
 
 
 test_that("fill in missing parameters", {
+  skip_if_not_installed("mockery")
   envir <- new.env()
   spec <- list(a = NULL, b = NULL, c = NULL)
   pars <- strict_list(a = 1, b = 2, c = 3, .name = "parameters")
@@ -122,6 +123,7 @@ test_that("fill in missing parameters", {
 
 
 test_that("fill in missing parameters", {
+  skip_if_not_installed("mockery")
   envir <- new.env()
   spec <- list(a = NULL, b = NULL, c = NULL)
   pars <- strict_list(a = 1, b = 2, c = 3, .name = "parameters")
@@ -153,6 +155,7 @@ test_that("require non-default parameters are present in environment", {
 
 
 test_that("prompt for missing parameters", {
+  skip_if_not_installed("mockery")
   withr::local_options(orderly_interactive_parameters_missing_error = NULL)
   envir <- list2env(list(c = 4), parent = new.env())
   mock_get <- mockery::mock(1, 2)

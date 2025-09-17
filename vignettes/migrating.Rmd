@@ -123,7 +123,7 @@ We have renamed the original version of the package as `orderly1` so that you ca
 # What were the problems in version 1
 
 * The YAML format is inflexible, error prone for users, and leads to duplication
-* It was too focussed around our initial needs with the [Vaccine Impact Modelling Consortium](https://vaccineimpact.org)
+* It was too focussed around our initial needs with the [Vaccine Impact Modelling Consortium](https://www.vaccineimpact.org/)
 * It was fairly easy to get your archive and SQLite database into an inconsistent state (e.g., by deleting or moving files from the archive)
 * The SQLite database behaved poorly on shared file systems
 

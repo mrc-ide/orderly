@@ -1,6 +1,4 @@
 test_that("client sends well formed requests", {
-  skip_if_not_installed("mockery")
-
   mock <- local_mock_response(json_string("[1,2,3]"))
 
   res <- http_client_request("http://example.com/path")
@@ -15,8 +13,6 @@ test_that("client sends well formed requests", {
 
 
 test_that("client can add headers", {
-  skip_if_not_installed("mockery")
-
   mock <- local_mock_response(json_string("[1,2,3]"))
 
   res <- http_client_request(
@@ -37,8 +33,6 @@ test_that("client can add headers", {
 
 
 test_that("client can return json verbatim as text", {
-  skip_if_not_installed("mockery")
-
   ## A little whitespace here to ensure that this has not gone through
   ## any json processor
   local_mock_response(json_string("[1,2, 3]"), wrap = FALSE)
@@ -50,7 +44,6 @@ test_that("client can return json verbatim as text", {
 
 
 test_that("client can download files", {
-  skip_if_not_installed("mockery")
   content <- charToRaw("result")
 
   dest <- temp_file()
@@ -130,8 +123,6 @@ test_that("handle empty errors", {
 
 
 test_that("can use the client to make requests", {
-  skip_if_not_installed("mockery")
-
   mock <- local_mock_response(json_string("[1,2,3]"))
 
   cl <- outpack_http_client$new("http://example.com")

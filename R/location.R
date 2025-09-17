@@ -51,7 +51,7 @@
 ##' allow this, you can pass a location of type "custom" with a list
 ##' of arguments.  We expect an argument 'driver' to be present among
 ##' this list.  For an example of this in action, see the
-##' [`outpack.sharepoint`](https://mrc-ide.github.io/outpack.sharepoint)
+##' [`orderly.sharedfile`](https://mrc-ide.github.io/orderly.sharedfile/)
 ##' package.
 ##'
 ##' *Be warned that we may change this interface in future, in which

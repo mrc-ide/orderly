@@ -65,6 +65,7 @@ test_that("can silently detect that git setup is ok", {
 
 
 test_that("don't try and open root if git has been checked", {
+  skip_if_not_installed("mockery")
   mock_git_open <- mockery::mock()
   mockery::stub(root_check_git, "git_open", mock_git_open)
   root <- create_temporary_root()

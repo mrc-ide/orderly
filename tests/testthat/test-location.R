@@ -829,6 +829,7 @@ test_that("validate arguments to packit locations", {
 
 
 test_that("can add a packit location", {
+  skip_if_not_installed("mockery")
   root <- create_temporary_root()
   orderly_location_add_packit("other",
                               url = "https://example.com",
@@ -853,6 +854,7 @@ test_that("can add a packit location", {
 })
 
 test_that("can add a packit location without a token", {
+  skip_if_not_installed("mockery")
   root <- create_temporary_root()
   orderly_location_add_packit("other",
                               url = "https://example.com",

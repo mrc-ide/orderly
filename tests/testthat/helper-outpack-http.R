@@ -40,6 +40,7 @@ json_string <- function(s) {
 }
 
 local_mock_response <- function(..., env = rlang::caller_env(), cycle = FALSE) {
+  testthat::skip_if_not_installed("mockery")
   mock <- mockery::mock(mock_response(...), cycle = cycle)
   httr2::local_mocked_responses(function(req) mock(req), env = env)
   mock

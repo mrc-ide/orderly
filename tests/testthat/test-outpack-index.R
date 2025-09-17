@@ -1,4 +1,5 @@
 test_that("reading metadata reports progress if requested", {
+  skip_if_not_installed("mockery")
   root <- create_temporary_root()
   ids <- create_random_packet_chain(5, root = root)
 
@@ -18,6 +19,7 @@ test_that("reading metadata reports progress if requested", {
 
 
 test_that("reading location reports progress if requested", {
+  skip_if_not_installed("mockery")
   root <- create_temporary_root()
   ids <- create_random_packet_chain(5, root = root)
 

@@ -131,7 +131,7 @@ strings/character vector (can have zero, one or more elements).
 \item session: some information about the session that the packet was run in
 (this is unstandardised, and even the orderly version may change)
 \item custom: additional metadata added by its respective engine.  For
-packets run by \code{orderly}, there will be a \code{orderly} field here,
+packets run by \code{orderly}, there will be an \code{orderly} field here,
 which is itself a list:
 \itemize{
 \item artefacts: A \link{data.frame} with artefact information, containing
