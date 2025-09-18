@@ -38,9 +38,13 @@ orderly_location_http <- R6::R6Class(
           self$client$request(sprintf("/metadata/%s/text", id),
                               parse_json = FALSE),
           outpack_http_client_error = function(e) {
-            cli::cli_abort(c("Some packet ids not found:",
-                             set_names(id, "*")),
-                           parent = NA)
+            if (e$code == 404) {
+              cli::cli_abort(c("Some packet ids not found:",
+                               set_names(id, "*")),
+                             parent = NA)
+            } else {
+              stop(e)
+            }
           })
         cli::cli_progress_update(id = id_bar)
         trimws(data)

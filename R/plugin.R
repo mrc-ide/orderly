@@ -259,7 +259,7 @@ plugin_no_cleanup <- function() {
 plugin_no_serialise <- function(data) {
   empty <- is.null(data) || all(vlapply(data, is.null))
   if (!empty) {
-    cli::cli_abort(paste("Your plugin produced output to be serialise but",
+    cli::cli_abort(paste("Your plugin produced output to be serialised but",
                          "has no serialise method"))
   }
   to_json(NULL, NULL)

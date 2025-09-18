@@ -277,7 +277,7 @@ query_parse_dependency <- function(expr, context, subquery_envir) {
     if (!is_expr_single_value(args[[1]], subquery_envir)) {
       query_parse_error(
         sprintf(paste(
-          "%s must be called on an expression guaranteed to return a single ID",
+          "%s must be called on an expression guaranteed to return",
           "a single ID. Try wrapping expression in `latest` or `single`."),
           name),
         expr, context)
