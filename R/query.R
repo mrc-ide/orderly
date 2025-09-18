@@ -277,7 +277,7 @@ query_parse_dependency <- function(expr, context, subquery_envir) {
     if (!is_expr_single_value(args[[1]], subquery_envir)) {
       query_parse_error(
         sprintf(paste(
-          "%s must be called on an expression guaranteed to return",
+          "%s must be called on an expression guaranteed to return a single ID",
           "a single ID. Try wrapping expression in `latest` or `single`."),
           name),
         expr, context)
@@ -325,20 +325,15 @@ as_logical <- function(expr) {
   ret
 }
 
-## TODO: think about this...
 query_error <- function(msg, expr, context, prefix) {
   if (identical(expr, context)) {
-    stop(sprintf("%s\n  - %s %s", msg, prefix, deparse_query(expr, NULL, NULL)),
-         call. = FALSE)
+    body_context <- NULL
   } else {
-    width <- max(nchar(prefix), nchar("within"))
-    stop(sprintf(
-      "%s\n  - %s %s\n  - %s %s",
-      msg,
-      format(prefix, width = width), deparse_query(expr, NULL, NULL),
-      format("within", width = width), deparse_query(context, NULL, NULL)),
-      call. = FALSE)
+    body_context <- c(i = "within {deparse_query(context, NULL, NULL)}")
   }
+  cli::cli_abort(c("{msg}",
+                   i = "{prefix} {deparse_query(expr, NULL, NULL)}",
+                   body_context))
 }
 
 

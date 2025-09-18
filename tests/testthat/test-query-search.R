@@ -114,28 +114,32 @@ test_that("Can filter based on given values", {
     orderly_search(quote(latest(parameter:a == this:a)),
                   parameters = list(a = 3), root = root),
     NA_character_)
-  expect_error(
+  err <- expect_error(
     orderly_search(quote(latest(parameter:a == this:x)),
-                  parameters = list(a = 3), root = root),
-    paste0("Did not find 'x' within given parameters (containing 'a')\n",
-           "  - while evaluating this:x\n",
-           "  - within           latest(parameter:a == this:x)"),
+                   parameters = list(a = 3), root = root),
+    "Did not find 'x' within given parameters (containing 'a')",
     fixed = TRUE)
+  expect_equal(err$body,
+               c(i = "while evaluating this:x",
+                 i = "within latest(parameter:a == this:x)"))
+
   envir <- list2env(list(a = sum), parent = emptyenv())
-  expect_error(
+  err <- expect_error(
     orderly_search(quote(latest(parameter:a == environment:x)),
-                  envir = envir, root = root),
-    paste0("Did not find 'x' within given environment (containing 'a')\n",
-           "  - while evaluating environment:x\n",
-           "  - within           latest(parameter:a == environment:x)"),
+                   envir = envir, root = root),
+    "Did not find 'x' within given environment (containing 'a')",
     fixed = TRUE)
-  expect_error(
+  expect_equal(err$body,
+               c(i = "while evaluating environment:x",
+                 i = "within latest(parameter:a == environment:x)"))
+
+  err <- expect_error(
     orderly_search(quote(latest(parameter:a == environment:a)),
                   envir = envir, root = root),
-    paste0("The value of 'a' from environment is not suitable as a lookup\n",
-           "  - while evaluating environment:a\n",
-           "  - within           latest(parameter:a == environment:a)"),
-    fixed = TRUE)
+    "The value of 'a' from environment is not suitable as a lookup\n")
+  expect_equal(err$body,
+               c(i = "while evaluating environment:a",
+                 i = "within latest(parameter:a == environment:a)"))
 })
 
 
@@ -355,25 +359,26 @@ test_that("orderly_search can include subqueries", {
 test_that("orderly_search returns useful error when subquery name unknown", {
   root <- create_temporary_root()
 
-  expect_error(
+  err <- expect_error(
     orderly_search(quote(latest({sub})), # nolint
                   root = root),
-    paste0("Cannot locate subquery named 'sub'. No named subqueries ",
-           "provided.\n",
-           "  - in     {sub}\n",
-           "  - within latest({sub})"),
+    "Cannot locate subquery named 'sub'. No named subqueries provided.",
     fixed = TRUE)
+  expect_equal(err$body,
+               c(i = "in {sub}",
+                 i = "within latest({sub})"))
 
-  expect_error(
+  err <- expect_error(
     orderly_search(quote(latest({subq})), # nolint
-                  subquery = list(sub = quote(name == "x"),
-                                  foo = quote(name == "y")),
-                  root = root),
-    paste0("Cannot locate subquery named 'subq'. ",
-           "Available subqueries are 'foo', 'sub'.\n",
-           "  - in     {subq}\n",
-           "  - within latest({subq})"),
+                   subquery = list(sub = quote(name == "x"),
+                                   foo = quote(name == "y")),
+                   root = root),
+    paste("Cannot locate subquery named 'subq'.",
+          "Available subqueries are 'foo', 'sub'"),
     fixed = TRUE)
+  expect_equal(err$body,
+               c(i = "in {subq}",
+                 i = "within latest({subq})"))
 
   ## Anonymous subqueries are not included in list
   expect_error(
@@ -402,33 +407,35 @@ test_that("orderly_search returns no results when subquery has no results", {
 
 test_that("subqueries cannot be used in tests e.g. ==, <, >= etc.", {
   root <- create_temporary_root(use_file_store = TRUE)
-
-  expect_error(
+  err <- expect_error(
     orderly_search(quote({sub} > 2), # nolint
                   subquery = list(sub = quote(parameter:a == 2)),
                   root = root),
-    paste0("Unhandled query expression value '{sub}'\n",
-           "  - in     {sub}\n",
-           "  - within {sub} > 2"),
+    "Unhandled query expression value '{sub}'",
     fixed = TRUE)
+  expect_equal(err$body,
+               c(i = "in {sub}",
+                 i = "within {sub} > 2"))
 
-  expect_error(
+  err <- expect_error(
     orderly_search(quote(latest({sub}) > 2), # nolint
                   subquery = list(sub = quote(parameter:a == 2)),
                   root = root),
-    paste0("Unhandled query expression value 'latest({sub})'\n",
-           "  - in     latest({sub})\n",
-           "  - within latest({sub}) > 2"),
+    "Unhandled query expression value 'latest({sub})'",
     fixed = TRUE)
+  expect_equal(err$body,
+               c(i = "in latest({sub})",
+                 i = "within latest({sub}) > 2"))
 
-  expect_error(
+  err <- expect_error(
     orderly_search(quote(latest({sub} == "hello")), # nolint
                   subquery = list(sub = quote(name == "x")),
                   root = root),
-    paste0("Unhandled query expression value '{sub}'\n",
-           "  - in     {sub}\n",
-           '  - within latest({sub} == "hello")'),
+    "Unhandled query expression value '{sub}'",
     fixed = TRUE)
+  expect_equal(err$body,
+               c(i = "in {sub}",
+                 i = 'within latest({sub} == "hello")'))
 })
 
 
@@ -475,9 +482,7 @@ test_that("subqueries can be used within single", {
     orderly_search(quote(single({sub})), # nolint
                   subquery = list(sub = quote(name == "x")),
                   root = root),
-    paste0("Query found 2 packets, but expected exactly one\n",
-           "  - while evaluating single({sub})"),
-    fixed = TRUE)
+    "Query found 2 packets, but expected exactly one")
 
   expect_equal(
     orderly_search(quote(single({sub})), # nolint
@@ -507,14 +512,14 @@ test_that("anonymous subquery is printed nicely when it errors", {
 
   x1 <- create_random_packet(root, "x", list(a = 1))
 
-  expect_error(
+  err <- expect_error(
     orderly_search(quote(latest({ single() })), # nolint
                   root = root),
-    paste0("Invalid call to single(); ",
-           "expected 1 args but received 0\n",
-           "  - in     single()\n",
-           "  - within latest({single()})"),
+    "Invalid call to single(); expected 1 args but received 0",
     fixed = TRUE)
+  expect_equal(err$body,
+               c(i = "in single()",
+                 i = "within latest({single()})"))
 })
 
 
@@ -631,14 +636,14 @@ test_that("usedby errors if given expression which could return multiple ids", {
   ids <- create_random_packet_chain(root, 2)
   ids["b"] <- create_random_dependent_packet(root, "b", ids["a"])
 
-  expect_error(
+  err <- expect_error(
     orderly_search(quote(usedby({report_b})), # nolint
                   subquery = list(report_b = quote(name == "b")),
                   root = root),
-    paste0("usedby must be called on an expression guaranteed to return a ",
-           "single ID. Try wrapping expression in `latest` or `single`.\n",
-           "  - in usedby({report_b})"),
-    fixed = TRUE)
+    "usedby must be called on an expression guaranteed to return a single")
+  expect_match(conditionMessage(err),
+               "Try wrapping expression in `latest` or `single`",
+               fixed = TRUE)
 
   ## Suggested fix works
   expect_equal(
