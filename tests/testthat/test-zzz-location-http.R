@@ -27,9 +27,11 @@ describe("server integration tests", {
   })
 
   it("throws compatible error on missing metadata", {
-    msg <- "Some packet ids not found: 'id-missing'"
-    expect_error(client_http$metadata("id-missing"), msg)
+    msg <- "Some packet ids not found"
+    err <- expect_error(client_http$metadata("id-missing"), msg)
+    expect_equal(err$body, c("*" = "id-missing"))
     expect_error(client_path$metadata("id-missing"), msg)
+    expect_equal(err$body, c("*" = "id-missing"))
   })
 
   it("can fetch files", {

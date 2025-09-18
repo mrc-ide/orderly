@@ -39,10 +39,12 @@ orderly_location_http <- R6::R6Class(
                               parse_json = FALSE),
           outpack_http_client_error = function(e) {
             if (e$code == 404) {
-              e$message <- sprintf("Some packet ids not found: '%s'", id)
-              class(e) <- c("simpleError", class(e))
+              cli::cli_abort(c("Some packet ids not found:",
+                               set_names(id, "*")),
+                             parent = NA)
+            } else {
+              stop(e)
             }
-            stop(e)
           })
         cli::cli_progress_update(id = id_bar)
         trimws(data)
@@ -63,8 +65,7 @@ orderly_location_http <- R6::R6Class(
         outpack_http_client_error = function(e) {
           if (e$code == 404) {
             unlink(dest)
-            e$message <- sprintf("Hash '%s' not found at location", hash)
-            class(e) <- c("simpleError", class(e))
+            cli::cli_abort("Hash '{hash}' not found at location", parent = NA)
           }
           stop(e)
         })

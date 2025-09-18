@@ -195,7 +195,7 @@ test_that("default serialise errors if metadata found", {
   expect_equal(plugin_no_serialise(list(a = NULL, b = NULL)), js_null)
   expect_error(
     plugin_no_serialise(list(a = 1, b = 2)),
-    "Your plugin produced output to be serialise but has no serialise method")
+    "Your plugin produced output to be serialised but has no serialise method")
 })
 
 

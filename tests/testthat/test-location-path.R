@@ -72,15 +72,15 @@ test_that("requesting nonexistant metadata is an error", {
   ids <- vcapply(1:3, function(i) create_random_packet(path))
 
   errs <- c("20220317-125935-ee5fd50e", "20220317-130038-48ffb8ba")
-  expect_error(loc$metadata(errs[[1]]),
-               "Some packet ids not found: '20220317-125935-ee5fd50e'")
-  ## Truncating this error, will comma-separate all ids
-  expect_error(
-    loc$metadata(errs),
-    "Some packet ids not found: '20220317-125935-ee5fd50e', '20220317")
+  err1 <- expect_error(loc$metadata(errs[[1]]), "Some packet ids not found")
+  expect_match(conditionMessage(err1), errs[[1]], fixed = TRUE)
 
-  expect_error(loc$metadata(c(ids[[1]], errs[[1]], ids[[2]])),
-               "Some packet ids not found: '20220317-125935-ee5fd50e'")
+  err2 <- expect_error(loc$metadata(errs), "Some packet ids not found")
+  expect_equal(err2$body, set_names(errs, "*"))
+
+  err3 <- expect_error(loc$metadata(c(ids[[1]], errs[[1]], ids[[2]])),
+                       "Some packet ids not found")
+  expect_equal(conditionMessage(err3), conditionMessage(err1))
 })
 
 

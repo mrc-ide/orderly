@@ -41,14 +41,14 @@ test_that("print context around parse errors", {
     query_parse(quote(a %in% b), NULL, emptyenv()),
     "Invalid query 'a %in% b'; unknown query component '%in%'",
     fixed = TRUE)
-  expect_match(err$message, "  - in a %in% b", fixed = TRUE)
+  expect_match(conditionMessage(err), "in a %in% b", fixed = TRUE)
 
   err <- expect_error(
     query_parse(quote(latest(a %in% b)), NULL, emptyenv()),
     "Invalid query 'a %in% b'; unknown query component '%in%'",
     fixed = TRUE)
-  expect_match(err$message, "  - in     a %in% b", fixed = TRUE)
-  expect_match(err$message, "  - within latest(a %in% b)", fixed = TRUE)
+  expect_match(conditionMessage(err), "in a %in% b", fixed = TRUE)
+  expect_match(conditionMessage(err), "within latest(a %in% b)", fixed = TRUE)
 })
 
 
@@ -112,20 +112,12 @@ test_that("dependency can take literal or expression", {
 test_that("usedby requires 2nd arg boolean", {
   expect_error(
     query_parse(quote(usedby(id == "123", "123")), NULL, emptyenv()),
-    paste0("`depth` argument in 'usedby()' must be a positive numeric, set to ",
-           "control the number of layers of parents to recurse through when ",
-           "listing dependencies. Use `depth = Inf` to search entire ",
-           "dependency tree.\n",
-           '  - in usedby(id == "123", "123")'),
+    "`depth` argument in 'usedby()' must be a positive numeric",
     fixed = TRUE)
 
   expect_error(
     query_parse(quote(usedby(id == "123", -2)), NULL, emptyenv()),
-    paste0("`depth` argument in 'usedby()' must be a positive numeric, set to ",
-           "control the number of layers of parents to recurse through when ",
-           "listing dependencies. Use `depth = Inf` to search entire ",
-           "dependency tree.\n",
-           '  - in usedby(id == "123", -2'),
+    "`depth` argument in 'usedby()' must be a positive numeric",
     fixed = TRUE)
 
   res <- query_parse(quote(usedby(id == "123", 2)), NULL, emptyenv())

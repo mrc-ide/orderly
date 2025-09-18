@@ -354,7 +354,7 @@ extract_convert <- function(ids, value, from, is, call) {
   examples <- NULL
   type <- extract_type(from, is)
   if (type == "list") {
-    return(I(value))
+    I(value)
   } else {
     is_null <- vlapply(value, is.null)
     len <- lengths(value)

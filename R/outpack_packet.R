@@ -140,10 +140,10 @@ outpack_packet_use_dependency <- function(packet, query, files,
   assert_is(search_options, "orderly_search_options")
 
   if (!query$info$single) {
-    stop(paste(
-      "The provided query is not guaranteed to return a single value:",
-      squote(deparse_query(query$value$expr, NULL, NULL)),
-      "Did you forget latest(...)?"))
+    cli::cli_abort(
+      c("The provided query is not guaranteed to return a single value",
+        ">" = squote(deparse_query(query$value$expr, NULL, NULL)),
+        "i" = "Did you forget latest(...)?"))
   }
 
   id <- orderly_search(query,
@@ -266,8 +266,8 @@ outpack_packet_add_custom <- function(packet, application, data) {
   parse_json(data, name = "custom metadata")
 
   if (application %in% vcapply(packet$custom, "[[", "application")) {
-    stop(sprintf("metadata for '%s' has already been added for this packet",
-                 application))
+    cli::cli_abort(
+      "metadata for '{application}' has already been added for this packet")
   }
 
   custom <- list(application = application, data = data)
@@ -359,7 +359,7 @@ outpack_packet_finish <- function(packet) {
 check_current_packet <- function(packet) { # TODO: rename
   assert_is(packet, "outpack_packet")
   if (isTRUE(packet$complete)) {
-    stop(sprintf("Packet '%s' is complete", packet$id))
+    cli::cli_abort("Packet '{packet$id}' is complete")
   }
   packet
 }

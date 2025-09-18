@@ -42,7 +42,7 @@
 orderly_config_set <- function(..., options = list(...), root = NULL) {
   root <- root_open(root, require_orderly = FALSE)
   if (!missing(options) && ...length() > 0) {
-    stop("If 'options' is given, no dot arguments are allowed")
+    cli::cli_abort("If 'options' is given, no dot arguments are allowed")
   }
   if (length(options) == 0) {
     return(invisible())
@@ -58,8 +58,7 @@ orderly_config_set <- function(..., options = list(...), root = NULL) {
 
   unknown <- setdiff(names(options), names(setters))
   if (length(unknown)) {
-    stop("Can't set configuration option: ",
-         paste(squote(unknown), collapse = ", "))
+    cli::cli_abort("Can't set configuration option{?s}: {squote(unknown)}")
   }
 
   for (nm in names(options)) {
@@ -146,7 +145,8 @@ config_set_use_file_store <- function(value, root, call) {
 
   if (!value) {
     if (is.null(config$core$path_archive)) {
-      stop("If 'path_archive' is NULL, then 'use_file_store' must be TRUE")
+      cli::cli_abort(
+        "If 'path_archive' is NULL, then 'use_file_store' must be TRUE")
     }
     remove_file_store(root)
   }
@@ -156,7 +156,7 @@ config_set_use_file_store <- function(value, root, call) {
       add_file_store(root),
       error = function(e) {
         remove_file_store(root)
-        stop("Error adding file store: ", e$message, call. = FALSE)
+        cli::cli_abort("Error adding file store", parent = e)
       })
   }
 
@@ -175,7 +175,8 @@ config_set_path_archive <- function(value, root, call) {
 
   if (is.null(value)) {
     if (!config$core$use_file_store) {
-      stop("If 'path_archive' is NULL, then 'use_file_store' must be TRUE")
+      cli::cli_abort(
+        "If 'path_archive' is NULL, then 'use_file_store' must be TRUE")
     }
     path_archive <- file.path(root$path, config$core$path_archive)
     if (fs::dir_exists(path_archive)) {
@@ -211,7 +212,7 @@ config_set_path_archive <- function(value, root, call) {
       if (fs::dir_exists(path_archive)) {
         fs::dir_delete(path_archive)
       }
-      stop("Error adding 'path_archive': ", e$message, call. = FALSE)
+      cli::cli_abort("Error adding 'path_archive'", parent = e)
     })
   }
 
@@ -224,7 +225,8 @@ config_new <- function(path_archive, use_file_store, require_complete_tree,
   assert_scalar_character(path_archive, allow_null = TRUE, call = call)
   assert_scalar_logical(use_file_store, call = call)
   if (is.null(path_archive) && !use_file_store) {
-    stop("If 'path_archive' is NULL, then 'use_file_store' must be TRUE")
+    cli::cli_abort(
+      "If 'path_archive' is NULL, then 'use_file_store' must be TRUE")
   }
 
   assert_scalar_logical(require_complete_tree, call = call)

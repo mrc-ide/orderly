@@ -16,7 +16,7 @@ outpack_insert_packet <- function(path, json, root = NULL) {
   ## appear.
   exists <- any(root$index$location(local)$packet == id)
   if (exists) {
-    stop(sprintf("'%s' has already been added for '%s'", id, local))
+    cli::cli_abort("'{id}' has already been added for '{local}'")
   }
 
   for (i in seq_len(nrow(meta$depends))) {
