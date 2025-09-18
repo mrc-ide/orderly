@@ -249,13 +249,11 @@ current_orderly_version <- function() {
 
 
 yaml_read <- function(filename) {
-  ## TODO: chain properly
-  catch_yaml <- function(e) {
-    stop(sprintf("while reading '%s'\n%s", filename, e$message),
-         call. = FALSE)
-  }
-  tryCatch(yaml_load(read_lines(filename, warn = FALSE)),
-           error = catch_yaml)
+  tryCatch(
+    yaml_load(read_lines(filename, warn = FALSE)),
+    error = function(e) {
+      cli::cli_abort("Error reading '{filename}'", parent = e)
+    })
 }
 
 

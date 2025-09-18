@@ -87,7 +87,7 @@ test_that("can ignore errors and substitute in NA values", {
 
 
 test_that("yaml_read throws nicely", {
-  expect_error(suppressWarnings(yaml_read("foo")), "while reading 'foo'")
+  expect_error(suppressWarnings(yaml_read("foo")), "Error reading 'foo'")
 })
 
 
