@@ -80,47 +80,6 @@ orderly_migrate_file <- function(path, file, dry_run) {
 }
 
 
-update_minimum_orderly_version <- function(filename, version, dry_run) {
-  assert_file_exists(filename)
-  ## Everything about yaml is terrible.  We would like to edit the
-  ## value within the yaml, but we can't easily roundtrip the
-  ## contents.  So instead we'll edit the strings that it contains,
-  ## which is disgusting.  However, the majority of these that we will
-  ## hit are written by us, and are very simple, so in practice this
-  ## should be reasonable.
-  txt <- readLines(filename, warn = FALSE)
-  pattern <- "^minimum_orderly_version\\s*:\\s+(.*?)\\s*$"
-  i <- grep(pattern, txt)
-  if (length(i) == 0) {
-    cli::cli_abort(
-      c("Failed to find key 'minimum_orderly_version' in orderly config",
-        i = "Looked in '{filename}'",
-        i = "Please edit this file yourself"))
-  }
-  if (length(i) > 1) {
-    cli::cli_abort(
-      c("Found more than one key 'minimum_orderly_version' in orderly config",
-        i = "Looked in '{filename}'",
-        x = "This is probably not valid yaml, does this even work for you?"))
-  }
-  existing <- gsub("[\"']", "", sub(pattern, "\\1", txt[[i]]))
-  if (numeric_version(existing) >= version) {
-    cli::cli_alert_success(
-      "Minimum orderly version already at {existing}")
-    return(FALSE)
-  }
-
-  txt[[i]] <- sprintf('minimum_orderly_version: "%s"', version)
-  if (dry_run) {
-    cli::cli_alert_info(
-      "Would update minimum orderly version from {existing} to {version}")
-  } else {
-    writeLines(txt, filename)
-    cli::cli_alert_success(
-      "Updated minimum orderly version from {existing} to {version}")
-  }
-  TRUE
-}
 
 
 load_orderly2_support <- function() {
