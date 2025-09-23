@@ -100,13 +100,14 @@ orderly_migrate_source <- function(path = ".", dry_run = FALSE, from = NULL,
     cli::cli_alert_success("No migrations to apply")
     return(invisible(FALSE))
   }
+  from <- max(numeric_version(from %||% current), numeric_version("1.99.0"))
   to <- numeric_version(max(names(dat)))
 
   migrate_check_git_status(path, dry_run)
 
   changed <- character()
   for (v in names(dat)) {
-    cli::cli_h1("Migrating from {current} to {v}")
+    cli::cli_alert_info("Migrating from {from} to {v}")
     ## Once there is more than one set of migrations, warn here if
     ##
     ## > any(changed) && dry_run
@@ -116,23 +117,21 @@ orderly_migrate_source <- function(path = ".", dry_run = FALSE, from = NULL,
     ## consider passing 'to = "{current}' to migrate a bit at a time.
     ## This will be hard toapply until we really need it though.
     changed <- union(changed, dat[[v]](path, dry_run))
-    current <- v
+    from <- v
   }
-
-  n <- length(changed)
 
   ## Update the minimum version; this will never decrease the number
   ## in the file, so should always be safe to attempt.
-  n <- n + update_minimum_orderly_version(
+  n <- length(changed) + update_minimum_orderly_version(
     file.path(path, "orderly_config.yml"), to, dry_run)
 
   any_changed <- n > 0
   if (!any_changed) {
     cli::cli_alert_success("Nothing to change!")
   } else if (dry_run) {
-    cli::cli_alert_info("Would change {sum(changed)} file{?s}")
+    cli::cli_alert_info("Would change {n} file{?s}")
   } else {
-    cli::cli_alert_success("Changed {changed} file{?s}")
+    cli::cli_alert_success("Changed {n} file{?s}")
     cli::cli_alert_info("Please review, then add and commit these to git")
   }
 
@@ -175,6 +174,7 @@ migrations <- function(current, from, to) {
 migrate_1_99_82 <- function(path, dry_run) {
   files <- dir(path, pattern = "\\.(R|Rmd|qmd|md)$",
                recursive = TRUE, ignore.case = TRUE)
+  cli::cli_alert_info("Checking {length(files)} file{?s} in '{path}'")
   changed <- logical(length(files))
   for (i in seq_along(files)) {
     changed[[i]] <- migrate_1_99_82_file(path, files[[i]], dry_run)
