@@ -8,6 +8,7 @@ stopifnot(read.dcf("DESCRIPTION", "Package") == "orderly")
 # functions to appear.  Nonetheless, the file *was* automatically
 # generated so we might as well save the script
 nms <- getNamespaceExports("orderly")
+nms <- setdiff(nms, "orderly_migrate_source")
 
 fs::dir_create("inst/orderly2/R")
 fmt <- "#' @importFrom orderly %s\n#' @export\norderly::%s"
