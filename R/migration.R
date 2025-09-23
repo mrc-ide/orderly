@@ -1,5 +1,9 @@
-##' Migrate source code from orderly2 (version 1.99.81 and previous)
-##' to refer to orderly (version 1.99.82 and subsequent).
+##' Migrate source code for an orderly project.  Periodically, we may
+##' make changes to how orderly works that require you to update your
+##' source code sooner or later.  This function can be used to
+##' automate (or at least accelerate) that process by trying to
+##' rewrite the R code within your project.  See below for details of
+##' migrations and triggers for them.
 ##'
 ##' This function acts as an interface for rewriting the source code
 ##' that will be used to create new packets, it does not migrate any
@@ -38,7 +42,22 @@
 ##' We would like to enforce changes to `orderly_parameter` but have
 ##' not worked out a general best practice way of doing this.
 ##'
-##' # Version control
+##' # Migration process
+##'
+##' This function requires a clean git status before it is run, and
+##' will typically be best to run against a fresh clone of a
+##' repository (though this is not enforced).  After running, review
+##' changes (if any) with `git diff` and then commit.  You cannot run
+##' this function against source code that is not version controlled
+##' with git.
+##'
+##' # Migration of very old sources
+##'
+##' If you have old yaml-based orderly sources, you should consult
+##' `vignette("migrating")` as the migration path is not automatic and
+##' a bit more involved.  You will need to install the helper package
+##' `outpack.orderly` and migrate your source and your archive
+##' separately.
 ##'
 ##' @title Migrate orderly source code
 ##'
@@ -51,38 +70,51 @@
 ##'
 ##' @param from Optional minimum version to migrate from.  If `NULL`,
 ##'   we migrate from the version indicated in your
-##'   `orderly_config.yml`.  You can specify a lower version here if
-##'   you want to force migrations that would otherwise be skipped
-##'   because they are assumed to be applied.  Pass `"0"` (as a
-##'   string) to match all previous versions.
+##'   `orderly_config.yml` and assume that all older migrations have
+##'   been applied.  You can specify a lower version here if you want
+##'   to force migrations that would otherwise be skipped because they
+##'   are assumed to be applied.  Pass `"0"` (as a string) to match
+##'   all previous versions.
 ##'
 ##' @param to Optional maximum version to migrate to.  If `NULL` we
-##'   apply all possible migrations.
+##'   apply all possible migrations.  With `dry_run = TRUE` you may
+##'   not want to use this, because we do not write any files,
+##'   therefore each migration does not see the results of applying
+##'   the previous migration.
 ##'
 ##' @return Primarily called for side effects, but returns (invisibly)
 ##'   `TRUE` if any changes were made (or would be made if `dry_run`
 ##'   was `TRUE`) and `FALSE` otherwise.
 ##'
 ##' @export
+##' @examples
+##' # If a project already has made the migration from orderly2 to
+##' # orderly, then the migration does nothing:
+##' path <- orderly_example()
+##' orderly_migrate_source(path, dry_run = TRUE)
 orderly_migrate_source <- function(path = ".", dry_run = FALSE, from = NULL,
                                    to = NULL) {
-  ## TODO: check version is at least orderly2
-  current <- numeric_version("1.99.0")
-
-  migrate_check_git_status(path, dry_run)
-
+  current <- orderly_migrate_read_version(path)
   dat <- migrations(current, from, to)
   if (length(dat) == 0) {
     cli::cli_alert_success("No migrations to apply")
     return(invisible(FALSE))
   }
+  to <- numeric_version(max(names(dat)))
 
-  ## If doing a dry run, we can't really run multiple migrations
-  ## because we don't hold the correct contents.  Ignore this fact for
-  ## now.
+  migrate_check_git_status(path, dry_run)
+
   changed <- character()
   for (v in names(dat)) {
     cli::cli_h1("Migrating from {current} to {v}")
+    ## Once there is more than one set of migrations, warn here if
+    ##
+    ## > any(changed) && dry_run
+    ##
+    ## that this migration is being run against files that have not
+    ## had the previous migrations applied, and that the user might
+    ## consider passing 'to = "{current}' to migrate a bit at a time.
+    ## This will be hard toapply until we really need it though.
     changed <- union(changed, dat[[v]](path, dry_run))
     current <- v
   }
@@ -90,7 +122,7 @@ orderly_migrate_source <- function(path = ".", dry_run = FALSE, from = NULL,
   n <- length(changed)
 
   ## Update the minimum version; this will never decrease the number
-  ## in the file, so should always be safe.
+  ## in the file, so should always be safe to attempt.
   n <- n + update_minimum_orderly_version(
     file.path(path, "orderly_config.yml"), to, dry_run)
 
@@ -108,23 +140,27 @@ orderly_migrate_source <- function(path = ".", dry_run = FALSE, from = NULL,
 }
 
 
-## This is easy enough
 migrate_check_git_status <- function(path, dry_run) {
   status <- tryCatch(
     gert::git_status(repo = path),
-    error = function(e) {
-      if (dry_run) {
-        cli::cli_alert_warning(
-          "'{path}' does not appear to be version controlled")
-        return(NULL)
-      }
+    error = function(e) NULL)
+
+  if (is.null(status)) {
+    if (dry_run) {
+      cli::cli_alert_warning(
+        paste("The path '{path}' does not appear to be under version control",
+              "You will not be able to migrate your files, but we will still",
+              "show what needs changing, as you have used 'dry_run = TRUE'"))
+    } else {
       cli::cli_abort(
         "Not migrating '{path}' as it does not appear to be version controlled")
-    })
-  if (!dry_run && nrow(status) != 0) {
-    cli::cli_abort(
-      c("Not migrating '{path}' as 'git status' is not clean",
-        i = "Try running this in a fresh clone"))
+    }
+  } else {
+    if (nrow(status) > 0 && !dry_run) {
+      cli::cli_abort(
+        c("Not migrating '{path}' as 'git status' is not clean",
+          i = "Try running this in a fresh clone"))
+    }
   }
 }
 
@@ -148,8 +184,10 @@ migrate_1_99_82 <- function(path, dry_run) {
 
 
 ## Much of what is in here can no doubt be generalised, we'll not try
-## and do that yet.
-migrate_file <- function(path, file, dry_run) {
+## and do that yet.  Not all migrations will follow this pattern as
+## some will also change the name of the file (e.g., the migration
+## away from orderly.R to <name>/<name>.R
+migrate_1_99_82_file <- function(path, file, dry_run) {
   filename <- file.path(path, file)
   prev <- txt <- readLines(filename, warn = FALSE)
   txt <- sub("orderly2::", "orderly::", txt, fixed = TRUE)
@@ -208,4 +246,30 @@ update_minimum_orderly_version <- function(filename, version, dry_run) {
       "Updated minimum orderly version from {existing} to {version}")
   }
   TRUE
+}
+
+
+orderly_migrate_read_version <- function(path, call = parent.frame()) {
+  ## We don't use 'orderly_config_read' here because this is
+  ## eventually going to be made more relaxed about reading yaml, and
+  ## because we want to be quite explicit about paths (never looking
+  ## up the tree), and because we're going to start playing silly
+  ## business about the yaml vs a json configuration soon, and because
+  ## we don't want to error based on obsolete version numbers being
+  ## loaded.
+  ##
+  ## Once we support json configuration we'll prefer to read the json
+  ## verson and warn if both are present (we'll also do that in the
+  ## main root read too).
+  assert_file_exists_relative("orderly_config.yml", workdir = path,
+                              name = "Orderly configuration", call = call)
+  dat <- yaml_read(file.path(path, "orderly_config.yml"))
+
+  value <- dat$minimum_orderly_version
+  if (is.null(value)) {
+    cli::cli_abort(paste("Invalid orderly configuration does not have key",
+                         "'minimum_orderly_version'"))
+  }
+  assert_not_orderly1_project(value)
+  numeric_version(value)
 }
