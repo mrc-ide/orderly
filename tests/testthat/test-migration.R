@@ -180,4 +180,4 @@ test_that("can read version from config", {
   writeLines("minimum_orderly_version: 1.99.99", filename)
   expect_equal(orderly_migrate_read_version(path),
                numeric_version("1.99.99"))
-}
+})
