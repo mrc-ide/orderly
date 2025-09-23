@@ -11,11 +11,29 @@ test_that("Do nothing while migrating up-to-date sources", {
 })
 
 
+test_that("Do nothing while trying unneeded migrations", {
+  path <- suppressMessages(orderly_example())
+  res <- evaluate_promise(orderly_migrate_source(path))
+  expect_length(res$messages, 1)
+  expect_match(res$messages[[1]], "No migrations to apply")
+  expect_false(res$result)
+})
+
+
 test_that("refuse to migrate sources that are not under version control", {
   path <- suppressMessages(orderly_example())
   expect_error(
     orderly_migrate_source(path, from = "1.99.0"),
     "Not migrating")
+})
+
+
+test_that("warn on dry run without version control", {
+  path <- suppressMessages(orderly_example())
+  res <- evaluate_promise(
+    orderly_migrate_source(path, from = "1.99.0", dry_run = TRUE))
+  expect_match(res$messages[[1]],
+               "does not appear to be under version control")
 })
 
 
@@ -150,3 +168,16 @@ test_that("can migrate old sources", {
 
   expect_equal(nrow(gert::git_status(repo = path)), 2)
 })
+
+
+test_that("can read version from config", {
+  path <- withr::local_tempdir()
+  filename <- file.path(path, "orderly_config.yml")
+  file.create(filename)
+  expect_error(
+    orderly_migrate_read_version(path),
+    "Invalid orderly configuration does not have key")
+  writeLines("minimum_orderly_version: 1.99.99", filename)
+  expect_equal(orderly_migrate_read_version(path),
+               numeric_version("1.99.99"))
+}
