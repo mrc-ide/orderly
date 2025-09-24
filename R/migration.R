@@ -12,7 +12,7 @@
 ##' relatively simple changes to your code, we can write a script that
 ##' will do a reasonable (if not perfect) job of this, and you can run
 ##' this over your code, check the results and if you like it commit
-##' the changes to your repository, rather than than you having to go
+##' the changes to your repository, rather than you having to go
 ##' through and change everything by hand.
 ##'
 ##' The version of orderly that you support is indicated by the
