@@ -23,7 +23,11 @@
 ##' # Migrations
 ##'
 ##' A summary of migrations.  The version number indicates the minimum
-##' version that this would increase your source repository to
+##' version that this would increase your source repository to.
+##'
+##' Currently, we do not *enforce* these changes must be present in a
+##' repository that declares it uses a recent orderly version, but
+##' this may happen at any time, without further warning!
 ##'
 ##' ## 1.99.82
 ##'
@@ -32,11 +36,15 @@
 ##' `orderly2::orderly_parameter`) and calls to `library` (e.g.,
 ##' `library(orderly2)`)
 ##'
+##' ## 1.99.88
+##'
+##' Renames '<name>/orderly.R' files to '<name>/<name>.R', a change
+##' that we introduced in early 2024 (version 1.99.13).
+##'
 ##' ## Future migrations
 ##'
 ##' We have some old changes to enable here:
 ##'
-##' * renaming `<name>/orderly.R` to `<name>/<name>.R`
 ##' * enforcing named arguments to `orderly_artefact`
 ##'
 ##' We would like to enforce changes to `orderly_parameter` but have

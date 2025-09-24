@@ -59,7 +59,11 @@ your code up to date.
 }
 \section{Migrations}{
 A summary of migrations.  The version number indicates the minimum
-version that this would increase your source repository to
+version that this would increase your source repository to.
+
+Currently, we do not \emph{enforce} these changes must be present in a
+repository that declares it uses a recent orderly version, but
+this may happen at any time, without further warning!
 \subsection{1.99.82}{
 
 Removes references to \code{orderly2}, replacing them with \code{orderly}.
@@ -68,11 +72,16 @@ This affects namespaced calls (e.g.,
 \code{library(orderly2)})
 }
 
+\subsection{1.99.88}{
+
+Renames '\if{html}{\out{<name>}}/orderly.R' files to '\if{html}{\out{<name>}}/\if{html}{\out{<name>}}.R', a change
+that we introduced in early 2024 (version 1.99.13).
+}
+
 \subsection{Future migrations}{
 
 We have some old changes to enable here:
 \itemize{
-\item renaming \verb{<name>/orderly.R} to \verb{<name>/<name>.R}
 \item enforcing named arguments to \code{orderly_artefact}
 }
 
