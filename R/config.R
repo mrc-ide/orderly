@@ -24,7 +24,7 @@ orderly_config_read <- function(path, call = NULL) {
   on.exit(setwd(owd))
   dat <- list()
   for (x in names(check)) {
-    dat[[x]] <- check[[x]](raw[[x]], filename, call)
+    dat[[x]] <- check[[x]](raw[[x]], filename, call = call)
   }
 
   dat
@@ -33,16 +33,8 @@ orderly_config_read <- function(path, call = NULL) {
 
 orderly_config_validate_minimum_orderly_version <- function(value, filename,
                                                             call = NULL) {
-  assert_scalar_character(value, call = call)
+  assert_not_orderly1_project(value, call = call)
   version <- numeric_version(value)
-  if (version < numeric_version("1.99.0")) {
-    cli::cli_abort(
-      c("Detected old orderly project, you need to migrate to orderly 2",
-        i = 'Please see documentation at vignette("migrating")',
-        i = paste("You can also use this project with the 'orderly1' package,",
-                  "which can safely be installed alongside the new version")),
-      call = call)
-  }
   if (version > current_orderly_version()) {
     cli::cli_abort(sprintf(
       "orderly version '%s' is required, but only '%s' installed",
@@ -50,6 +42,20 @@ orderly_config_validate_minimum_orderly_version <- function(value, filename,
       call = call)
   }
   version
+}
+
+
+assert_not_orderly1_project <- function(value, call = NULL) {
+  assert_scalar_character(value, call = call)
+  if (numeric_version(value) < numeric_version("1.99.0")) {
+    cli::cli_abort(
+      c("Detected old orderly project, you need to migrate to orderly 2",
+        i = 'Please see documentation at vignette("migrating")',
+        i = paste(
+          "You can also use this project with the 'orderly1' package,",
+          "which can safely be installed alongside the new version")),
+      call = call)
+  }
 }
 
 

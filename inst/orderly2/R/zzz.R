@@ -146,10 +146,6 @@ orderly::orderly_hash_data
 #' @export
 orderly::orderly_hash_file
 
-#' @importFrom orderly orderly_migrate_source_from_orderly2
-#' @export
-orderly::orderly_migrate_source_from_orderly2
-
 #' @importFrom orderly orderly_location_add
 #' @export
 orderly::orderly_location_add
