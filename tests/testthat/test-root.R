@@ -198,7 +198,7 @@ test_that("can identify a plain source root", {
 
 test_that("can identify a plain source root from a full root", {
   path <- test_prepare_orderly_example("explicit")
-  root <- root_open(path)
+  root <- root_open(path, FALSE)
   expect_equal(orderly_src_root(root$path, FALSE), root$path)
   expect_equal(orderly_src_root(root, FALSE), root$path)
 })
@@ -214,15 +214,15 @@ test_that("can use ORDERLY_ROOT to control the working directory", {
 
   withr::with_envvar(c(ORDERLY_ROOT = NA_character_), {
     withr::with_dir(path_a, {
-      expect_equal(root_open(NULL)$path, path_a)
-      expect_equal(root_open(path_b)$path, path_b)
+      expect_equal(root_open(NULL, FALSE)$path, path_a)
+      expect_equal(root_open(path_b, FALSE)$path, path_b)
     })
   })
 
   withr::with_envvar(c(ORDERLY_ROOT = path_c), {
     withr::with_dir(path_a, {
-      expect_equal(root_open(NULL)$path, path_c)
-      expect_equal(root_open(path_b)$path, path_b)
+      expect_equal(root_open(NULL, FALSE)$path, path_c)
+      expect_equal(root_open(path_b, FALSE)$path, path_b)
     })
   })
 })

@@ -326,18 +326,19 @@ orderly_find_root_locate <- function(path, call = NULL) {
   has_outpack <- !is.null(path_outpack)
   has_orderly <- !is.null(path_orderly)
 
-  if (has_outpack && has_orderly && path_outpack != path_orderly) {
-    if (fs::path_has_parent(path_outpack, path_orderly)) {
-      order <- c(orderly = path_orderly, outpack = path_outpack)
-    } else {
-      order <- c(outpack = path_outpack, orderly = path_orderly)
+  err_nesting <- has_outpack && has_orderly &&
+    dirname(path_outpack) != dirname(path_orderly)
+  if (err_nesting) {
+    dirs <- c(outpack = dirname(path_outpack), orderly = dirname(path_orderly))
+    if (fs::path_has_parent(dirs[[1]], dirs[[2]])) {
+      dirs <- dirs[2:1]
     }
     cli::cli_abort(c(
       "Found incorrectly nested orderly and outpack directories",
-      i = "{names(order)[[1]]} was found at '{order[[1]]}'",
-      i = "{names(order)[[2]]} was found at '{order[[2]]}'",
-      x = paste("{names(order)[[2]]} is nested within {names(order)[[1]]}",
-                "at {fs::path_rel(order[[2]], order[[1]])}"),
+      i = "{names(dirs)[[1]]} was found at '{dirs[[1]]}'",
+      i = "{names(dirs)[[2]]} was found at '{dirs[[2]]}'",
+      x = paste("{names(dirs)[[2]]} is nested within {names(dirs)[[1]]}",
+                "at {fs::path_rel(dirs[[2]], dirs[[1]])}"),
       i = "How did you even do this? Please let us know!"),
       call = call)
   }
