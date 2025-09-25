@@ -19,7 +19,7 @@ outpack_root <- R6::R6Class(
       }
       self$index <- outpack_index$new(path)
       if (!is.null(path_orderly)) {
-        self$config$orderly <- orderly_config_read(path_orderly, call)
+        self$config$orderly <- orderly_config_read(path_orderly, NULL)
       }
       lockBinding("path", self)
       lockBinding("index", self)

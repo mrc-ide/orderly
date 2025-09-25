@@ -70,7 +70,8 @@ orderly_init <- function(root = ".",
                          require_complete_tree = FALSE,
                          force = FALSE) {
   assert_scalar_character(root)
-  has_orderly_config <- file.exists(file.path(root, "orderly_config.yml"))
+  path_orderly <- file.path(root, "orderly_config.yml")
+  has_orderly_config <- file.exists(path_orderly)
   if (!has_orderly_config && file.exists(root)) {
     if (!is_directory(root)) {
       cli::cli_abort("'root' exists but is not a directory")
@@ -108,13 +109,12 @@ orderly_init <- function(root = ".",
     fs::dir_create(file.path(path_outpack, "metadata"))
     fs::dir_create(file.path(path_outpack, "location"))
     config_write(config, root)
-    root <- outpack_root$new(root)
+    root <- outpack_root$new(root, NULL)
     cli::cli_alert_success("Created orderly root at '{root$path}'")
   }
 
   if (!has_orderly_config) {
-    writeLines(empty_config_contents(),
-               file.path(root$path, "orderly_config.yml"))
+    writeLines(empty_config_contents(), path_orderly)
   }
 
   root <- root_open(root, require_orderly = TRUE)
@@ -133,11 +133,12 @@ empty_config_contents <- function() {
 
 root_open <- function(path, require_orderly, call = parent.frame()) {
   if (inherits(path, "outpack_root")) {
-    if (!require_orderly || !is.null(path$config$orderly)) {
-      return(path)
+    root <- path # make this much easier to read
+    if (!require_orderly || !is.null(root$config$orderly)) {
+      return(root)
     }
     ## This is going to error, but the error later will do.
-    path <- path$path
+    path <- root$path
   }
 
   dat <- orderly_find_root(path,
@@ -305,7 +306,7 @@ orderly_find_root <- function(path, require_orderly, require_outpack,
       call = call)
   }
 
-  if (require_outpack && !is.null(ret$path_outpack)) {
+  if (require_outpack && is.null(ret$path_outpack)) {
     cli::cli_abort(
       c(sprintf("orderly directory '%s' not initialised", path),
         x = "Did not find an '.outpack' directory within path",
@@ -361,7 +362,7 @@ orderly_find_root_here <- function(path, call) {
   assert_is_directory(path, call = call)
 
   path_outpack <- file.path(path, ".outpack")
-  path_orderly <- file.path(path, ".orderly_config.yml")
+  path_orderly <- file.path(path, "orderly_config.yml")
 
   has_outpack <- file_exists(path_outpack)
   has_orderly <- file_exists(path_orderly)
@@ -369,12 +370,12 @@ orderly_find_root_here <- function(path, call) {
   if (!has_outpack && !has_orderly) {
     cli::cli_abort(
       c("Did not find existing orderly (or outpack) root in '{path}'",
-        i = paste("Expected to find file 'orderly_config.yml'"
+        i = paste("Expected to find file 'orderly_config.yml'",
                   "or directory '.outpack/'")),
       call = call)
   }
 
   list(path = path,
-       path_outpack = path_outpack,
-       path_orderly = path_orderly)
+       path_outpack = if (has_outpack) path_outpack,
+       path_orderly = if (has_orderly) path_orderly)
 }

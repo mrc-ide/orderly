@@ -154,7 +154,7 @@ helper_add_git <- function(path) {
 outpack_init_no_orderly <- function(...) {
   path <- orderly_init_quietly(...)
   fs::file_delete(file.path(path, "orderly_config.yml"))
-  outpack_root$new(path)
+  outpack_root$new(path, NULL)
 }
 
 
