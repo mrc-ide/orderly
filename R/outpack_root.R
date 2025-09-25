@@ -8,7 +8,7 @@ outpack_root <- R6::R6Class(
     files = NULL,
     index = NULL,
 
-    initialize = function(path) {
+    initialize = function(path, path_orderly) {
       assert_file_exists(path)
       assert_file_exists(file.path(path, ".outpack"))
       path <- as.character(fs::path_real(path))
@@ -18,6 +18,9 @@ outpack_root <- R6::R6Class(
         self$files <- file_store$new(file.path(path, ".outpack", "files"))
       }
       self$index <- outpack_index$new(path)
+      if (!is.null(path_orderly)) {
+        self$config$orderly <- orderly_config_read(path_orderly, call)
+      }
       lockBinding("path", self)
       lockBinding("index", self)
     }

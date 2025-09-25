@@ -239,6 +239,9 @@ orderly_plugin_add_metadata <- function(name, field, data) {
 
 check_plugin_enabled <- function(name, config, call) {
   if (is.null(config$plugins[[name]])) {
+    ## TODO: pass filename through here, or change the error message
+    ## to simply say "orderly configuration" and point (in a hint) as
+    ## to how to enable it, which will eventually be programmatic.
     cli::cli_abort("Plugin '{name}' not enabled in 'orderly_config.yml'",
                    call = call)
   }

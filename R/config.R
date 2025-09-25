@@ -1,5 +1,5 @@
-orderly_config_read <- function(path, call = NULL) {
-  filename <- file.path(path, "orderly_config.yml")
+orderly_config_read <- function(filename, call = NULL) {
+  path <- dirname(filename)
   assert_file_exists_relative(basename(filename), workdir = path,
                               name = "Orderly configuration", call = call)
   raw <- yaml_read(filename)
@@ -8,8 +8,7 @@ orderly_config_read <- function(path, call = NULL) {
     assert_named(raw, call = call)
   }
 
-  raw <- resolve_envvar(raw, orderly_envir_read(path, call),
-                        "orderly_config.yml")
+  raw <- resolve_envvar(raw, orderly_envir_read(path, call), basename(filename))
 
   check <- list(
     minimum_orderly_version = orderly_config_validate_minimum_orderly_version,
