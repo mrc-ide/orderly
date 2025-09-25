@@ -15,10 +15,13 @@ find_entrypoint_filename <- function(src, suppress_zero_files = FALSE,
   names <- c(sprintf("%s.R", reportname), "orderly.R")
   files_exist <- file.exists(file.path(src, names))
   n_found <- sum(files_exist)
+  hint <- paste("You can automatically rename these files with",
+                "{.help orderly_migrate_source}")
   if (n_found > 1 && !suppress_multiple_files) {
     cli::cli_abort(
-      paste("Please only create {names[[1]]} file, orderly.R",
-            "has been deprecated")
+      c(paste("Please only create {names[[1]]} file, orderly.R",
+              "has been deprecated"),
+        i = hint)
     )
   }
   if (n_found == 0 && !suppress_zero_files) {
@@ -28,9 +31,10 @@ find_entrypoint_filename <- function(src, suppress_zero_files = FALSE,
   }
   if (files_exist[[2]]) {
     cli::cli_warn(
-      paste("Naming convention orderly.R will be deprecated",
-            "soon. Please change orderly file name to",
-            "<reportname>.R"),
+      c(paste("Naming convention orderly.R will be deprecated",
+              "soon. Please change orderly file name to",
+              "<reportname>.R"),
+        i = hint),
       .frequency = "regularly",
       .frequency_id = "deprecate_orderly_file_name"
     )

@@ -1,7 +1,8 @@
 test_that("Do nothing while migrating up-to-date sources", {
   path <- suppressMessages(orderly_example())
   info <- helper_add_git(path)
-  res <- evaluate_promise(orderly_migrate_source(path, from = "0"))
+  res <- evaluate_promise(
+    orderly_migrate_source(path, from = "0", to = "1.99.82"))
   expect_length(res$messages, 4)
   expect_match(res$messages[[1]], "Migrating from 1.99.0 to 1.99.82")
   expect_match(res$messages[[2]], "Checking \\d+ files in")
@@ -143,7 +144,7 @@ test_that("can migrate old sources", {
   info <- helper_add_git(path)
 
   res <- evaluate_promise(
-    orderly_migrate_source(path, from = "0", dry_run = TRUE))
+    orderly_migrate_source(path, to = "1.99.82", dry_run = TRUE))
   expect_length(res$messages, 5)
   expect_match(res$messages[[1]], "Migrating from 1.99.0 to 1.99.82")
   expect_match(res$messages[[2]], "Checking \\d+ files in")
@@ -155,7 +156,7 @@ test_that("can migrate old sources", {
   expect_equal(nrow(gert::git_status(repo = path)), 0)
 
   res <- evaluate_promise(
-    orderly_migrate_source(path))
+    orderly_migrate_source(path, to = "1.99.82"))
   expect_length(res$messages, 6)
   expect_match(res$messages[[1]], "Migrating from 1.99.0 to 1.99.82")
   expect_match(res$messages[[2]], "Checking \\d+ files in")
@@ -180,4 +181,42 @@ test_that("can read version from config", {
   writeLines("minimum_orderly_version: 1.99.99", filename)
   expect_equal(orderly_migrate_read_version(path),
                numeric_version("1.99.99"))
+})
+
+
+
+test_that("can migrate orderly.R files", {
+  path <- suppressMessages(orderly_example())
+  writeLines(
+    'minimum_orderly_version: "1.99.82"',
+    file.path(path, "orderly_config.yml"))
+
+  nms <- orderly_list_src(path)
+  fs::file_move(file.path(path, "src", nms, paste0(nms, ".R")),
+                file.path(path, "src", nms, "orderly.R"))
+  info <- helper_add_git(path)
+
+  expect_length(dir(path, "orderly\\.R$", recursive = TRUE), length(nms))
+
+  res <- evaluate_promise(
+    orderly_migrate_source(path, to = "1.99.88", dry_run = TRUE))
+  expect_length(res$messages, length(nms) + 3)
+  n <- length(res$messages)
+  expect_match(res$messages[[1]], "Migrating from 1.99.82 to 1.99.88")
+  expect_match(res$messages[2:(n - 2)],
+               "Would rename '.+/orderly\\.R' to '.+/.+\\.R'")
+  expect_match(res$messages[[n - 1]], "Would update minimum orderly version")
+  expect_match(res$messages[[n]],
+               sprintf("Would change %d files", length(nms) + 1))
+  expect_true(res$result)
+
+  expect_equal(nrow(gert::git_status(repo = path)), 0)
+
+  res <- evaluate_promise(
+    orderly_migrate_source(path, to = "1.99.88"))
+  expect_length(res$messages, length(nms) + 4)
+  expect_true(res$result)
+
+  expect_equal(nrow(gert::git_status(repo = path)), length(nms) * 2 + 1)
+  expect_length(dir(path, "orderly\\.R$", recursive = TRUE), 0)
 })

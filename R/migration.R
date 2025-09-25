@@ -23,7 +23,11 @@
 ##' # Migrations
 ##'
 ##' A summary of migrations.  The version number indicates the minimum
-##' version that this would increase your source repository to
+##' version that this would increase your source repository to.
+##'
+##' Currently, we do not *enforce* these changes must be present in a
+##' repository that declares it uses a recent orderly version, but
+##' this may happen at any time, without further warning!
 ##'
 ##' ## 1.99.82
 ##'
@@ -32,11 +36,15 @@
 ##' `orderly2::orderly_parameter`) and calls to `library` (e.g.,
 ##' `library(orderly2)`)
 ##'
+##' ## 1.99.88
+##'
+##' Renames '<name>/orderly.R' files to '<name>/<name>.R', a change
+##' that we introduced in early 2024 (version 1.99.13).
+##'
 ##' ## Future migrations
 ##'
 ##' We have some old changes to enable here:
 ##'
-##' * renaming `<name>/orderly.R` to `<name>/<name>.R`
 ##' * enforcing named arguments to `orderly_artefact`
 ##'
 ##' We would like to enforce changes to `orderly_parameter` but have
@@ -165,7 +173,8 @@ migrate_check_git_status <- function(path, dry_run) {
 
 
 migrations <- function(current, from, to) {
-  possible <- list("1.99.82" = migrate_1_99_82)
+  possible <- list("1.99.82" = migrate_1_99_82,
+                   "1.99.88" = migrate_1_99_88)
   v <- numeric_version(names(possible))
   possible[(v > from %||% current) & (v <= to %||% ORDERLY_MINIMUM_VERSION)]
 }
@@ -200,6 +209,37 @@ migrate_1_99_82_file <- function(path, file, dry_run) {
     } else {
       cli::cli_alert_info("Updated {n} line{?s} in {file}")
       writeLines(txt, filename)
+    }
+  }
+  changed
+}
+
+
+migrate_1_99_88 <- function(path, dry_run) {
+  path_src <- file.path(path, "src")
+  dirs <- fs::dir_ls(path_src, type = "directory")
+  changed <- character()
+  for (p in dirs) {
+    name <- basename(p)
+    path_old <- file.path(p, "orderly.R")
+    if (file.exists(path_old)) {
+      path_new <- file.path(p, paste0(name, ".R"))
+      if (file.exists(path_new)) {
+        cli::cli_alert_danger(
+          paste("Deleting 'src/{name}/orderly.R' as '{name}' also contains",
+                "'{name}.R' - {.strong please check carefully}"))
+        fs::file_delete(path_old)
+      } else {
+        if (dry_run) {
+          cli::cli_alert_info(
+            "Would rename '{name}/orderly.R' to '{name}/{name}.R'")
+        } else {
+          cli::cli_alert_info(
+            "Renaming '{name}/orderly.R' to '{name}/{name}.R'")
+          fs::file_move(path_old, path_new)
+        }
+      }
+      changed <- c(changed, path_old)
     }
   }
   changed
