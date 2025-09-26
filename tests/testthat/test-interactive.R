@@ -47,7 +47,7 @@ test_that("does not unnecessarily suggest changing working directory", {
   # Editor path is not an orderly report
   expect_no_warning(detect_orderly_interactive_path(
     path = file.path(root, "src", "explicit"),
-    editor_path = file.path(root, "orderly_config.yml")
+    editor_path = file.path(root, "orderly_config.json")
   ))
 
   # Editor path is an unsaved file

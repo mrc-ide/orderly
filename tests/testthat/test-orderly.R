@@ -25,7 +25,7 @@ test_that("no candidates returns empty character vector", {
   path <- test_prepare_orderly_example(character())
   fs::dir_delete(file.path(path, "src"))
   expect_setequal(dir(path, all.files = TRUE, no.. = TRUE),
-                  c(".outpack", "orderly_config.yml"))
+                  c(".outpack", "orderly_config.json"))
   expect_equal(withr::with_dir(path, orderly_list_src()), character())
   expect_equal(orderly_list_src(path), character())
 })

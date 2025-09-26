@@ -93,7 +93,7 @@
 ##'   shared drive.
 ##'
 ##' In the first instance, we have a source path at `<src>` which
-##'   contains the file `orderly_config.yml` and the directory `src/`
+##'   contains the file `orderly_config.json` and the directory `src/`
 ##'   with our source reports, and a separate path `<root>` which
 ##'   contains the directory `.outpack/` with all the metadata - it
 ##'   may also have an unpacked archive, and a `.git/` directory

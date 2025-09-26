@@ -1,9 +1,10 @@
 is_plausible_orderly_report <- function(path) {
   path_split <- fs::path_split(path)[[1]]
+  name_config <- c("orderly_config.yml", "orderly_config.json")
 
   length(path_split) > 2 &&
     path_split[[length(path_split) - 1]] == "src" &&
-    file.exists(file.path(path, "../..", "orderly_config.yml"))
+    any(file.exists(file.path(path, "../..", name_config)))
 }
 
 rstudio_get_current_active_editor_path <- function() {

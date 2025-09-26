@@ -132,6 +132,7 @@ test_that("can migrate source file", {
 
 test_that("can migrate old sources", {
   path <- suppressMessages(orderly_example())
+  unlink(file.path(path, "orderly_config.json"))
   writeLines(
     'minimum_orderly_version: "1.99.0"',
     file.path(path, "orderly_config.yml"))
@@ -171,6 +172,7 @@ test_that("can migrate old sources", {
 })
 
 
+## TODO: this needs work too
 test_that("can read version from config", {
   path <- withr::local_tempdir()
   filename <- file.path(path, "orderly_config.yml")
@@ -187,9 +189,7 @@ test_that("can read version from config", {
 
 test_that("can migrate orderly.R files", {
   path <- suppressMessages(orderly_example())
-  writeLines(
-    'minimum_orderly_version: "1.99.82"',
-    file.path(path, "orderly_config.yml"))
+  write_old_version_marker(path, "1.99.82")
 
   nms <- orderly_list_src(path)
   fs::file_move(file.path(path, "src", nms, paste0(nms, ".R")),

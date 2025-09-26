@@ -862,3 +862,13 @@ find_calling_env <- function(fn) {
 load_namespace <- function(name) {
   rlang::eval_bare(rlang::call2("loadNamespace", name))
 }
+
+
+read_config_data <- function(filename) {
+  ext <- fs::path_ext(filename)
+  if (ext == "yml") {
+    yaml_read(filename)
+  } else {
+    jsonlite::read_json(filename)
+  }
+}
