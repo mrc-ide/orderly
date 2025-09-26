@@ -2,9 +2,9 @@ test_that("Configuration must be empty", {
   tmp <- tempfile()
   on.exit(fs::dir_delete(tmp))
   fs::dir_create(tmp)
-  writeLines(c(empty_config_contents(), "a: 1"),
-             file.path(tmp, "orderly_config.yml"))
-  expect_error(orderly_config_read(tmp),
+  filename <- file.path(tmp, "orderly_config.yml")
+  writeLines(c(empty_config_contents(), "a: 1"), filename)
+  expect_error(orderly_config_read(filename),
                "Unknown field in .+")
 })
 
@@ -14,7 +14,7 @@ test_that("Configuration must exist", {
   on.exit(fs::dir_delete(tmp))
   fs::dir_create(tmp)
   outpack_init_no_orderly(tmp)
-  expect_error(orderly_config_read(tmp),
+  expect_error(orderly_config_read(file.path(tmp, "orderly_config.yml")),
                "Orderly configuration does not exist: 'orderly_config.yml'")
 })
 
@@ -172,33 +172,23 @@ test_that("can identify a plain source root", {
   info <- test_prepare_orderly_example_separate("explicit")
   expect_equal(normalise_path(orderly_src_root(info$src, FALSE)),
                normalise_path(info$src))
-  expect_equal(
-    orderly_src_root(file.path(info$src, "src", "explicit"), TRUE),
-    orderly_src_root(info$src, FALSE))
   expect_error(
-    orderly_src_root(file.path(info$src, "src", "explicit"), FALSE),
-    "Did not find existing orderly source root in")
+    orderly_src_root(file.path(info$src, "src", "explicit")),
+    "Did not find existing orderly (or outpack) root in", fixed = TRUE)
 
   p <- file.path(info$outpack, "a", "b", "c")
   fs::dir_create(p)
 
   err <- expect_error(
-    orderly_src_root(info$outpack, FALSE),
-    "Did not find existing orderly source root in")
-  expect_equal(err$body, c(i = "Expected to find file 'orderly_config.yml'"))
-
-  err <- expect_error(
-    orderly_src_root(p, TRUE),
-    "Did not find existing orderly source root in")
-  expect_equal(err$body,
-               c(i = "Expected to find file 'orderly_config.yml'",
-                 i = "Looked in parents of this path without success"))
+    orderly_src_root(info$outpack),
+    "Did not find 'orderly_config.yml' in",
+    fixed = TRUE)
 })
 
 
 test_that("can identify a plain source root from a full root", {
   path <- test_prepare_orderly_example("explicit")
-  root <- root_open(path)
+  root <- root_open(path, FALSE)
   expect_equal(orderly_src_root(root$path, FALSE), root$path)
   expect_equal(orderly_src_root(root, FALSE), root$path)
 })
@@ -214,15 +204,15 @@ test_that("can use ORDERLY_ROOT to control the working directory", {
 
   withr::with_envvar(c(ORDERLY_ROOT = NA_character_), {
     withr::with_dir(path_a, {
-      expect_equal(root_open(NULL)$path, path_a)
-      expect_equal(root_open(path_b)$path, path_b)
+      expect_equal(root_open(NULL, FALSE)$path, path_a)
+      expect_equal(root_open(path_b, FALSE)$path, path_b)
     })
   })
 
   withr::with_envvar(c(ORDERLY_ROOT = path_c), {
     withr::with_dir(path_a, {
-      expect_equal(root_open(NULL)$path, path_c)
-      expect_equal(root_open(path_b)$path, path_b)
+      expect_equal(root_open(NULL, FALSE)$path, path_c)
+      expect_equal(root_open(path_b, FALSE)$path, path_b)
     })
   })
 })

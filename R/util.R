@@ -342,14 +342,14 @@ orderly_file <- function(path) {
 }
 
 
-## We could rewrite this non-recurively, this just comes from orderly
 find_file_descend <- function(target, start = ".", limit = "/") {
   root <- normalise_path(limit)
   start <- normalise_path(start)
 
   f <- function(path) {
-    if (file.exists(file.path(path, target))) {
-      return(path)
+    filename <- file.path(path, target)
+    if (file.exists(filename)) {
+      return(filename)
     }
     if (normalise_path(path) == root) {
       return(NULL)

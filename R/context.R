@@ -16,8 +16,16 @@ orderly_context <- function(envir) {
   } else {
     path <- getwd()
     root_src <- detect_orderly_interactive_path(path)
-    root <- root_src # for now at least
-    config <- orderly_config_read(root)
+    root <- root_src
+
+    ## This can probably be tidied up a bit later?
+    dat <- orderly_find_root(root_src,
+                             require_orderly = TRUE,
+                             require_outpack = FALSE,
+                             call = call)
+    path_orderly_config <- dat$path_orderly
+
+    config <- orderly_config_read(path_orderly_config)
     src <- path
     parameters <- current_orderly_parameters(src, envir)
     parameters_values <- parameters$values
