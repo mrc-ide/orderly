@@ -59,11 +59,21 @@ test_that("allow dry run on unclean repo", {
 })
 
 
-test_that("don't change up-to yml", {
+test_that("don't change up-to json", {
   path <- withr::local_tempfile()
   writeLines(empty_config_contents(), path)
   res <- evaluate_promise(
-    update_minimum_orderly_version(path, ORDERLY_MINIMUM_VERSION, FALSE))
+    update_minimum_orderly_version_json(path, ORDERLY_MINIMUM_VERSION, FALSE))
+  expect_false(res$result)
+  expect_match(res$messages, "Minimum orderly version already at")
+})
+
+
+test_that("don't change up-to yml", {
+  path <- withr::local_tempfile()
+  writeLines("minimum_orderly_version: 1.99.88", path)
+  res <- evaluate_promise(
+    update_minimum_orderly_version_yml(path, "1.99.88", FALSE))
   expect_false(res$result)
   expect_match(res$messages, "Minimum orderly version already at")
 })
@@ -73,7 +83,20 @@ test_that("can increase version if required", {
   path <- withr::local_tempfile()
   writeLines(empty_config_contents(), path)
   res <- evaluate_promise(
-    update_minimum_orderly_version(path, "9.9.9", FALSE))
+    update_minimum_orderly_version_json(path, "9.9.9", FALSE))
+  expect_true(res$result)
+  expect_match(res$messages,
+               "Updated minimum orderly version from .+ to 9.9.9")
+  expect_equal(jsonlite::read_json(path),
+               list("minimum_orderly_version" = "9.9.9"))
+})
+
+
+test_that("can increase version if required (yaml)", {
+  path <- withr::local_tempfile()
+  writeLines("minimum_orderly_version: 1.99.0", path)
+  res <- evaluate_promise(
+    update_minimum_orderly_version_yml(path, "9.9.9", FALSE))
   expect_true(res$result)
   expect_match(res$messages,
                "Updated minimum orderly version from .+ to 9.9.9")
@@ -86,16 +109,19 @@ test_that("error if no minimum version key found", {
   path <- withr::local_tempfile()
   file.create(path)
   expect_error(
-    update_minimum_orderly_version(path, "2.0.0", FALSE),
+    update_minimum_orderly_version_json(path, "2.0.0", FALSE),
+    "Failed to find key 'minimum_orderly_version' in orderly config")
+  expect_error(
+    update_minimum_orderly_version_yml(path, "2.0.0", FALSE),
     "Failed to find key 'minimum_orderly_version' in orderly config")
 })
 
 
 test_that("cope with malformed yaml", {
   path <- withr::local_tempfile()
-  writeLines(rep(empty_config_contents(), 2), path)
+  writeLines(rep("minimum_orderly_version: 1.99.0", 2), path)
   expect_error(
-    update_minimum_orderly_version(path, ORDERLY_MINIMUM_VERSION, FALSE),
+    update_minimum_orderly_version_yml(path, ORDERLY_MINIMUM_VERSION, FALSE),
     "Found more than one key 'minimum_orderly_version' in orderly config")
 })
 
@@ -105,7 +131,7 @@ test_that("leave other yaml alone when updating", {
   txt <- '# a comment\nminimum_orderly_version: "0.0.1"'
   writeLines(txt, path)
   res <- evaluate_promise(
-    update_minimum_orderly_version(path, "9.9.9", FALSE))
+    update_minimum_orderly_version_yml(path, "9.9.9", FALSE))
   expect_equal(readLines(path),
                c("# a comment", 'minimum_orderly_version: "9.9.9"'))
 })
@@ -132,6 +158,7 @@ test_that("can migrate source file", {
 
 test_that("can migrate old sources", {
   path <- suppressMessages(orderly_example())
+  unlink(file.path(path, "orderly_config.json"))
   writeLines(
     'minimum_orderly_version: "1.99.0"',
     file.path(path, "orderly_config.yml"))
@@ -171,6 +198,7 @@ test_that("can migrate old sources", {
 })
 
 
+## TODO: this needs work too
 test_that("can read version from config", {
   path <- withr::local_tempdir()
   filename <- file.path(path, "orderly_config.yml")
@@ -187,9 +215,7 @@ test_that("can read version from config", {
 
 test_that("can migrate orderly.R files", {
   path <- suppressMessages(orderly_example())
-  writeLines(
-    'minimum_orderly_version: "1.99.82"',
-    file.path(path, "orderly_config.yml"))
+  write_old_version_marker(path, "1.99.82")
 
   nms <- orderly_list_src(path)
   fs::file_move(file.path(path, "src", nms, paste0(nms, ".R")),

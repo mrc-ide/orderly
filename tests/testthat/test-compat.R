@@ -123,6 +123,7 @@ test_that("can run old orderly sources directly", {
   unload_orderly2_support()
   withr::defer(unload_orderly2_support())
   path <- suppressMessages(orderly_example())
+  unlink(file.path(path, "orderly_config.json"))
   writeLines(
     'minimum_orderly_version: "1.99.0"',
     file.path(path, "orderly_config.yml"))

@@ -153,7 +153,7 @@ helper_add_git <- function(path) {
 ## create a root that does not have the orderly bits.
 outpack_init_no_orderly <- function(...) {
   path <- orderly_init_quietly(...)
-  fs::file_delete(file.path(path, "orderly_config.yml"))
+  fs::file_delete(file.path(path, "orderly_config.json"))
   outpack_root$new(path, NULL)
 }
 
