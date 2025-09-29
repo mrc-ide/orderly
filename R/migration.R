@@ -173,7 +173,8 @@ migrate_check_git_status <- function(path, dry_run) {
 
 migrations <- function(current, from, to) {
   possible <- list("1.99.82" = migrate_1_99_82,
-                   "1.99.88" = migrate_1_99_88)
+                   "1.99.88" = migrate_1_99_88,
+                   "1.99.90" = migrate_1_99_90)
   v <- numeric_version(names(possible))
   possible[(v > from %||% current) & (v <= to %||% ORDERLY_MINIMUM_VERSION)]
 }
@@ -242,6 +243,35 @@ migrate_1_99_88 <- function(path, dry_run) {
     }
   }
   changed
+}
+
+
+migrate_1_99_90 <- function(path, dry_run) {
+  path_config_yml <- file.path(path, "orderly_config.yml")
+  path_config_json <- file.path(path, "orderly_config.json")
+
+  if (!file.exists(path_config_yml)) {
+    cli::cli_alert_info("No old-style yaml configuration found")
+    return(FALSE)
+  }
+
+  dat <- yaml_load(read_lines(path_config_yml, warn = FALSE))
+  if (!identical(names(dat), "minimum_orderly_version")) {
+    cli::cli_abort(
+      c("Can't migrate nontrivial orderly configuration",
+        i = "Please reconfigure this yourself, using json"))
+  }
+  if (dry_run) {
+    cli::cli_alert_info(
+      "Would translate 'orderly_config.yml' to 'orderly_config.json'")
+  } else {
+    cli::cli_alert_info(
+      "Translating 'orderly_config.yml' to 'orderly_config.json'")
+    jsonlite::write_json(dat, path_config_json, auto_unbox = TRUE)
+    fs::file_delete(path_config_yml)
+  }
+
+  TRUE
 }
 
 

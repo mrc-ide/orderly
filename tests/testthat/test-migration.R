@@ -246,3 +246,45 @@ test_that("can migrate orderly.R files", {
   expect_equal(nrow(gert::git_status(repo = path)), length(nms) * 2 + 1)
   expect_length(dir(path, "orderly\\.R$", recursive = TRUE), 0)
 })
+
+
+test_that("can migrate old configuration", {
+  path <- suppressMessages(orderly_example())
+  write_old_version_marker(path, "1.99.88")
+  info <- helper_add_git(path)
+
+  res <- evaluate_promise(
+    orderly_migrate_source(path, to = "1.99.90", dry_run = TRUE))
+  expect_true(res$result)
+  expect_length(res$messages, 4)
+  expect_match(res$messages[[2]],
+               "Would translate 'orderly_config.yml' to 'orderly_config.json'")
+
+  res <- evaluate_promise(
+    orderly_migrate_source(path, to = "1.99.90"))
+  expect_true(res$result)
+  expect_equal(nrow(gert::git_status(repo = path)), 2)
+  expect_false(file.exists(file.path(path, "orderly_config.yml")))
+  expect_true(file.exists(file.path(path, "orderly_config.json")))
+  expect_equal(jsonlite::read_json(file.path(path, "orderly_config.json")),
+               list("minimum_orderly_version" = "1.99.90"))
+})
+
+
+test_that("can't migrate complex old configuration", {
+  path <- suppressMessages(orderly_example())
+  fs::file_delete(file.path(path, "orderly_config.json"))
+  writeLines("minimum_orderly_version: 1.99.88\nother: true",
+             file.path(path, "orderly_config.yml"))
+  info <- helper_add_git(path)
+
+  expect_error(suppressMessages(
+    orderly_migrate_source(path, to = "1.99.90", dry_run = TRUE)),
+    "Can't migrate nontrivial orderly configuration")
+  expect_error(suppressMessages(
+    orderly_migrate_source(path, to = "1.99.90", dry_run = FALSE)),
+    "Can't migrate nontrivial orderly configuration")
+
+  expect_true(file.exists(file.path(path, "orderly_config.yml")))
+  expect_false(file.exists(file.path(path, "orderly_config.json")))
+})

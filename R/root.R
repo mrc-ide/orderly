@@ -348,7 +348,7 @@ orderly_find_root_locate <- function(path, call = NULL) {
   if (has_orderly_old) {
     if (has_orderly) {
       cli::cli_abort(
-        c("Both 'orderly_config.json' and 'orderly_config.yml'",
+        c("Both 'orderly_config.json' and 'orderly_config.yml' found",
           i = "Looked within '{path}'",
           i = "Found new configuration: '{path_orderly}'",
           i = "Found old configuration: '{path_orderly_old}'",
@@ -406,7 +406,7 @@ orderly_find_root_here <- function(path, call) {
   if (has_orderly_old) {
     if (has_orderly) {
       cli::cli_abort(
-        c("Both 'orderly_config.json' and 'orderly_config.yml'",
+        c("Both 'orderly_config.json' and 'orderly_config.yml' found",
           i = "Looked within '{path}'",
           i = "Found new configuration: '{path_orderly}'",
           i = "Found old configuration: '{path_orderly_old}'",
