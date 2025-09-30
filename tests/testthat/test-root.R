@@ -243,10 +243,11 @@ test_that("can find root in subdirectory with old configuration", {
   path <- suppressMessages(orderly_example())
   from <- file.path(path, "src")
   res1 <- orderly_find_root_locate(from)
+  expect_equal(basename(res1$path_orderly), "orderly_config.json")
 
   write_old_version_marker(path, "1.99.82")
   res2 <- orderly_find_root_locate(from)
-  expect_equal(basename(res1$path_orderly), "orderly_config.yml")
+  expect_equal(basename(res2$path_orderly), "orderly_config.yml")
 
   expect_equal(res1$path, res2$path)
 })
