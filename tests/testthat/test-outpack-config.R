@@ -11,9 +11,11 @@ test_that("Validate inputs to config set", {
 
 
 test_that("Setting no options does nothing", {
-  ## This is quite tedious on macs because of the resolution of the
-  ## temporary directory (/private/var vs /var)
+  ## This is quite tedious on windows and macs because of the
+  ## resolution of the temporary directory (slashes and short paths on
+  ## windows, /private/var vs /var on macs)
   skip_on_os("mac")
+  skip_on_os("windows")
   root <- create_temporary_root()
   config <- root$config
   orderly_config_set(root = root)
