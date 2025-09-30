@@ -186,6 +186,16 @@ test_that("can identify a plain source root", {
 })
 
 
+test_that("error for plain source root with two configurations", {
+  info <- test_prepare_orderly_example_separate("explicit")
+  file.create(file.path(info$src, "orderly_config.yml"))
+  expect_error(
+    orderly_src_root(info$src),
+    "Both 'orderly_config.json' and 'orderly_config.yml' found")
+})
+
+
+
 test_that("can identify a plain source root from a full root", {
   path <- test_prepare_orderly_example("explicit")
   root <- root_open(path, FALSE)
@@ -215,4 +225,15 @@ test_that("can use ORDERLY_ROOT to control the working directory", {
       expect_equal(root_open(path_b, FALSE)$path, path_b)
     })
   })
+})
+
+
+test_that("Error if both configurations found", {
+  tmp <- withr::local_tempdir()
+  orderly_init_quietly(tmp)
+  file.create(file.path(tmp, "orderly_config.yml"))
+  err <- expect_error(
+    withr::with_dir(tmp, root_open(NULL, require_orderly = TRUE)),
+    "Both 'orderly_config.json' and 'orderly_config.yml' found",
+    fixed = TRUE)
 })

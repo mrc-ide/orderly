@@ -81,9 +81,7 @@ orderly_init <- function(root = ".",
   has_orderly_config_old <- file.exists(path_orderly_old)
   if (has_orderly_config_old) {
     if (has_orderly_config) {
-      cli::cli_abort(
-        c("Both 'orderly_config.json' and 'orderly_config.yml' found",
-          i = "Delete 'orderly_config.yml' from {root} and try again"))
+      error_both_configurations(root)
     }
     path_orderly <- path_orderly_old
     has_orderly <- has_orderly_old
@@ -347,7 +345,12 @@ orderly_find_root_locate <- function(path, call = NULL) {
 
   if (has_orderly_old) {
     if (has_orderly) {
-      cli::cli_abort(
+      # This is slightly more involved than error_both_configurations
+      # to cope with the possibility that the the configurations are
+      # in different directories (since we search) even though this is
+      # very unlikely and probably just not going to be nicely
+      # resolvable.
+      cli::cli_abort( # - TODO: test
         c("Both 'orderly_config.json' and 'orderly_config.yml' found",
           i = "Looked within '{path}'",
           i = "Found new configuration: '{path_orderly}'",
@@ -405,13 +408,7 @@ orderly_find_root_here <- function(path, call) {
 
   if (has_orderly_old) {
     if (has_orderly) {
-      cli::cli_abort(
-        c("Both 'orderly_config.json' and 'orderly_config.yml' found",
-          i = "Looked within '{path}'",
-          i = "Found new configuration: '{path_orderly}'",
-          i = "Found old configuration: '{path_orderly_old}'",
-          i = "Delete '{path_orderly_old}' and try again"),
-        call = call)
+      error_both_configurations(path, call) # TODO: test
     }
     path_orderly <- path_orderly_old
     has_orderly <- has_orderly_old
@@ -428,4 +425,13 @@ orderly_find_root_here <- function(path, call) {
   list(path = path,
        path_outpack = if (has_outpack) path_outpack,
        path_orderly = if (has_orderly) path_orderly)
+}
+
+
+error_both_configurations <- function(path, call = parent.frame()) {
+  cli::cli_abort(
+    c("Both 'orderly_config.json' and 'orderly_config.yml' found",
+      i = "Looked within '{path}'",
+      i = "Delete 'orderly_config.yml' and try again"),
+    call = call)
 }

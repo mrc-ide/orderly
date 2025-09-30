@@ -220,3 +220,13 @@ test_that("force initialisation of non-empty directory", {
   expect_true(file.exists(file.path(tmp, ".outpack")))
   expect_true(file.exists(file.path(tmp, "orderly_config.json")))
 })
+
+
+test_that("can fail gracefully with both configurations present", {
+  tmp <- withr::local_tempdir()
+  res <- orderly_init_quietly(tmp)
+  file.create(file.path(tmp, "orderly_config.yml"))
+  expect_error(
+    orderly_init_quietly(tmp),
+    "Both 'orderly_config.json' and 'orderly_config.yml' found")
+})
