@@ -22,7 +22,7 @@ This vignette is intended to primarily serve as a design document, and will be o
 
 A plugin is provided by a package, possibly it will be the only thing that a package provides.  The plugin name must (currently) be the same as the package name.  The only functions that the package needs to call are `orderly::orderly_plugin` and `orderly::orderly_plugin_register` which create and register the plugin, respectively.
 
-To make a plugin available for an orderly project, two new bits of configuration may be present in `orderly_config.yml` - one declares the plugin will be used, the other configures the plugin.
+To make a plugin available for an orderly project, two new bits of configuration may be present in `orderly_config.json` - one declares the plugin will be used, the other configures the plugin.
 
 To use a plugin for an individual report, functions from the plugin should be used, which configure and use the plugin.
 
@@ -34,7 +34,7 @@ With the yaml-less design of `orderly` (see `vignette("migrating")` if you are f
 
 As an example, we'll implement a stripped down version of the database plugin that inspired this work (see [`orderly.db](https://github.com/mrc-ide/orderly.db) for a fuller implementation). To make this work we need functions:
 
-* ...that process additional fields in `orderly_config.yml` that describe where to find the database
+* ...that process additional fields in `orderly_config.json` that describe where to find the database
 * ...that can be called from an orderly file that access the database
 * ...that can add metadata to the final orderly metadata about what was done
 
@@ -51,12 +51,14 @@ DBI::dbDisconnect(con)
 path_root <- tempfile()
 orderly::orderly_init(path_root)
 fs::dir_create(path_root)
-writeLines(c(
-  "minimum_orderly_version: 1.99.82",
-  "plugins:",
-  "  example.db:",
-  sprintf("    path: %s", path_db)),
-  file.path(path_root, "orderly_config.yml"))
+
+jsonlite::write_json(
+  list(minimum_orderly_version = "1.99.90",
+       plugins = list(
+         orderly.db = list(
+           path = path_db))),
+  file.path(path_root, "orderly_config.json"),
+  auto_unbox = TRUE)
 
 path_example <- file.path(path_root, "src", "example")
 fs::dir_create(path_example)
@@ -83,10 +85,10 @@ Here is the directory structure of our minimal project
 withr::with_dir(path_root, fs::dir_tree("."))
 ```
 
-The `orderly_config.yml` file contains the information shared by all possible uses of the plugin - in the case the connection information for the database:
+The `orderly_config.json` file contains the information shared by all possible uses of the plugin - in the case the connection information for the database:
 
 ```{r, echo = FALSE, results = "asis"}
-yaml_output(readLines(file.path(path_root, "orderly_config.yml")))
+json_output(readLines(file.path(path_root, "orderly_config.json")))
 ```
 
 Our plugin is called `example.db` and is listed within the `plugins` section, along with its configuration; in this case indicating the path where the SQLite file can be loaded from.
@@ -102,7 +104,7 @@ Normally, we imagine some calculation here but this is kept minimal for the purp
 To implement this we need to:
 
 1. create a package
-2. write a function to handle the configuration in `orderly_config.yml`
+2. write a function to handle the configuration in `orderly_config.json`
 3. write a function `query()` used in `example.R` to do the query itself
 
 ### Create a tiny package
@@ -146,7 +148,7 @@ and the `NAMESPACE` and `R/plugin.R` files are shown below.
 
 ### Handle the configuration
 
-The only required function that a plugin needs to provide is one to process the data from `orderly_config.yml`.  This is probably primarily concerned with validation so can be fairly simple at first, later we'll expand this to report errors nicely:
+The only required function that a plugin needs to provide is one to process the data from `orderly_config.json`.  This is probably primarily concerned with validation so can be fairly simple at first, later we'll expand this to report errors nicely:
 
 ```{r, export_to_package = "minimal"}
 db_config <- function(data, filename) {
@@ -156,8 +158,8 @@ db_config <- function(data, filename) {
 
 The arguments here are
 
-* `data`: the deserialised section of the `orderly_config.yml` specific to this plugin
-* `filename`: the full path to `orderly_config.yml`
+* `data`: the deserialised section of the `orderly_config.json` specific to this plugin
+* `filename`: the full path to `orderly_config.json`
 
 The return value here should be the `data` argument with any auxiliary data added after validation.
 
@@ -222,17 +224,17 @@ orderly::orderly_run("example", root = path_root)
 
 # Making the plugin more robust
 
-The plugin above is fairly fragile because it does not do any validation on the input data from `orderly_config.yml` or `orderly.yml`.  This is fairly annoying to do as yaml is incredibly flexible and reporting back information to the user about what might have gone wrong is hard.
+The plugin above is fairly fragile because it does not do any validation on the input data from `orderly_config.json`.  This is fairly annoying to do in practice, but a little effort will make the experience for a user better because they will be able to debug incorrect configuration more effectively.
 
-In our case, we expect a single key-value pair in `orderly_config.yml` with the key being `path` and the value being the path to a SQLite database. We can easily expand our configuration function to report better back to the user when they misconfigure the plugin:
+In our case, we expect a single key-value pair in `orderly_config.json` with the key being `path` and the value being the path to a SQLite database. We can easily expand our configuration function to report better back to the user when they misconfigure the plugin:
 
 ```{r, export_to_package = "full", eval = FALSE}
 db_config <- function(data, filename) {
   if (!is.list(data) || is.null(names(data)) || length(data) == 0) {
-    stop("Expected a named list for orderly_config.yml:example.db")
+    stop("Expected a JSON object for orderly_config.json:example.db")
   }
   if (length(data$path) != 1 || !is.character(data$path)) {
-    stop("Expected a string for orderly_config.yml:example.db:path")
+    stop("Expected a string for orderly_config.json:example.db:path")
   }
   if (!file.exists(data$path)) {
     stop(sprintf(
@@ -247,9 +249,9 @@ This should do an acceptable job of preventing poor input while suggesting to th
 
 # Saving metadata about what the plugin did
 
-Nothing about what the plugin does is saved into the report metadata unless you save it. Partly this is because the orderly.yml, which is saved into the final directory, serves as some sort of record.  However, you probably want to know something about the data that you returned here. For example we might want to save
+Nothing about what the plugin does is saved into the report metadata unless you save it. Partly this is because the orderly source file, which is saved into the final directory, serves as some sort of record.  However, you probably want to know something about the data that you returned here. For example we might want to save
 
-* the query string so that later we can query it without having to read and process the `orderly.yml` file
+* the query string so that later we can query it without having to read and process the orderly source file
 * some statistics about the size of the data (e.g., the number of rows returned, or the columns)
 * perhaps some summary of the content such as a hash so that we can see if the content has changed between different versions of a report
 
@@ -378,7 +380,7 @@ meta$custom$example.db
 Our need for this functionality are similar to this example - pulling out the database functionality from the original version of orderly into something that is more independent, as it turns out to be useful only in a fraction of orderly use-cases. We can imagine other potential uses though, such as:
 
 * Non-DBI-based database data extraction, or customised routines for pulling data from a database
-* Download files from some shared location just before use (e.g., SharePoint, OneDrive, AWS). The `orderly_config.yml` would contain account connection details and `orderly.yml` would contain mapping between the remote data/files and local files. Rather than writing to the environment as we do above, use the `path` argument to copy files into the correct place.
+* Download files from some shared location just before use (e.g., SharePoint, OneDrive, AWS). The `orderly_config.json` would contain account connection details and the orderly source file would contain mapping between the remote data/files and local files. Rather than writing to the environment as we do above, use the `path` argument to copy files into the correct place.
 * Pull data from some web API just before running
 
 These all follow the same basic pattern of requiring some configuration in order to be able to connect to the resource service, some specification of what resources are to be fetched, and some action to actually fetch the resource and put it into place.

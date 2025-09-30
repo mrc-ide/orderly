@@ -25,7 +25,7 @@ install.packages(
 
 # Creating an empty orderly repository
 
-The first step is to initialise an empty `orderly` repository. An `orderly` repository is a directory with the file `orderly_config.yml` within it, and since version 2 also a directory `.outpack/`.  Files within the `.outpack/` directory should never be directly modified by users and this directory should be excluded from version control (see `orderly::orderly_gitignore_update`).
+The first step is to initialise an empty `orderly` repository. An `orderly` repository is a directory with the file `orderly_config.json` within it, and since version 2 also a directory `.outpack/`.  Files within the `.outpack/` directory should never be directly modified by users and this directory should be excluded from version control (see `orderly::orderly_gitignore_update`).
 
 Create an orderly repository by calling `orderly::orderly_init()`:
 
@@ -42,10 +42,10 @@ dir_tree(path, all = TRUE)
 
 This step should be performed on a completely empty directory, otherwise an error will be thrown.  Later, you will re-initialise an `orderly` repository when cloning to a new machine, such as when working with others; this is discussed in `vignette("collaboration")`.
 
-The `orderly_config.yml` file contains very little by default:
+The `orderly_config.json` file contains very little by default:
 
 ```{r, echo = FALSE, results = "asis"}
-yaml_output(readLines(file.path(path, "orderly_config.yml")))
+json_output(readLines(file.path(path, "orderly_config.json")))
 ```
 
 For this vignette, the created orderly root is in R's per-session temporary directory, which will be deleted once R exits.  If you want to use a directory that will persist across restarting R (which you would certainly want when using `orderly` on a real project!) you should replace this with a path within your home directory, or other location that you control.
@@ -454,8 +454,8 @@ Make sure to exclude some files from `git` by listing them in `.gitignore`:
 You absolutely should version control some files:
 
 - `src/` the main source of your analyses
-- `orderly_config.yml` - this high level configuration is suitable for sharing
-- Any shared resource directory (configured in `orderly_config.yml`) should probably be version controlled
+- `orderly_config.json` - this high level configuration is suitable for sharing
+- The shared resource directory (`shared/`) should probably be version controlled
 
 Your source repository will end up in multiple people's machines, each of which are configured differently. The configuration option set via `orderly::orderly_config_set` are designed to be (potentially) different for different users, so this configuration needs to be not version controlled. It also means that reports/packets can't directly refer to values set here.  This includes the directory used to save archive packets at (if enabled) and the names of locations (equivalent to git remotes).
 

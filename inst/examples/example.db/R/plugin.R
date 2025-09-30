@@ -1,9 +1,9 @@
 db_config <- function(data, filename) {
   if (!is.list(data) || is.null(names(data)) || length(data) == 0) {
-    stop("Expected a named list for orderly_config.yml:example.db")
+    stop("Expected a named list for orderly_config.json:example.db")
   }
   if (length(data$path) != 1 || !is.character(data$path)) {
-    stop("Expected a string for orderly_config.yml:example.db:path")
+    stop("Expected a string for orderly_config.json:example.db:path")
   }
   if (!file.exists(data$path)) {
     stop(sprintf(
