@@ -258,7 +258,7 @@ migrate_1_99_90 <- function(path, dry_run) {
 
   if (!file.exists(path_config_yml)) {
     cli::cli_alert_info("No old-style yaml configuration found")
-    return(FALSE)
+    return(character())
   }
 
   dat <- yaml_load(read_lines(path_config_yml, warn = FALSE))
@@ -277,7 +277,7 @@ migrate_1_99_90 <- function(path, dry_run) {
     fs::file_delete(path_config_yml)
   }
 
-  TRUE
+  c(basename(path_config_yml), basename(path_config_json))
 }
 
 

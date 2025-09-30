@@ -1,13 +1,13 @@
 test_that("Do nothing while migrating up-to-date sources", {
   path <- suppressMessages(orderly_example())
   info <- helper_add_git(path)
+
   res <- evaluate_promise(
-    orderly_migrate_source(path, from = "0", to = "1.99.82"))
-  expect_length(res$messages, 4)
-  expect_match(res$messages[[1]], "Migrating from 1.99.0 to 1.99.82")
-  expect_match(res$messages[[2]], "Checking \\d+ files in")
-  expect_match(res$messages[[3]], "Minimum orderly version already at")
-  expect_match(res$messages[[4]], "Nothing to change")
+    orderly_migrate_source(path, from = "0"))
+  n <- length(res$messages)
+  expect_match(res$messages[[1]], "Migrating from 1.99.0 to")
+  expect_match(res$messages[[n - 1]], "Minimum orderly version already at")
+  expect_match(res$messages[[n]], "Nothing to change")
   expect_false(res$result)
 })
 
@@ -82,6 +82,12 @@ test_that("don't change up-to yml", {
 test_that("can increase version if required", {
   path <- withr::local_tempfile()
   writeLines(empty_config_contents(), path)
+  res <- evaluate_promise(
+    update_minimum_orderly_version_json(path, "9.9.9", TRUE))
+  expect_true(res$result)
+  expect_match(res$messages,
+               "Would update minimum orderly version from .+ to 9.9.9")
+
   res <- evaluate_promise(
     update_minimum_orderly_version_json(path, "9.9.9", FALSE))
   expect_true(res$result)
