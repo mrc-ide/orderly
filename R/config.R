@@ -25,6 +25,8 @@ orderly_config_read <- function(filename, call = NULL) {
     dat[[x]] <- check[[x]](raw[[x]], filename, call = call)
   }
 
+  dat$path_config <- filename
+
   dat
 }
 

@@ -120,7 +120,7 @@ test_that("error if packet uses non-configured plugin", {
   envir <- new.env()
   expect_error(
     orderly_run_quietly("plugin", root = path, envir = envir),
-    "Plugin 'example.random' not enabled in 'orderly_config.json'",
+    "Plugin 'example.random' not enabled in orderly configuration",
     fixed = TRUE)
 })
 

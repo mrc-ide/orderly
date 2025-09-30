@@ -42,14 +42,12 @@ copy_examples <- function(examples, path_src) {
   }
 
   if ("plugin" %in% examples) {
-    testthat::skip("write the plugin support")
     register_example_plugin()
-    config <- c(config,
-                "plugins:",
-                "  example.random:",
-                "    distribution:",
-                "      normal")
+    dat <- jsonlite::fromJSON(config)
+    dat$plugins <- list(example.random = list(distribution = "normal"))
+    config <- jsonlite::toJSON(dat, auto_unbox = TRUE, pretty = TRUE)
   }
+
   writeLines(config, file.path(path_src, "orderly_config.json"))
 
   fs::dir_create(file.path(path_src, "src"))

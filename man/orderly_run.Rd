@@ -169,7 +169,7 @@ shared drive.
 }
 
 In the first instance, we have a source path at \verb{<src>} which
-contains the file \code{orderly_config.yml} and the directory \verb{src/}
+contains the file \code{orderly_config.json} and the directory \verb{src/}
 with our source reports, and a separate path \verb{<root>} which
 contains the directory \verb{.outpack/} with all the metadata - it
 may also have an unpacked archive, and a \verb{.git/} directory
