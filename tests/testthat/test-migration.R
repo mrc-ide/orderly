@@ -248,6 +248,27 @@ test_that("can migrate orderly.R files", {
 })
 
 
+test_that("delete old orderly.R files", {
+  path <- suppressMessages(orderly_example())
+  write_old_version_marker(path, "1.99.82")
+  file.create(file.path(path, "src", "data", "orderly.R"))
+  info <- helper_add_git(path)
+
+  res <- evaluate_promise(
+    orderly_migrate_source(path, to = "1.99.88", dry_run = TRUE))
+  expect_match(res$messages[[2]], "Would delete 'src/data/orderly.R'")
+  expect_true(res$result)
+  expect_equal(nrow(gert::git_status(repo = path)), 0)
+
+  res <- evaluate_promise(
+    orderly_migrate_source(path, to = "1.99.88"))
+  expect_match(res$messages[[2]], "Deleting 'src/data/orderly.R'")
+  expect_true(res$result)
+  expect_equal(nrow(gert::git_status(repo = path)), 2)
+  expect_false(file.exists(file.path(path, "src", "data", "orderly.R")))
+})
+
+
 test_that("can migrate old configuration", {
   path <- suppressMessages(orderly_example())
   write_old_version_marker(path, "1.99.88")

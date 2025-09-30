@@ -225,10 +225,16 @@ migrate_1_99_88 <- function(path, dry_run) {
     if (file.exists(path_old)) {
       path_new <- file.path(p, paste0(name, ".R"))
       if (file.exists(path_new)) {
-        cli::cli_alert_danger(
-          paste("Deleting 'src/{name}/orderly.R' as '{name}' also contains",
-                "'{name}.R' - {.strong please check carefully}"))
-        fs::file_delete(path_old)
+        if (dry_run) {
+          cli::cli_alert_danger(
+            paste("Would delete 'src/{name}/orderly.R' as '{name}' also",
+                  "contains '{name}.R'"))
+        } else {
+          cli::cli_alert_danger(
+            paste("Deleting 'src/{name}/orderly.R' as '{name}' also",
+                  "contains '{name}.R' - {.strong please check carefully}"))
+          fs::file_delete(path_old)
+        }
       } else {
         if (dry_run) {
           cli::cli_alert_info(
