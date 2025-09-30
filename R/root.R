@@ -73,21 +73,19 @@ orderly_init <- function(root = ".",
                          force = FALSE) {
   assert_scalar_character(root)
   path_orderly <- file.path(root, "orderly_config.json")
-  has_orderly_config <- file.exists(path_orderly)
+  has_orderly <- file.exists(path_orderly)
 
-  ## This little block will turn up again in a slightly different form
-  ## shortly, within the code that searches for
   path_orderly_old <- file.path(root, "orderly_config.yml")
-  has_orderly_config_old <- file.exists(path_orderly_old)
-  if (has_orderly_config_old) {
-    if (has_orderly_config) {
+  has_orderly_old <- file.exists(path_orderly_old)
+  if (has_orderly_old) {
+    if (has_orderly) {
       error_both_configurations(root)
     }
     path_orderly <- path_orderly_old
     has_orderly <- has_orderly_old
   }
 
-  if (!has_orderly_config && file.exists(root)) {
+  if (!has_orderly && file.exists(root)) {
     if (!is_directory(root)) {
       cli::cli_abort("'root' exists but is not a directory")
     }
@@ -128,7 +126,7 @@ orderly_init <- function(root = ".",
     cli::cli_alert_success("Created orderly root at '{root$path}'")
   }
 
-  if (!has_orderly_config) {
+  if (!has_orderly) {
     writeLines(empty_config_contents(), path_orderly)
   }
 

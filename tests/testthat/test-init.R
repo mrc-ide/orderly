@@ -230,3 +230,10 @@ test_that("can fail gracefully with both configurations present", {
     orderly_init_quietly(tmp),
     "Both 'orderly_config.json' and 'orderly_config.yml' found")
 })
+
+
+test_that("can run init on an old configuration", {
+  path <- suppressMessages(orderly_example())
+  write_old_version_marker(path, "1.99.82")
+  expect_no_error(orderly_init_quietly(path))
+})
