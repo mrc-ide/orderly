@@ -55,7 +55,7 @@ fs::dir_create(path_root)
 jsonlite::write_json(
   list(minimum_orderly_version = "1.99.90",
        plugins = list(
-         orderly.db = list(
+         example.db = list(
            path = path_db))),
   file.path(path_root, "orderly_config.json"),
   auto_unbox = TRUE)
