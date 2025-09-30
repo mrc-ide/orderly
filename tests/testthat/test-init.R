@@ -15,10 +15,13 @@ test_that("Can initialise a new orderly root", {
   expect_true(file.exists(tmp))
   expect_identical(normalise_path(res), normalise_path(tmp))
   root <- root_open(tmp, require_orderly = TRUE)
+  version <- numeric_version(ORDERLY_MINIMUM_VERSION)
+  filename <- file.path(tmp, "orderly_config.json")
   expect_s3_class(root, "outpack_root")
   expect_equal(
     root$config$orderly,
-    list(minimum_orderly_version = numeric_version(ORDERLY_MINIMUM_VERSION)))
+    structure(list(minimum_orderly_version = version),
+              filename = filename))
 })
 
 
@@ -33,12 +36,14 @@ test_that("initialisation leaves things unchanged", {
 test_that("can turn an outpack root into an orderly one", {
   tmp <- withr::local_tempdir()
   outpack_init_no_orderly(tmp)
-
   orderly_init_quietly(tmp)
   root2 <- root_open(tmp, require_orderly = FALSE)
+  version <- numeric_version(ORDERLY_MINIMUM_VERSION)
+  filename <- file.path(tmp, "orderly_config.json")
   expect_equal(
     root2$config$orderly,
-    list(minimum_orderly_version = numeric_version(ORDERLY_MINIMUM_VERSION)))
+    structure(list(minimum_orderly_version = version),
+              filename = filename))
   expect_s3_class(root2, "outpack_root")
 })
 

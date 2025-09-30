@@ -240,7 +240,7 @@ orderly_plugin_add_metadata <- function(name, field, data) {
 
 check_plugin_enabled <- function(name, config, call) {
   if (is.null(config$plugins[[name]])) {
-    filename <- config$path_config
+    filename <- attr(config, "filename") %||% "orderly_config.json"
     cli::cli_abort(c("Plugin '{name}' not enabled in orderly configuration",
                      i = "Check or edit '{basename(filename)}'"),
                    call = call)
