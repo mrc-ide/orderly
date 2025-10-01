@@ -115,12 +115,12 @@ test_that("don't load package if plugin already loaded", {
 
 test_that("error if packet uses non-configured plugin", {
   path <- test_prepare_orderly_example("plugin")
-  writeLines(empty_config_contents(), file.path(path, "orderly_config.yml"))
+  writeLines(empty_config_contents(), file.path(path, "orderly_config.json"))
 
   envir <- new.env()
   expect_error(
     orderly_run_quietly("plugin", root = path, envir = envir),
-    "Plugin 'example.random' not enabled in 'orderly_config.yml'",
+    "Plugin 'example.random' not enabled in orderly configuration",
     fixed = TRUE)
 })
 

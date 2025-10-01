@@ -2,8 +2,7 @@ orderly_config_read <- function(filename, call = NULL) {
   path <- dirname(filename)
   assert_file_exists_relative(basename(filename), workdir = path,
                               name = "Orderly configuration", call = call)
-  raw <- yaml_read(filename)
-
+  raw <- read_config_data(filename)
   if (!is.null(raw)) {
     assert_named(raw, call = call)
   }
@@ -25,6 +24,8 @@ orderly_config_read <- function(filename, call = NULL) {
   for (x in names(check)) {
     dat[[x]] <- check[[x]](raw[[x]], filename, call = call)
   }
+
+  attr(dat, "filename") <- filename
 
   dat
 }
@@ -76,6 +77,7 @@ orderly_config_validate_plugins <- function(plugins, filename, call = NULL) {
 
 
 orderly_envir_read <- function(path, call = NULL) {
+  ## TODO: we might prefer json here too, fairly easily really
   filename <- file.path(path, "orderly_envir.yml")
   if (!file.exists(filename)) {
     return(NULL)

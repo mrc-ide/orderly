@@ -1,23 +1,24 @@
 ##' Create an orderly plugin. A plugin is typically defined by a
 ##' package and is used to extend orderly by enabling new
-##' functionality, declared in `orderly_config.yml` and your orderly file,
-##' and affecting the running of reports primarily by creating new
-##' objects in the report environment.  This system is discussed in
-##' more detail in `vignette("plugins")`, but will be expanded (likely
-##' in breaking ways) soon.
+##' functionality, declared in your orderly configuration
+##' (`orderly_config.json`) and your orderly file (`<name>.R`), and
+##' affecting the running of reports primarily by creating new objects
+##' in the report environment.  This system is discussed in more
+##' detail in `vignette("plugins")`.
 ##'
 ##' @title Register an orderly plugin
 ##'
 ##' @param name The name of the plugin, typically the package name
 ##'
 ##' @param config A function to read, check and process the
-##'   configuration section in `orderly_config.yml`. This function
-##'   will be passed the deserialised data from the plugin's section
-##'   of `orderly_config.yml`, and the full path to that file.  As the
-##'   order of loading of plugins is not defined, each plugin must
-##'   standalone and should not try and interact with other plugins at
-##'   load. It should return a processed copy of the configuration
-##'   data, to be passed in as the second argument to `read`.
+##'   configuration section in the orderly configuration.  This
+##'   function will be passed the deserialised data from the plugin's
+##'   section of `orderly_config.json, and the full path to that file.
+##'   As the order of loading of plugins is not defined, each plugin
+##'   must standalone and should not try and interact with other
+##'   plugins at load. It should return a processed copy of the
+##'   configuration data, to be passed in as the second argument to
+##'   `read`.
 ##'
 ##' @param serialise A function to serialise any metadata added by the
 ##'   plugin's functions to the outpack metadata. It will be passed a
@@ -189,7 +190,7 @@ orderly_plugin <- function(package, config, serialise, deserialise, cleanup,
 orderly_plugin_context <- function(name, envir) {
   assert_scalar_character(name, call = environment())
   ctx <- orderly_context(envir)
-  check_plugin_enabled(name, ctx$config)
+  check_plugin_enabled(name, ctx$config, environment())
   ## Narrower view on configuration - can only see the config for the
   ## plugin itself:
   ctx$config <- ctx$config$plugins[[name]]$config
@@ -239,10 +240,9 @@ orderly_plugin_add_metadata <- function(name, field, data) {
 
 check_plugin_enabled <- function(name, config, call) {
   if (is.null(config$plugins[[name]])) {
-    ## TODO: pass filename through here, or change the error message
-    ## to simply say "orderly configuration" and point (in a hint) as
-    ## to how to enable it, which will eventually be programmatic.
-    cli::cli_abort("Plugin '{name}' not enabled in 'orderly_config.yml'",
+    filename <- attr(config, "filename") %||% "orderly_config.json"
+    cli::cli_abort(c("Plugin '{name}' not enabled in orderly configuration",
+                     i = "Check or edit '{basename(filename)}'"),
                    call = call)
   }
 }

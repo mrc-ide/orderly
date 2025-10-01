@@ -17,13 +17,9 @@ orderly_plugin_register(
 \item{name}{The name of the plugin, typically the package name}
 
 \item{config}{A function to read, check and process the
-configuration section in \code{orderly_config.yml}. This function
-will be passed the deserialised data from the plugin's section
-of \code{orderly_config.yml}, and the full path to that file.  As the
-order of loading of plugins is not defined, each plugin must
-standalone and should not try and interact with other plugins at
-load. It should return a processed copy of the configuration
-data, to be passed in as the second argument to \code{read}.}
+configuration section in the orderly configuration.  This
+function will be passed the deserialised data from the plugin's
+section of \verb{orderly_config.json, and the full path to that file. As the order of loading of plugins is not defined, each plugin must standalone and should not try and interact with other plugins at load. It should return a processed copy of the configuration data, to be passed in as the second argument to }read`.}
 
 \item{serialise}{A function to serialise any metadata added by the
 plugin's functions to the outpack metadata. It will be passed a
@@ -64,11 +60,11 @@ registering a plugin.
 \description{
 Create an orderly plugin. A plugin is typically defined by a
 package and is used to extend orderly by enabling new
-functionality, declared in \code{orderly_config.yml} and your orderly file,
-and affecting the running of reports primarily by creating new
-objects in the report environment.  This system is discussed in
-more detail in \code{vignette("plugins")}, but will be expanded (likely
-in breaking ways) soon.
+functionality, declared in your orderly configuration
+(\code{orderly_config.json}) and your orderly file (\verb{<name>.R}), and
+affecting the running of reports primarily by creating new objects
+in the report environment.  This system is discussed in more
+detail in \code{vignette("plugins")}.
 }
 \examples{
 # The example code from vignette("plugins") is available in the package

@@ -2,8 +2,8 @@ test_that("Configuration must be empty", {
   tmp <- tempfile()
   on.exit(fs::dir_delete(tmp))
   fs::dir_create(tmp)
-  filename <- file.path(tmp, "orderly_config.yml")
-  writeLines(c(empty_config_contents(), "a: 1"), filename)
+  filename <- file.path(tmp, "orderly_config.json")
+  writeLines('{"minimum_orderly_version": "1.99.0", "a": 1}', filename)
   expect_error(orderly_config_read(filename),
                "Unknown field in .+")
 })
@@ -14,8 +14,8 @@ test_that("Configuration must exist", {
   on.exit(fs::dir_delete(tmp))
   fs::dir_create(tmp)
   outpack_init_no_orderly(tmp)
-  expect_error(orderly_config_read(file.path(tmp, "orderly_config.yml")),
-               "Orderly configuration does not exist: 'orderly_config.yml'")
+  expect_error(orderly_config_read(file.path(tmp, "orderly_config.json")),
+               "Orderly configuration does not exist: 'orderly_config.json'")
 })
 
 
@@ -25,12 +25,12 @@ test_that("error of opening an outpack root that is not an orderly root", {
 
   err <- expect_error(
     withr::with_dir(tmp, root_open(".", require_orderly = TRUE)),
-    "Did not find 'orderly_config.yml' in '.",
+    "Did not find 'orderly_config.json' in '.",
     fixed = TRUE)
   expect_equal(
     err$body,
     c(x = paste("Your directory has an '.outpack/' path, so is a valid",
-                "outpack root, but does not contain 'orderly_config.yml' so",
+                "outpack root, but does not contain 'orderly_config.json' so",
                 "cannot be used as an orderly root"),
       i = 'Please run orderly::orderly_init(".") to initialise',
       i = "See ?orderly_init for more arguments to this function"))
@@ -51,7 +51,7 @@ test_that("pass back a root", {
                    root_outpack)
   expect_error(
     root_open(root_outpack, require_orderly = TRUE),
-    sprintf("Did not find 'orderly_config.yml' in '%s'", root_outpack$path))
+    sprintf("Did not find 'orderly_config.json' in '%s'", root_outpack$path))
 })
 
 
@@ -181,9 +181,19 @@ test_that("can identify a plain source root", {
 
   err <- expect_error(
     orderly_src_root(info$outpack),
-    "Did not find 'orderly_config.yml' in",
+    "Did not find 'orderly_config.json' in",
     fixed = TRUE)
 })
+
+
+test_that("error for plain source root with two configurations", {
+  info <- test_prepare_orderly_example_separate("explicit")
+  file.create(file.path(info$src, "orderly_config.yml"))
+  expect_error(
+    orderly_src_root(info$src),
+    "Both 'orderly_config.json' and 'orderly_config.yml' found")
+})
+
 
 
 test_that("can identify a plain source root from a full root", {
@@ -215,4 +225,29 @@ test_that("can use ORDERLY_ROOT to control the working directory", {
       expect_equal(root_open(path_b, FALSE)$path, path_b)
     })
   })
+})
+
+
+test_that("Error if both configurations found", {
+  tmp <- withr::local_tempdir()
+  orderly_init_quietly(tmp)
+  file.create(file.path(tmp, "orderly_config.yml"))
+  err <- expect_error(
+    withr::with_dir(tmp, root_open(NULL, require_orderly = TRUE)),
+    "Both 'orderly_config.json' and 'orderly_config.yml' found",
+    fixed = TRUE)
+})
+
+
+test_that("can find root in subdirectory with old configuration", {
+  path <- suppressMessages(orderly_example())
+  from <- file.path(path, "src")
+  res1 <- orderly_find_root_locate(from)
+  expect_equal(basename(res1$path_orderly), "orderly_config.json")
+
+  write_old_version_marker(path, "1.99.82")
+  res2 <- orderly_find_root_locate(from)
+  expect_equal(basename(res2$path_orderly), "orderly_config.yml")
+
+  expect_equal(res1$path, res2$path)
 })

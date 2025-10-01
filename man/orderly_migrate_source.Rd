@@ -15,10 +15,10 @@ If \code{TRUE}, you can run this function against a repository that
 is not under version control.}
 
 \item{from}{Optional minimum version to migrate from.  If \code{NULL},
-we migrate from the version indicated in your
-\code{orderly_config.yml} and assume that all older migrations have
-been applied.  You can specify a lower version here if you want
-to force migrations that would otherwise be skipped because they
+we migrate from the version indicated in your orderly
+configuration and assume that all older migrations have been
+applied.  You can specify a lower version here if you want to
+force migrations that would otherwise be skipped because they
 are assumed to be applied.  Pass \code{"0"} (as a string) to match
 all previous versions.}
 

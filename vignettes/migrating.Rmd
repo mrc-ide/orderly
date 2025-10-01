@@ -190,7 +190,7 @@ which will rewrite some simple references to `orderly2` for you.  In particular 
 * `orderly2::fn` with `orderly::fn`
 * `library(orderly2)` with `library(orderly)`
 
-It will also update the minimum required version in the `orderly_config.yml` to at least `r orderly:::ORDERLY_MINIMUM_VERSION`
+It will also update the minimum required version in the `orderly_config.json` to at least `r orderly:::ORDERLY_MINIMUM_VERSION`  (or migrate `orderly_config.yml` to `orderly_config.json` and update that file).
 
 Review the changes that this function has made by running `git diff`, and if happy commit them.
 

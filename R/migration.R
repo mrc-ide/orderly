@@ -77,10 +77,10 @@
 ##'   is not under version control.
 ##'
 ##' @param from Optional minimum version to migrate from.  If `NULL`,
-##'   we migrate from the version indicated in your
-##'   `orderly_config.yml` and assume that all older migrations have
-##'   been applied.  You can specify a lower version here if you want
-##'   to force migrations that would otherwise be skipped because they
+##'   we migrate from the version indicated in your orderly
+##'   configuration and assume that all older migrations have been
+##'   applied.  You can specify a lower version here if you want to
+##'   force migrations that would otherwise be skipped because they
 ##'   are assumed to be applied.  Pass `"0"` (as a string) to match
 ##'   all previous versions.
 ##'
@@ -130,8 +130,7 @@ orderly_migrate_source <- function(path = ".", dry_run = FALSE, from = NULL,
 
   ## Update the minimum version; this will never decrease the number
   ## in the file, so should always be safe to attempt.
-  n <- length(changed) + update_minimum_orderly_version(
-    file.path(path, "orderly_config.yml"), to, dry_run)
+  n <- length(changed) + update_minimum_orderly_version(path, to, dry_run)
 
   any_changed <- n > 0
   if (!any_changed) {
@@ -174,7 +173,8 @@ migrate_check_git_status <- function(path, dry_run) {
 
 migrations <- function(current, from, to) {
   possible <- list("1.99.82" = migrate_1_99_82,
-                   "1.99.88" = migrate_1_99_88)
+                   "1.99.88" = migrate_1_99_88,
+                   "1.99.90" = migrate_1_99_90)
   v <- numeric_version(names(possible))
   possible[(v > from %||% current) & (v <= to %||% ORDERLY_MINIMUM_VERSION)]
 }
@@ -225,10 +225,16 @@ migrate_1_99_88 <- function(path, dry_run) {
     if (file.exists(path_old)) {
       path_new <- file.path(p, paste0(name, ".R"))
       if (file.exists(path_new)) {
-        cli::cli_alert_danger(
-          paste("Deleting 'src/{name}/orderly.R' as '{name}' also contains",
-                "'{name}.R' - {.strong please check carefully}"))
-        fs::file_delete(path_old)
+        if (dry_run) {
+          cli::cli_alert_danger(
+            paste("Would delete 'src/{name}/orderly.R' as '{name}' also",
+                  "contains '{name}.R'"))
+        } else {
+          cli::cli_alert_danger(
+            paste("Deleting 'src/{name}/orderly.R' as '{name}' also",
+                  "contains '{name}.R' - {.strong please check carefully}"))
+          fs::file_delete(path_old)
+        }
       } else {
         if (dry_run) {
           cli::cli_alert_info(
@@ -246,8 +252,82 @@ migrate_1_99_88 <- function(path, dry_run) {
 }
 
 
-update_minimum_orderly_version <- function(filename, version, dry_run) {
-  assert_file_exists(filename)
+migrate_1_99_90 <- function(path, dry_run) {
+  path_config_yml <- file.path(path, "orderly_config.yml")
+  path_config_json <- file.path(path, "orderly_config.json")
+
+  if (!file.exists(path_config_yml)) {
+    cli::cli_alert_info("No old-style yaml configuration found")
+    return(character())
+  }
+
+  dat <- yaml_load(read_lines(path_config_yml, warn = FALSE))
+  if (!identical(names(dat), "minimum_orderly_version")) {
+    cli::cli_abort(
+      c("Can't migrate nontrivial orderly configuration",
+        i = "Please reconfigure this yourself, using json"))
+  }
+  if (dry_run) {
+    cli::cli_alert_info(
+      "Would translate 'orderly_config.yml' to 'orderly_config.json'")
+  } else {
+    cli::cli_alert_info(
+      "Translating 'orderly_config.yml' to 'orderly_config.json'")
+    jsonlite::write_json(dat, path_config_json, auto_unbox = TRUE)
+    fs::file_delete(path_config_yml)
+  }
+
+  c(basename(path_config_yml), basename(path_config_json))
+}
+
+
+update_minimum_orderly_version <- function(path, version, dry_run) {
+  path_config <- orderly_find_root(path,
+                                   require_orderly = TRUE,
+                                   require_outpack = FALSE)$path_orderly
+  ext <- fs::path_ext(path_config)
+  if (ext == "yml") {
+    update_minimum_orderly_version_yml(path_config, version, dry_run)
+  } else {
+    update_minimum_orderly_version_json(path_config, version, dry_run)
+  }
+}
+
+
+update_minimum_orderly_version_json <- function(filename, version, dry_run) {
+  ## json is quite annoying to roundtrip, but we can get a long way
+  ## with regular expressions, and avoid deserialisation entirely.
+  txt <- paste(readLines(filename, warn = FALSE), collapse = "\n")
+  pattern <- '^(.+"minimum_orderly_version"\\s*:\\s*")([0-9.]+)(".+)$'
+
+  if (!grepl(pattern, txt)) {
+    cli::cli_abort(
+      c("Failed to find key 'minimum_orderly_version' in orderly config",
+        i = "Looked in '{filename}'",
+        i = "Please edit this file yourself"))
+  }
+  existing <- sub(pattern, "\\2", txt)
+  if (numeric_version(existing) >= version) {
+    cli::cli_alert_success(
+      "Minimum orderly version already at {existing}")
+    return(FALSE)
+  }
+
+  txt <- sub(pattern, sprintf("\\1%s\\3", version), txt)
+  if (dry_run) {
+    cli::cli_alert_info(
+      "Would update minimum orderly version from {existing} to {version}")
+  } else {
+    writeLines(txt, filename)
+    cli::cli_alert_success(
+      "Updated minimum orderly version from {existing} to {version}")
+  }
+
+  TRUE
+}
+
+
+update_minimum_orderly_version_yml <- function(filename, version, dry_run) {
   ## Everything about yaml is terrible.  We would like to edit the
   ## value within the yaml, but we can't easily roundtrip the
   ## contents.  So instead we'll edit the strings that it contains,
@@ -297,14 +377,11 @@ orderly_migrate_read_version <- function(path, call = parent.frame()) {
   ## business about the yaml vs a json configuration soon, and because
   ## we don't want to error based on obsolete version numbers being
   ## loaded.
-  ##
-  ## Once we support json configuration we'll prefer to read the json
-  ## verson and warn if both are present (we'll also do that in the
-  ## main root read too).
-  assert_file_exists_relative("orderly_config.yml", workdir = path,
-                              name = "Orderly configuration", call = call)
-  dat <- yaml_read(file.path(path, "orderly_config.yml"))
-
+  path_config <- orderly_find_root(path,
+                                   require_orderly = TRUE,
+                                   require_outpack = FALSE,
+                                   call = call)$path_orderly
+  dat <- read_config_data(path_config)
   value <- dat$minimum_orderly_version
   if (is.null(value)) {
     cli::cli_abort(paste("Invalid orderly configuration does not have key",

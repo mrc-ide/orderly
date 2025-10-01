@@ -13,7 +13,7 @@ test_prepare_orderly_example_separate <- function(examples, ...) {
 
   path_outpack <- file.path(tmp, "outpack")
   suppressMessages(orderly_init(path_outpack, ...))
-  fs::file_delete(file.path(path_outpack, "orderly_config.yml"))
+  fs::file_delete(file.path(path_outpack, "orderly_config.json"))
 
   path_src <- file.path(tmp, "src")
   copy_examples(examples, path_src)
@@ -24,7 +24,7 @@ test_prepare_orderly_example_separate <- function(examples, ...) {
 
 copy_examples <- function(examples, path_src) {
   if (file.exists(path_src)) {
-    config <- readLines(file.path(path_src, "orderly_config.yml"))
+    config <- readLines(file.path(path_src, "orderly_config.json"))
   } else {
     config <- empty_config_contents()
   }
@@ -43,13 +43,12 @@ copy_examples <- function(examples, path_src) {
 
   if ("plugin" %in% examples) {
     register_example_plugin()
-    config <- c(config,
-                "plugins:",
-                "  example.random:",
-                "    distribution:",
-                "      normal")
+    dat <- jsonlite::fromJSON(config)
+    dat$plugins <- list(example.random = list(distribution = "normal"))
+    config <- jsonlite::toJSON(dat, auto_unbox = TRUE, pretty = TRUE)
   }
-  writeLines(config, file.path(path_src, "orderly_config.yml"))
+
+  writeLines(config, file.path(path_src, "orderly_config.json"))
 
   fs::dir_create(file.path(path_src, "src"))
   for (i in examples) {
@@ -134,4 +133,18 @@ skip_if_jsonlite_changes_error_messages <- function(doc, pattern) {
       testthat::skip("update tests for change in jsonlite error")
     }
   })
+}
+
+
+write_old_version_marker <- function(path, version) {
+  if (numeric_version(version) < "1.99.90") {
+    unlink(file.path(path, "orderly_config.json"))
+    writeLines(
+      sprintf('minimum_orderly_version: "%s"', version),
+      file.path(path, "orderly_config.yml"))
+  } else {
+    writeLines(
+      sprintf('{"minimum_orderly_version": "%s"}', version),
+      file.path(path, "orderly_config.json"))
+  }
 }

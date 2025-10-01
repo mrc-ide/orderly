@@ -15,10 +15,13 @@ test_that("Can initialise a new orderly root", {
   expect_true(file.exists(tmp))
   expect_identical(normalise_path(res), normalise_path(tmp))
   root <- root_open(tmp, require_orderly = TRUE)
+  version <- numeric_version(ORDERLY_MINIMUM_VERSION)
+  filename <- file.path(tmp, "orderly_config.json")
   expect_s3_class(root, "outpack_root")
   expect_equal(
     root$config$orderly,
-    list(minimum_orderly_version = numeric_version(ORDERLY_MINIMUM_VERSION)))
+    structure(list(minimum_orderly_version = version),
+              filename = filename))
 })
 
 
@@ -33,12 +36,14 @@ test_that("initialisation leaves things unchanged", {
 test_that("can turn an outpack root into an orderly one", {
   tmp <- withr::local_tempdir()
   outpack_init_no_orderly(tmp)
-
   orderly_init_quietly(tmp)
   root2 <- root_open(tmp, require_orderly = FALSE)
+  version <- numeric_version(ORDERLY_MINIMUM_VERSION)
+  filename <- file.path(tmp, "orderly_config.json")
   expect_equal(
     root2$config$orderly,
-    list(minimum_orderly_version = numeric_version(ORDERLY_MINIMUM_VERSION)))
+    structure(list(minimum_orderly_version = version),
+              filename = filename))
   expect_s3_class(root2, "outpack_root")
 })
 
@@ -152,7 +157,7 @@ test_that("inform about weirdly nested roots: orderly in outpack", {
   root <- outpack_init_no_orderly(tmp)
   p <- file.path(tmp, "a", "b")
   fs::dir_create(p)
-  file.create(file.path(p, "orderly_config.yml"))
+  file.create(file.path(p, "orderly_config.json"))
   err <- expect_error(
     withr::with_dir(p, root_open(NULL, require_orderly = TRUE)),
     "Found incorrectly nested orderly and outpack directories")
@@ -188,7 +193,7 @@ test_that("create root in wd by default", {
   path <- withr::local_tempdir()
   root <- withr::with_dir(path, suppressMessages(orderly_init()))
   expect_true(file.exists(file.path(path, ".outpack")))
-  expect_true(file.exists(file.path(path, "orderly_config.yml")))
+  expect_true(file.exists(file.path(path, "orderly_config.json")))
 })
 
 
@@ -202,7 +207,7 @@ test_that("allow rstudio files to exist for init", {
 
   expect_no_error(orderly_init_quietly(tmp))
   expect_true(file.exists(file.path(tmp, ".outpack")))
-  expect_true(file.exists(file.path(tmp, "orderly_config.yml")))
+  expect_true(file.exists(file.path(tmp, "orderly_config.json")))
 })
 
 
@@ -213,5 +218,22 @@ test_that("force initialisation of non-empty directory", {
   file.create(file.path(tmp, "file"))
   expect_no_error(orderly_init_quietly(tmp, force = TRUE))
   expect_true(file.exists(file.path(tmp, ".outpack")))
-  expect_true(file.exists(file.path(tmp, "orderly_config.yml")))
+  expect_true(file.exists(file.path(tmp, "orderly_config.json")))
+})
+
+
+test_that("can fail gracefully with both configurations present", {
+  tmp <- withr::local_tempdir()
+  res <- orderly_init_quietly(tmp)
+  file.create(file.path(tmp, "orderly_config.yml"))
+  expect_error(
+    orderly_init_quietly(tmp),
+    "Both 'orderly_config.json' and 'orderly_config.yml' found")
+})
+
+
+test_that("can run init on an old configuration", {
+  path <- suppressMessages(orderly_example())
+  write_old_version_marker(path, "1.99.82")
+  expect_no_error(orderly_init_quietly(path))
 })

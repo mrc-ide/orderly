@@ -1,9 +1,10 @@
 ##' Initialise an empty orderly repository, or initialise a source
 ##' copy of an orderly repository (see Details). An orderly repository
-##' is defined by the presence of a file `orderly_config.yml` at its
-##' root, along with a directory `.outpack/` at the same level.
+##' is defined by the presence of a file `orderly_config.json` (or
+##' `orderly_config.yml`) at its root, along with a directory
+##' `.outpack/` at the same level.
 ##'
-##' It is expected that `orderly_config.yml` will be saved in version
+##' It is expected that `orderly_config.json` will be saved in version
 ##' control, but that `.outpack` will be excluded from version
 ##' control; this means that for every clone of your project you will
 ##' need to call `orderly::orderly_init()` to initialise the
@@ -14,14 +15,15 @@
 ##' already-initialised directory, however, any arguments passed
 ##' through must exactly match the configuration of the current root,
 ##' otherwise an error will be thrown. Please use
-##' [orderly::orderly_config_set] to change the configuration, as
-##' this ensures that the change in configuration is possible. If
-##' configuration options are given but match those that the directory
-##' already uses, then nothing happens.
+##' [orderly::orderly_config_set] to change the configuration within
+##' `.outpack`, as this ensures that the change in configuration is
+##' possible. If configuration options are given but match those that
+##' the directory already uses, then nothing happens.  You can safely
+##' edit `orderly_config.json` yourself, at least for now.
 ##'
 ##' If the repository that you call `orderly::orderly_init()` on is
 ##' already initialised with an `.outpack` directory but not an
-##' `orderly_config.yml` file, then we will write that file too.
+##' `orderly_config.json` file, then we will write that file too.
 ##'
 ##' @title Initialise an orderly repository
 ##'
@@ -70,9 +72,20 @@ orderly_init <- function(root = ".",
                          require_complete_tree = FALSE,
                          force = FALSE) {
   assert_scalar_character(root)
-  path_orderly <- file.path(root, "orderly_config.yml")
-  has_orderly_config <- file.exists(path_orderly)
-  if (!has_orderly_config && file.exists(root)) {
+  path_orderly <- file.path(root, "orderly_config.json")
+  has_orderly <- file.exists(path_orderly)
+
+  path_orderly_old <- file.path(root, "orderly_config.yml")
+  has_orderly_old <- file.exists(path_orderly_old)
+  if (has_orderly_old) {
+    if (has_orderly) {
+      error_both_configurations(root)
+    }
+    path_orderly <- path_orderly_old
+    has_orderly <- has_orderly_old
+  }
+
+  if (!has_orderly && file.exists(root)) {
     if (!is_directory(root)) {
       cli::cli_abort("'root' exists but is not a directory")
     }
@@ -113,7 +126,7 @@ orderly_init <- function(root = ".",
     cli::cli_alert_success("Created orderly root at '{root$path}'")
   }
 
-  if (!has_orderly_config) {
+  if (!has_orderly) {
     writeLines(empty_config_contents(), path_orderly)
   }
 
@@ -123,11 +136,11 @@ orderly_init <- function(root = ".",
 }
 
 
-ORDERLY_MINIMUM_VERSION <- "1.99.88"  # nolint
+ORDERLY_MINIMUM_VERSION <- "1.99.90"  # nolint
 
 
 empty_config_contents <- function() {
-  sprintf('minimum_orderly_version: "%s"', ORDERLY_MINIMUM_VERSION)
+  sprintf('{"minimum_orderly_version": "%s"}', ORDERLY_MINIMUM_VERSION)
 }
 
 
@@ -297,9 +310,9 @@ orderly_find_root <- function(path, require_orderly, require_outpack,
 
   if (require_orderly && is.null(ret$path_orderly)) {
     cli::cli_abort(
-      c("Did not find 'orderly_config.yml' in '{path}'",
+      c("Did not find 'orderly_config.json' in '{path}'",
         x = paste("Your directory has an '.outpack/' path, so is a valid",
-                  "outpack root, but does not contain 'orderly_config.yml' so",
+                  "outpack root, but does not contain 'orderly_config.json' so",
                   "cannot be used as an orderly root"),
         i = 'Please run orderly::orderly_init("{path}") to initialise',
         i = "See ?orderly_init for more arguments to this function"),
@@ -321,10 +334,31 @@ orderly_find_root <- function(path, require_orderly, require_outpack,
 
 orderly_find_root_locate <- function(path, call = NULL) {
   path_outpack <- find_file_descend(".outpack", path)
-  path_orderly <- find_file_descend("orderly_config.yml", path)
+  path_orderly <- find_file_descend("orderly_config.json", path)
+  path_orderly_old <- find_file_descend("orderly_config.yml", path)
 
   has_outpack <- !is.null(path_outpack)
   has_orderly <- !is.null(path_orderly)
+  has_orderly_old <- !is.null(path_orderly_old)
+
+  if (has_orderly_old) {
+    if (has_orderly) {
+      # This is slightly more involved than error_both_configurations
+      # to cope with the possibility that the the configurations are
+      # in different directories (since we search) even though this is
+      # very unlikely and probably just not going to be nicely
+      # resolvable.
+      cli::cli_abort( # - TODO: test
+        c("Both 'orderly_config.json' and 'orderly_config.yml' found",
+          i = "Looked within '{path}'",
+          i = "Found new configuration: '{path_orderly}'",
+          i = "Found old configuration: '{path_orderly_old}'",
+          i = "Delete '{path_orderly_old}' and try again"),
+        call = call)
+    }
+    path_orderly <- path_orderly_old
+    has_orderly <- has_orderly_old
+  }
 
   err_nesting <- has_outpack && has_orderly &&
     dirname(path_outpack) != dirname(path_orderly)
@@ -363,10 +397,20 @@ orderly_find_root_here <- function(path, call) {
   assert_is_directory(path, call = call)
 
   path_outpack <- file.path(path, ".outpack")
-  path_orderly <- file.path(path, "orderly_config.yml")
+  path_orderly <- file.path(path, "orderly_config.json")
+  path_orderly_old <- file.path(path, "orderly_config.yml")
 
   has_outpack <- file_exists(path_outpack)
   has_orderly <- file_exists(path_orderly)
+  has_orderly_old <- file_exists(path_orderly_old)
+
+  if (has_orderly_old) {
+    if (has_orderly) {
+      error_both_configurations(path, call) # TODO: test
+    }
+    path_orderly <- path_orderly_old
+    has_orderly <- has_orderly_old
+  }
 
   if (!has_outpack && !has_orderly) {
     cli::cli_abort(
@@ -379,4 +423,13 @@ orderly_find_root_here <- function(path, call) {
   list(path = path,
        path_outpack = if (has_outpack) path_outpack,
        path_orderly = if (has_orderly) path_orderly)
+}
+
+
+error_both_configurations <- function(path, call = parent.frame()) {
+  cli::cli_abort(
+    c("Both 'orderly_config.json' and 'orderly_config.yml' found",
+      i = "Looked within '{path}'",
+      i = "Delete 'orderly_config.yml' and try again"),
+    call = call)
 }

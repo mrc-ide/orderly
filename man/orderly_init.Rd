@@ -47,11 +47,12 @@ invisibly. Typically this is called only for its side effect.
 \description{
 Initialise an empty orderly repository, or initialise a source
 copy of an orderly repository (see Details). An orderly repository
-is defined by the presence of a file \code{orderly_config.yml} at its
-root, along with a directory \verb{.outpack/} at the same level.
+is defined by the presence of a file \code{orderly_config.json} (or
+\code{orderly_config.yml}) at its root, along with a directory
+\verb{.outpack/} at the same level.
 }
 \details{
-It is expected that \code{orderly_config.yml} will be saved in version
+It is expected that \code{orderly_config.json} will be saved in version
 control, but that \code{.outpack} will be excluded from version
 control; this means that for every clone of your project you will
 need to call \code{orderly::orderly_init()} to initialise the
@@ -62,14 +63,15 @@ You can safely call \code{orderly::orderly_init()} on an
 already-initialised directory, however, any arguments passed
 through must exactly match the configuration of the current root,
 otherwise an error will be thrown. Please use
-\link{orderly_config_set} to change the configuration, as
-this ensures that the change in configuration is possible. If
-configuration options are given but match those that the directory
-already uses, then nothing happens.
+\link{orderly_config_set} to change the configuration within
+\code{.outpack}, as this ensures that the change in configuration is
+possible. If configuration options are given but match those that
+the directory already uses, then nothing happens.  You can safely
+edit \code{orderly_config.json} yourself, at least for now.
 
 If the repository that you call \code{orderly::orderly_init()} on is
 already initialised with an \code{.outpack} directory but not an
-\code{orderly_config.yml} file, then we will write that file too.
+\code{orderly_config.json} file, then we will write that file too.
 }
 \examples{
 # We'll use an automatically cleaned-up directory for the root:
