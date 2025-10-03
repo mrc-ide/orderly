@@ -319,10 +319,7 @@ test_that("can't migrate complex old configuration", {
 
 test_that("leave archive files alone", {
   path <- suppressMessages(orderly_example())
-  unlink(file.path(path, "orderly_config.json"))
-  writeLines(
-    'minimum_orderly_version: "1.99.0"',
-    file.path(path, "orderly_config.yml"))
+  write_old_version_marker(path, "1.99.0")
 
   filename <- file.path(path, "src", "data", "data.R")
   txt <- readLines(filename)
@@ -335,30 +332,19 @@ test_that("leave archive files alone", {
 
   res <- evaluate_promise(
     orderly_migrate_source(path, to = "1.99.82", dry_run = TRUE))
-  expect_length(res$messages, 5)
-  expect_match(res$messages[[1]], "Migrating from 1.99.0 to 1.99.82")
-  expect_match(res$messages[[2]], "Checking \\d+ files in")
-  expect_match(res$messages[[3]], "Would update 2 lines in src/data/data.R")
-  expect_match(res$messages[[4]], "Would update minimum orderly version")
-  expect_match(res$messages[[5]], "Would change 2 files")
+  expect_length(res$messages, 7)
+  expect_match(res$messages[[1]], "fresh clone")
+  expect_match(res$messages[[2]], "Found directories")
+  expect_match(res$messages[[3]], "Migrating from 1.99.0 to 1.99.82")
+  expect_match(res$messages[[4]], "Checking \\d+ files in")
+  expect_match(res$messages[[5]], "Would update 2 lines in src/data/data.R")
+  expect_match(res$messages[[6]], "Would update minimum orderly version")
+  expect_match(res$messages[[7]], "Would change 2 files")
   expect_true(res$result)
 
   expect_equal(nrow(gert::git_status(repo = path)), 0)
 
-  res <- evaluate_promise(
-    orderly_migrate_source(path, to = "1.99.82"))
-  expect_length(res$messages, 6)
-  expect_match(res$messages[[1]], "Migrating from 1.99.0 to 1.99.82")
-  expect_match(res$messages[[2]], "Checking \\d+ files in")
-  expect_match(res$messages[[3]], "Updated 2 lines in src/data/data.R")
-  expect_match(res$messages[[4]], "Updated minimum orderly version")
-  expect_match(res$messages[[5]], "Changed 2 files")
-  expect_match(res$messages[[6]],
-               "Please review, then add and commit these to git")
-  expect_true(res$result)
-
-  expect_equal(nrow(gert::git_status(repo = path)), 2)
-
-  txt <- readLines(file.path(path, "archive", "data", id, "data.R"))
-  expect_match(txt, "orderly2::orderly_", all = FALSE)
+  expect_error(
+    orderly_migrate_source(path, to = "1.99.82"),
+    "Not migrating")
 })
