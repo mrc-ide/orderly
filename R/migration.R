@@ -183,6 +183,7 @@ migrations <- function(current, from, to) {
 migrate_1_99_82 <- function(path, dry_run) {
   files <- dir(path, pattern = "\\.(R|Rmd|qmd|md)$",
                recursive = TRUE, ignore.case = TRUE)
+  files <- files[!grepl("^(archive|draft)[/\\\\]", files)]
   cli::cli_alert_info("Checking {length(files)} file{?s} in '{path}'")
   changed <- logical(length(files))
   for (i in seq_along(files)) {
