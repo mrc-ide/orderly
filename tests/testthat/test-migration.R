@@ -1,5 +1,6 @@
 test_that("Do nothing while migrating up-to-date sources", {
   path <- suppressMessages(orderly_example())
+  helper_remove_outpack(path)
   info <- helper_add_git(path)
 
   res <- evaluate_promise(
@@ -40,6 +41,7 @@ test_that("warn on dry run without version control", {
 
 test_that("refuse to migrate unclean repo", {
   path <- suppressMessages(orderly_example())
+  helper_remove_outpack(path)
   info <- helper_add_git(path)
   file.create(file.path(path, "some-file"))
   err <- expect_error(
@@ -51,6 +53,7 @@ test_that("refuse to migrate unclean repo", {
 
 test_that("allow dry run on unclean repo", {
   path <- suppressMessages(orderly_example())
+  helper_remove_outpack(path)
   info <- helper_add_git(path)
   file.create(file.path(path, "some-file"))
   res <- evaluate_promise(
@@ -174,6 +177,7 @@ test_that("can migrate old sources", {
   writeLines(sub("^orderly_", "orderly2::orderly_", txt),
              filename)
 
+  helper_remove_outpack(path)
   info <- helper_add_git(path)
 
   res <- evaluate_promise(
@@ -226,6 +230,7 @@ test_that("can migrate orderly.R files", {
   nms <- orderly_list_src(path)
   fs::file_move(file.path(path, "src", nms, paste0(nms, ".R")),
                 file.path(path, "src", nms, "orderly.R"))
+  helper_remove_outpack(path)
   info <- helper_add_git(path)
 
   expect_length(dir(path, "orderly\\.R$", recursive = TRUE), length(nms))
@@ -258,6 +263,7 @@ test_that("delete old orderly.R files", {
   path <- suppressMessages(orderly_example())
   write_old_version_marker(path, "1.99.82")
   file.create(file.path(path, "src", "data", "orderly.R"))
+  helper_remove_outpack(path)
   info <- helper_add_git(path)
 
   res <- evaluate_promise(
@@ -278,6 +284,7 @@ test_that("delete old orderly.R files", {
 test_that("can migrate old configuration", {
   path <- suppressMessages(orderly_example())
   write_old_version_marker(path, "1.99.88")
+  helper_remove_outpack(path)
   info <- helper_add_git(path)
 
   res <- evaluate_promise(
@@ -303,6 +310,7 @@ test_that("can't migrate complex old configuration", {
   fs::file_delete(file.path(path, "orderly_config.json"))
   writeLines("minimum_orderly_version: 1.99.88\nother: true",
              file.path(path, "orderly_config.yml"))
+  helper_remove_outpack(path)
   info <- helper_add_git(path)
 
   expect_error(suppressMessages(
@@ -314,4 +322,38 @@ test_that("can't migrate complex old configuration", {
 
   expect_true(file.exists(file.path(path, "orderly_config.yml")))
   expect_false(file.exists(file.path(path, "orderly_config.json")))
+})
+
+
+test_that("leave archive files alone", {
+  path <- suppressMessages(orderly_example())
+  write_old_version_marker(path, "1.99.0")
+
+  filename <- file.path(path, "src", "data", "data.R")
+  txt <- readLines(filename)
+  writeLines(sub("^orderly_", "orderly2::orderly_", txt),
+             filename)
+
+  env <- new.env()
+  id <- withr::with_dir(path, orderly_run_quietly("data", envir = env))
+
+  info <- helper_add_git(path)
+
+  res <- evaluate_promise(
+    orderly_migrate_source(path, to = "1.99.82", dry_run = TRUE))
+  expect_length(res$messages, 7)
+  expect_match(res$messages[[1]], "fresh clone")
+  expect_match(res$messages[[2]], "Found directories")
+  expect_match(res$messages[[3]], "Migrating from 1.99.0 to 1.99.82")
+  expect_match(res$messages[[4]], "Checking \\d+ files in")
+  expect_match(res$messages[[5]], "Would update 2 lines in src/data/data.R")
+  expect_match(res$messages[[6]], "Would update minimum orderly version")
+  expect_match(res$messages[[7]], "Would change 2 files")
+  expect_true(res$result)
+
+  expect_equal(nrow(gert::git_status(repo = path)), 0)
+
+  expect_error(
+    orderly_migrate_source(path, to = "1.99.82"),
+    "Not migrating")
 })

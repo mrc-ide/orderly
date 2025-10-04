@@ -149,6 +149,11 @@ helper_add_git <- function(path) {
 }
 
 
+helper_remove_outpack <- function(path) {
+  unlink(file.path(path, ".outpack"), recursive = TRUE)
+}
+
+
 ## This matches the old semantics of outpack_root, and is used to
 ## create a root that does not have the orderly bits.
 outpack_init_no_orderly <- function(...) {

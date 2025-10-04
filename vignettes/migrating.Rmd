@@ -182,7 +182,7 @@ which needs updating to use `orderly`.  A few alternative solutions are availabl
 The best solution to use if you are happy modifying your source code.  We require a clean clone of your repository (`git status` should report no modified or unknown files).  You can then run:
 
 ```r
-orderly_migrate_source_from_orderly2()
+orderly_migrate_source()
 ```
 
 which will rewrite some simple references to `orderly2` for you.  In particular it will replace

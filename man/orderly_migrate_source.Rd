@@ -97,6 +97,13 @@ repository (though this is not enforced).  After running, review
 changes (if any) with \verb{git diff} and then commit.  You cannot run
 this function against source code that is not version controlled
 with git.
+
+We will refuse to migrate sources if we find the directories
+\verb{archive/}, \verb{draft/} or \verb{.outpack/} to avoid any chance of
+modifying files in packets that have been previously run.  You
+should make a fresh clone, migrate that, push back up to GitHub
+(or whereever you store your sources) and pull back down into your
+working directory.
 }
 
 \section{Migration of very old sources}{

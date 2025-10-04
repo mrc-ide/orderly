@@ -59,6 +59,13 @@
 ##' this function against source code that is not version controlled
 ##' with git.
 ##'
+##' We will refuse to migrate sources if we find the directories
+##' `archive/`, `draft/` or `.outpack/` to avoid any chance of
+##' modifying files in packets that have been previously run.  You
+##' should make a fresh clone, migrate that, push back up to GitHub
+##' (or whereever you store your sources) and pull back down into your
+##' working directory.
+##'
 ##' # Migration of very old sources
 ##'
 ##' If you have old yaml-based orderly sources, you should consult
@@ -112,6 +119,7 @@ orderly_migrate_source <- function(path = ".", dry_run = FALSE, from = NULL,
   to <- numeric_version(max(names(dat)))
 
   migrate_check_git_status(path, dry_run)
+  migrate_check_archive_status(path, dry_run)
 
   changed <- character()
   for (v in names(dat)) {
@@ -171,6 +179,29 @@ migrate_check_git_status <- function(path, dry_run) {
 }
 
 
+migrate_check_archive_status <- function(path, dry_run) {
+  check <- c(".outpack", "archive", "draft")
+  err <- check[file.exists(file.path(path, check))]
+  if (length(err) == 0) {
+    return()
+  }
+  if (dry_run) {
+      cli::cli_alert_warning(
+        paste("The path '{path}' does not appear to be a fresh clone, as.",
+              "it contains directories created by running orderly.",
+              "You will not be able to migrate your files, but we will still",
+              "show what needs changing, as you have used 'dry_run = TRUE'"),
+        wrap = TRUE)
+      cli::cli_alert_danger("Found {?directory/directories} {squote(err)}")
+  } else {
+    cli::cli_abort(
+      c("Not migrating '{path}' as it does not appear to be a fresh clone",
+        x = "Found {?directory/directories} {squote(err)}",
+        i = "Try running this in a fresh clone"))
+  }
+}
+
+
 migrations <- function(current, from, to) {
   possible <- list("1.99.82" = migrate_1_99_82,
                    "1.99.88" = migrate_1_99_88,
@@ -183,6 +214,7 @@ migrations <- function(current, from, to) {
 migrate_1_99_82 <- function(path, dry_run) {
   files <- dir(path, pattern = "\\.(R|Rmd|qmd|md)$",
                recursive = TRUE, ignore.case = TRUE)
+  files <- files[!grepl("^(archive|draft)[/\\\\]", files)]
   cli::cli_alert_info("Checking {length(files)} file{?s} in '{path}'")
   changed <- logical(length(files))
   for (i in seq_along(files)) {
