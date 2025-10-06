@@ -25,13 +25,13 @@ If you want to make this permanent, you can add this line to your `~/.Rprofile` 
 
 Control verbosity of some informative messages.  If set to `TRUE`, then we suppress many of the `cli`-based chatty messages.
 
-The option is `FALSE` by default, but it is `TRUE` in testthat tests, so that you should not need to suppress output manually.
+The option is `FALSE` by default, but it is `TRUE` in `testthat` tests, so that you should not need to suppress output manually.
 
 ## `orderly.index_progress`
 
 Display a progress bar when building the orderly index (which can take a while on large archives).
 
-This option is `TRUE` by default, but also affected by cli's options `cli.progress_show_after` and `cli.progress_clear`.
+This option is `TRUE` by default, but also affected by `cli`'s options `cli.progress_show_after` and `cli.progress_clear`.
 
 ## `orderly.schema_validate`
 
@@ -53,7 +53,7 @@ This option is `FALSE` by default.
 
 ## `orderly.git_error_is_warning`
 
-Controls if the error thrown for incorrectly version controlled `.outpack` files should be convered into a warning.
+Controls if the error thrown for incorrectly version controlled `.outpack` files should be converted into a warning.
 
 This option is `FALSE` by default.
 
