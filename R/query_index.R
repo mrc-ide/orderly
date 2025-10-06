@@ -3,6 +3,7 @@
 #' @description
 #' Class for managing the active index whilst evaluating a query
 #' @keywords internal
+#' @noRd
 query_index <- R6::R6Class(
   "query_index",
   cloneable = FALSE,
