@@ -41,7 +41,7 @@ Set search options for interactive use of orderly; see
 details. This applies only for the current session, but applies to
 all interactive uses of orderly functions that might have received
 a copy of the search options (\code{location}, \code{allow_remote} and
-\code{fetrch_metadata}) via \link{orderly_run}.  Calling with no
+\code{fetch_metadata}) via \link{orderly_run}.  Calling with no
 arguments resets to the defaults.
 }
 \examples{
