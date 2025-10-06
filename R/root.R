@@ -136,7 +136,7 @@ orderly_init <- function(root = ".",
 }
 
 
-ORDERLY_MINIMUM_VERSION <- "1.99.90"  # nolint
+ORDERLY_MINIMUM_VERSION <- "2.0.0"  # nolint
 
 
 empty_config_contents <- function() {
