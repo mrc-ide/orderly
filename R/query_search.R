@@ -150,7 +150,8 @@ compatibility_fix_options <- function(options, name,
 }
 
 
-build_search_options <- function(location = NULL, allow_remote = NULL,
+build_search_options <- function(location = NULL,
+                                 allow_remote = NULL,
                                  fetch_metadata = FALSE,
                                  call = parent.frame()) {
   if (!is.null(location)) {

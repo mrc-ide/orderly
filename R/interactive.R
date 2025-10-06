@@ -67,19 +67,25 @@ detect_orderly_interactive_path <- function(
 
 ##' Set search options for interactive use of orderly; see
 ##' [orderly::orderly_dependency] and [orderly::orderly_run] for
-##' details. This may be either an [orderly::orderly_search_options]
-##' object, or a list that will be coerced into one at the point of
-##' use (or `NULL`). This applies only for the current session, but
-##' applies to all interactive uses of orderly functions that might
-##' have received a copy of `search_options` via
-##' [orderly::orderly_run]
+##' details. This applies only for the current session, but applies to
+##' all interactive uses of orderly functions that might have received
+##' a copy of the search options (`location`, `allow_remote` and
+##' `fetrch_metadata`) via [orderly::orderly_run].  Calling with no
+##' arguments resets to the defaults.
 ##'
 ##' @title Set search options for interactive use
 ##'
 ##' @inheritParams orderly_search
 ##'
 ##' @return Nothing, called for its side effects
+##'
 ##' @export
+##' @examples
+##' # enable fetching packets from remote locations in this session
+##' orderly_interactive_set_search_options(allow_remote = TRUE)
+##' # ... your interactive session
+##' # reset to defaults
+##' orderly_interactive_set_search_options()
 orderly_interactive_set_search_options <- function(location = NULL,
                                                    allow_remote = NULL,
                                                    fetch_metadata = FALSE) {
@@ -87,6 +93,7 @@ orderly_interactive_set_search_options <- function(location = NULL,
                                   allow_remote = allow_remote,
                                   fetch_metadata = fetch_metadata)
   .interactive$search_options <- options
+  invisible()
 }
 
 
