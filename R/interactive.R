@@ -70,7 +70,7 @@ detect_orderly_interactive_path <- function(
 ##' details. This applies only for the current session, but applies to
 ##' all interactive uses of orderly functions that might have received
 ##' a copy of the search options (`location`, `allow_remote` and
-##' `fetrch_metadata`) via [orderly::orderly_run].  Calling with no
+##' `fetch_metadata`) via [orderly::orderly_run].  Calling with no
 ##' arguments resets to the defaults.
 ##'
 ##' @title Set search options for interactive use
