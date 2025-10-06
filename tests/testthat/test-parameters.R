@@ -146,7 +146,7 @@ test_that("fill in missing parameters", {
 
 
 test_that("require non-default parameters are present in environment", {
-  withr::local_options(orderly_interactive_parameters_missing_error = TRUE)
+  withr::local_options(orderly.interactive_parameters_missing_error = TRUE)
   envir <- list2env(list(b = 3, c = 4), parent = new.env())
   expect_error(
     get_missing_parameters_interactive(c("a", "b", "c"), NULL, envir),
@@ -156,7 +156,7 @@ test_that("require non-default parameters are present in environment", {
 
 test_that("prompt for missing parameters", {
   skip_if_not_installed("mockery")
-  withr::local_options(orderly_interactive_parameters_missing_error = NULL)
+  withr::local_options(orderly.interactive_parameters_missing_error = NULL)
   envir <- list2env(list(c = 4), parent = new.env())
   mock_get <- mockery::mock(1, 2)
   mockery::stub(get_missing_parameters_interactive, "get_parameter_interactive",

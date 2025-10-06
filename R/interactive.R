@@ -145,11 +145,11 @@ get_missing_parameters_interactive <- function(required, envir, call = NULL) {
   if (length(msg) == 0) {
     return()
   }
-  if (getOption("orderly_interactive_parameters_missing_error", FALSE)) {
+  if (getOption("orderly.interactive_parameters_missing_error", FALSE)) {
     cli::cli_abort(
       c("Missing parameters: {squote(msg)}",
         i = paste("Erroring because option",
-                  "'orderly_interactive_parameters_missing_error'",
+                  "'orderly.interactive_parameters_missing_error'",
                   "is 'TRUE'")),
       call = call)
   }

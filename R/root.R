@@ -213,7 +213,7 @@ root_validate_same_configuration <- function(args, config, root, call) {
 
 
 root_check_git <- function(root, call) {
-  if (isTRUE(getOption("orderly_git_error_ignore", FALSE))) {
+  if (isTRUE(getOption("orderly.git_error_ignore", FALSE))) {
     return()
   }
 
@@ -233,8 +233,8 @@ root_check_git <- function(root, call) {
 
   hint_disable <- paste(
     "To disable this check, set the option",
-    "'orderly_git_error_ignore' to TRUE by running",
-    "{.code options(orderly_git_error_ignore = TRUE)}")
+    "'orderly.git_error_ignore' to TRUE by running",
+    "{.code options(orderly.git_error_ignore = TRUE)}")
 
   ## This is easiest to do if the outpack rep is at the git root,
   ## which is the most common situation.
@@ -268,7 +268,7 @@ root_check_git <- function(root, call) {
     files_err <- files[rowSums(err) > 0]
     types_err <- special[colSums(err) > 0]
     url <- "https://mrc-ide.github.io/orderly/articles/troubleshooting.html"
-    warn_only <- getOption("orderly_git_error_is_warning", FALSE)
+    warn_only <- getOption("orderly.git_error_is_warning", FALSE)
     msg <- c("Detected {length(files_err)} outpack file{?s} committed to git",
              x = "Detected files were found in {squote(types_err)}",
              i = "For tips on resolving this, please see {.url {url}}",
@@ -279,8 +279,8 @@ root_check_git <- function(root, call) {
     } else {
       hint_warn_only <- paste(
         "To turn this into a warning and continue anyway",
-        "set the option 'orderly_git_error_is_warning' to TRUE",
-        "by running {.code options(orderly_git_error_is_warning = TRUE)}")
+        "set the option 'orderly.git_error_is_warning' to TRUE",
+        "by running {.code options(orderly.git_error_is_warning = TRUE)}")
       cli::cli_abort(c(msg, i = hint_warn_only, i = hint_disable), call = call)
     }
   }

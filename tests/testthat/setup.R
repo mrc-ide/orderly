@@ -1,5 +1,5 @@
 tests_schema_validate <- function() {
-  opt <- getOption("outpack.schema_validate", NULL)
+  opt <- getOption("orderly.schema_validate", NULL)
   if (!is.null(opt)) {
     return(opt)
   }
@@ -12,5 +12,5 @@ tests_schema_validate <- function() {
 
 withr::local_options(
   orderly.index_progress = FALSE,
-  outpack.schema_validate = tests_schema_validate(),
+  orderly.schema_validate = tests_schema_validate(),
   .local_envir = teardown_env())
