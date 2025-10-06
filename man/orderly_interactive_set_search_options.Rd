@@ -38,10 +38,16 @@ Nothing, called for its side effects
 \description{
 Set search options for interactive use of orderly; see
 \link{orderly_dependency} and \link{orderly_run} for
-details. This may be either an \link{orderly_search_options}
-object, or a list that will be coerced into one at the point of
-use (or \code{NULL}). This applies only for the current session, but
-applies to all interactive uses of orderly functions that might
-have received a copy of \code{search_options} via
-\link{orderly_run}
+details. This applies only for the current session, but applies to
+all interactive uses of orderly functions that might have received
+a copy of the search options (\code{location}, \code{allow_remote} and
+\code{fetch_metadata}) via \link{orderly_run}.  Calling with no
+arguments resets to the defaults.
+}
+\examples{
+# enable fetching packets from remote locations in this session
+orderly_interactive_set_search_options(allow_remote = TRUE)
+# ... your interactive session
+# reset to defaults
+orderly_interactive_set_search_options()
 }
