@@ -20,6 +20,7 @@ articles:
       - metadata
       - query
       - plugins
+      - details
 
 reference:
   - title: Run a report

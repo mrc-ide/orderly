@@ -346,7 +346,7 @@ Now, when we register the plugin, we provide the path to this schema, along with
 }
 ```
 
-Now, when the orderly metadata is saved (just before running the script part of a report) we will validate output that was passed into `orderly::orderly_plugin_add_metadata` against the schema, if `jsonvalidate` is installed (currently this requires our development version) and if the R option `outpack.schema_validate` is set to `TRUE` (e.g., by running `options(outpack.schema_validate = TRUE)`).
+Now, when the orderly metadata is saved (just before running the script part of a report) we will validate output that was passed into `orderly::orderly_plugin_add_metadata` against the schema, if `jsonvalidate` is installed (currently this requires our development version) and if the R option `orderly.schema_validate` is set to `TRUE` (e.g., by running `options(orderly.schema_validate = TRUE)`).
 
 Our final package has structure:
 

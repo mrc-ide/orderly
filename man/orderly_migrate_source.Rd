@@ -102,7 +102,7 @@ We will refuse to migrate sources if we find the directories
 \verb{archive/}, \verb{draft/} or \verb{.outpack/} to avoid any chance of
 modifying files in packets that have been previously run.  You
 should make a fresh clone, migrate that, push back up to GitHub
-(or whereever you store your sources) and pull back down into your
+(or wherever you store your sources) and pull back down into your
 working directory.
 }
 

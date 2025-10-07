@@ -99,8 +99,8 @@ test_that("can add gitignore if git setup is ok, but not present", {
 test_that("can error with instructions if files are added to git", {
   ## Make sure that these are never set for the tests
   withr::local_options(
-    orderly_git_error_is_warning = NULL,
-    orderly_git_error_ignore = NULL)
+    orderly.git_error_is_warning = NULL,
+    orderly.git_error_ignore = NULL)
 
   root <- create_temporary_root()
   info <- helper_add_git(root$path)
@@ -131,17 +131,17 @@ test_that("can error with instructions if files are added to git", {
 
   ## Can ignore the warning entirely:
   expect_silent(
-    withr::with_options(list(orderly_git_error_ignore = TRUE),
+    withr::with_options(list(orderly.git_error_ignore = TRUE),
                         root_check_git(root, NULL)))
 
   withr::with_options(
-    list(orderly_git_error_is_warning = TRUE),
+    list(orderly.git_error_is_warning = TRUE),
     expect_warning(id1 <- create_random_packet(root$path),
                    err$message, fixed = TRUE))
   expect_type(id1, "character")
 
   withr::with_options(
-    list(orderly_git_error_is_warning = TRUE),
+    list(orderly.git_error_is_warning = TRUE),
     expect_warning(id2 <- create_random_packet(root$path), NA)) # no warning
 
   expect_type(id2, "character")
@@ -153,8 +153,8 @@ test_that("can error with instructions if files are added to git", {
 test_that("can do git check in subdir", {
   ## Make sure that these are never set for the tests
   withr::local_options(
-    orderly_git_error_is_warning = NULL,
-    orderly_git_error_ignore = NULL)
+    orderly.git_error_is_warning = NULL,
+    orderly.git_error_ignore = NULL)
 
   path <- withr::local_tempdir()
   root <- file.path(path, "root")

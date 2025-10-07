@@ -38,7 +38,7 @@ orderly_run("data")
 which may have directed you to this very page.  If you just want to continue working anyway, then run the suggested command:
 
 ```{r}
-options(orderly_git_error_is_warning = TRUE)
+options(orderly.git_error_is_warning = TRUE)
 ```
 
 after which things will work with a warning the first time that session:
@@ -54,7 +54,7 @@ orderly_run("data")
 ```
 
 ```{r, include = FALSE}
-options(orderly_git_error_is_warning = FALSE)
+options(orderly.git_error_is_warning = FALSE)
 ```
 
 The rest of this section discusses how you might permanently fix the issue.

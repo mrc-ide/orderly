@@ -95,8 +95,8 @@ bound to the names of your parameters.  For any parameters that
 are not found we will look at the default values and use these
 if possible, but if not possible then we will either error or
 prompt based on the global option
-\code{orderly_interactive_parameters_missing_error}. If this is
-\code{TRUE}, then we will ask you to enter a value for the parameters
+\code{orderly.interactive_parameters_missing_error}. If this is
+\code{FALSE}, then we will ask you to enter a value for the parameters
 (strings will need to be entered with quotes).
 }
 }

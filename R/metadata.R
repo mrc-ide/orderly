@@ -123,8 +123,8 @@ static_orderly_strict_mode <- function(args) {
 ##'   are not found we will look at the default values and use these
 ##'   if possible, but if not possible then we will either error or
 ##'   prompt based on the global option
-##'   `orderly_interactive_parameters_missing_error`. If this is
-##'   `TRUE`, then we will ask you to enter a value for the parameters
+##'   `orderly.interactive_parameters_missing_error`. If this is
+##'   `FALSE`, then we will ask you to enter a value for the parameters
 ##'   (strings will need to be entered with quotes).
 ##'
 ##' @title Declare orderly parameters

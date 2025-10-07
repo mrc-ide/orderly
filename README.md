@@ -62,7 +62,7 @@ To run all tests, you need to have [`outpack_server`](https://github.com/mrc-ide
 cargo install --git https://github.com/mrc-ide/outpack_server
 ```
 
-If you want to force validation of schemas during testing, set the R option `outpack.schema_validate` to `TRUE`.  This will automatically be set on CI (as detected by the `CI` environment variable) and will be enabled if `jsonvalidate` is installed.  Set the option `outpack.schema_validate` as `FALSE` to disable checking.
+If you want to force validation of schemas during testing, set the R option `orderly.schema_validate` to `TRUE`.  This will automatically be set on CI (as detected by the `CI` environment variable) and will be enabled if `jsonvalidate` is installed.  Set the option `orderly.schema_validate` as `FALSE` to disable checking.
 
 ## Licence
 

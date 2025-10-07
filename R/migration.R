@@ -63,7 +63,7 @@
 ##' `archive/`, `draft/` or `.outpack/` to avoid any chance of
 ##' modifying files in packets that have been previously run.  You
 ##' should make a fresh clone, migrate that, push back up to GitHub
-##' (or whereever you store your sources) and pull back down into your
+##' (or wherever you store your sources) and pull back down into your
 ##' working directory.
 ##'
 ##' # Migration of very old sources
