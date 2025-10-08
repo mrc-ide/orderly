@@ -83,7 +83,7 @@ importantly different users may have different names for their
 locations so it makes little sense to encode the location name
 into the source code. Alternatively, you want to use different
 locations in different contexts, for example sometimes you might
-want to include local copies packets as possible dependencies,
+want to include local copies of packets as possible dependencies,
 but at other times you want to resolve dependencies only as they
 would be resolved on one of your locations.
 
