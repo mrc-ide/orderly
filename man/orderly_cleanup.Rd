@@ -21,7 +21,7 @@ do}
 default) to search for one from the current working
 directory. This function \strong{does} require that the directory is
 configured for orderly, and not just outpack (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 An (currently unstable) object of class

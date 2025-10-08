@@ -66,11 +66,11 @@ detect_orderly_interactive_path <- function(
 .interactive <- new.env(parent = emptyenv())
 
 ##' Set search options for interactive use of orderly; see
-##' [orderly::orderly_dependency] and [orderly::orderly_run] for
+##' [orderly_dependency()] and [orderly_run()] for
 ##' details. This applies only for the current session, but applies to
 ##' all interactive uses of orderly functions that might have received
 ##' a copy of the search options (`location`, `allow_remote` and
-##' `fetch_metadata`) via [orderly::orderly_run].  Calling with no
+##' `fetch_metadata`) via [orderly_run()].  Calling with no
 ##' arguments resets to the defaults.
 ##'
 ##' @title Set search options for interactive use

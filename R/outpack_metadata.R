@@ -1,5 +1,5 @@
 ##' Read metadata for a particular id. You may want to use
-##' [orderly::orderly_search] to find an id corresponding to a
+##' [orderly_search()] to find an id corresponding to a
 ##' particular query.
 ##'
 ##' @title Read outpack metadata
@@ -11,7 +11,7 @@
 ##'   default) to search for one from the current working
 ##'   directory. This function does not require that the directory is
 ##'   configured for orderly, and can be any `outpack` root (see
-##'   [orderly::orderly_init] for details).
+##'   [orderly_init()] for details).
 ##'
 ##' @return A list of metadata. See the outpack schema for details
 ##'   (https://github.com/mrc-ide/outpack)

@@ -10,7 +10,7 @@
 ##'
 ##' * `core.require_complete_tree`
 ##'
-##' See [orderly::orderly_init] for description of these options.
+##' See [orderly_init()] for description of these options.
 ##'
 ##' @title Set configuration options
 ##'
@@ -80,7 +80,7 @@ orderly_config_set <- function(..., options = list(...), root = NULL) {
 ##'
 ##' * `core`: The most important options about the outpack store, containing:
 ##'   - `path_archive`: The path to the human-readable packet archive,
-##'     or `NULL` if disabled (set in [orderly::orderly_config_set] as
+##'     or `NULL` if disabled (set in [orderly_config_set()] as
 ##'     `core.path_archive`)
 ##'   - `use_file_store`: Indicates if a content-addressable file store
 ##'     is enabled (`core.use_file_store`)
@@ -89,10 +89,10 @@ orderly_config_set <- function(..., options = list(...), root = NULL) {
 ##'   - `hash_algorithm`: The hash algorithm used (currently not modifiable)
 ##'
 ##' * `location`: Information about locations; see
-##'   [orderly::orderly_location_add],
-##'   [orderly::orderly_location_rename] and
-##'   [orderly::orderly_location_remove] to interact with this
-##'   configuration, or [orderly::orderly_location_list] to more
+##'   [orderly_location_add()],
+##'   [orderly_location_rename()] and
+##'   [orderly_location_remove()] to interact with this
+##'   configuration, or [orderly_location_list()] to more
 ##'   simply list available locations. Returns as a [data.frame] with
 ##'   columns `name`, `id`, `priority`, `type` and `args`, with `args`
 ##'   being a list column.

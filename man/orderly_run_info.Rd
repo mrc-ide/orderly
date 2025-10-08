@@ -32,7 +32,7 @@ report, for example embedding the current report id, or
 information about computed dependencies. This information is in a
 slightly different format to orderly version 1.x and does not
 (currently) include information about dependencies when run
-outside of \link{orderly_run}, but this was never reliable
+outside of \code{\link[=orderly_run]{orderly_run()}}, but this was never reliable
 previously.
 }
 \examples{

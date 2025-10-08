@@ -3,7 +3,7 @@
 ##' based locations are supported, with limited support for custom
 ##' locations. Note that adding a location does *not* pull metadata
 ##' from it, you need to call
-##' [orderly::orderly_location_fetch_metadata] first.  The function
+##' [orderly_location_fetch_metadata()] first.  The function
 ##' `orderly_location_add` can add any sort of location, but the other
 ##' functions documented here (`orderly_location_add_path`, etc) will
 ##' typically be much easier to use in practice.
@@ -331,7 +331,7 @@ orderly_location_remove <- function(name, root = NULL) {
 ##'   `args`.  The `args` column is a list column, with each element
 ##'   being the key-value pair arguments to the location.
 ##'
-##' @seealso [orderly::orderly_location_fetch_metadata], which can
+##' @seealso [orderly_location_fetch_metadata()], which can
 ##'   update your outpack index with metadata from any of the
 ##'   locations listed here.
 ##'
@@ -369,7 +369,7 @@ orderly_location_list <- function(verbose = FALSE, root = NULL) {
 ##' @title Fetch metadata from a location
 ##'
 ##' @param location The name of a location to pull from (see
-##'   [orderly::orderly_location_list] for possible values).  If not
+##'   [orderly_location_list()] for possible values).  If not
 ##'   given, pulls from all locations.  The "local" and "orphan"
 ##'   locations are always up to date and pulling metadata from them
 ##'   does nothing.
@@ -441,7 +441,7 @@ orderly_location_pull_metadata <- function(...) {
 ##' Pull one or more packets (including all their files) into this
 ##' archive from one or more of your locations. This will make files
 ##' available for use as dependencies (e.g., with
-##' [orderly::orderly_dependency]).
+##' [orderly_dependency()]).
 ##'
 ##' It is possible that it will take a long time to pull packets, if
 ##' you are moving a lot of data or if you are operating over a slow
@@ -593,7 +593,7 @@ orderly_location_pull_packet <- function(...) {
 ##'   vector of ids, but you can use a query here.
 ##'
 ##' @param location The name of a location to push to (see
-##' [orderly::orderly_location_list] for possible values).
+##' [orderly_location_list()] for possible values).
 ##'
 ##' @param dry_run Logical, indicating if we should print a summary
 ##'   but not make any changes.

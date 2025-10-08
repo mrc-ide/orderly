@@ -31,7 +31,7 @@ exist only for convenience.}
 
 \item{require_complete_tree}{Logical, indicating if we require a
 complete tree of packets.  This currently affects
-\link{orderly_location_pull}, by requiring that it
+\code{\link[=orderly_location_pull]{orderly_location_pull()}}, by requiring that it
 always operates in recursive mode.  This is \code{FALSE} by default,
 but set to \code{TRUE} if you want your archive to behave well as a
 location; if \code{TRUE} you will always have all the packets that
@@ -63,7 +63,7 @@ You can safely call \code{orderly::orderly_init()} on an
 already-initialised directory, however, any arguments passed
 through must exactly match the configuration of the current root,
 otherwise an error will be thrown. Please use
-\link{orderly_config_set} to change the configuration within
+\code{\link[=orderly_config_set]{orderly_config_set()}} to change the configuration within
 \code{.outpack}, as this ensures that the change in configuration is
 possible. If configuration options are given but match those that
 the directory already uses, then nothing happens.  You can safely

@@ -8,9 +8,9 @@
 ##' @inheritParams orderly_run
 ##'
 ##' @return A character vector of names of source reports, suitable
-##'   for passing to [orderly::orderly_run]
+##'   for passing to [orderly_run()]
 ##'
-##' @seealso [orderly::orderly_metadata_extract] for listing packets
+##' @seealso [orderly_metadata_extract()] for listing packets
 ##'   that have completed
 ##'
 ##' @export

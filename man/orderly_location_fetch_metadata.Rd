@@ -8,7 +8,7 @@ orderly_location_fetch_metadata(location = NULL, root = NULL)
 }
 \arguments{
 \item{location}{The name of a location to pull from (see
-\link{orderly_location_list} for possible values).  If not
+\code{\link[=orderly_location_list]{orderly_location_list()}} for possible values).  If not
 given, pulls from all locations.  The "local" and "orphan"
 locations are always up to date and pulling metadata from them
 does nothing.}
@@ -17,7 +17,7 @@ does nothing.}
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 Nothing

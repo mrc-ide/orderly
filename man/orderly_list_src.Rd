@@ -11,11 +11,11 @@ orderly_list_src(root = NULL)
 default) to search for one from the current working
 directory. This function \strong{does} require that the directory is
 configured for orderly, and not just outpack (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 A character vector of names of source reports, suitable
-for passing to \link{orderly_run}
+for passing to \code{\link[=orderly_run]{orderly_run()}}
 }
 \description{
 List source reports - that is, directories within \verb{src/} that
@@ -28,6 +28,6 @@ path <- orderly_example()
 orderly_list_src(root = path)
 }
 \seealso{
-\link{orderly_metadata_extract} for listing packets
+\code{\link[=orderly_metadata_extract]{orderly_metadata_extract()}} for listing packets
 that have completed
 }

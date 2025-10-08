@@ -47,7 +47,7 @@ orderly_context <- function(envir) {
 ##' information about computed dependencies. This information is in a
 ##' slightly different format to orderly version 1.x and does not
 ##' (currently) include information about dependencies when run
-##' outside of [orderly::orderly_run], but this was never reliable
+##' outside of [orderly_run()], but this was never reliable
 ##' previously.
 ##'
 ##' @title Information about currently running report

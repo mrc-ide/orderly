@@ -1,5 +1,5 @@
 ##' Construct an outpack query, typically then passed through to
-##' [orderly::orderly_search]
+##' [orderly_search()]
 ##'
 ##' @title Construct outpack query
 ##'
@@ -16,7 +16,7 @@
 ##'   referenced by name from the `expr`.
 ##'
 ##' @return An `orderly_query` object, which should not be modified,
-##'   but which can be passed to [orderly::orderly_search()]
+##'   but which can be passed to [orderly_search()]
 ##'
 ##' @export
 ##' @examples

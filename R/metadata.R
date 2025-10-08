@@ -1,7 +1,7 @@
 ##' Put orderly into "strict mode", which is closer to the defaults
 ##' in orderly 1.0.0; in this mode only explicitly included files (via
-##' [orderly::orderly_resource] and
-##' [orderly::orderly_shared_resource]) are copied when running a
+##' [orderly_resource()] and
+##' [orderly_shared_resource()]) are copied when running a
 ##' packet, and we warn about any unexpected files at the end of the
 ##' run.  Using strict mode allows orderly to be more aggressive in
 ##' how it deletes files within the source directory, more accurate in
@@ -12,7 +12,7 @@
 ##' computation occurs within orderly functions (i.e., that the
 ##' requirements to run a packet are fully known before actually
 ##' running it).  Most likely this will *not* be the default behaviour
-##' and `orderly_strict_mode` will gain an argument.
+##' and `orderly_strict_mode()` will gain an argument.
 ##'
 ##' We will allow server processes to either override this value
 ##' (enabling it even when it is not explicitly given) and/or require
@@ -41,10 +41,9 @@ static_orderly_strict_mode <- function(args) {
 
 ##' Declare orderly parameters. You should only have one call to this
 ##' within your file! Typically you'd put the call to this function
-##' very close to the top so that it's easy to scan, though the order
-##' does not really matter.  Parameters are scalar atomic values
-##' (e.g. a string, number or boolean) and defaults must be present
-##' literally (i.e., they may not come from a variable
+##' very close to the top of the file.  Parameters are scalar atomic
+##' values (e.g. a string, number or boolean) and defaults must be
+##' present literally (i.e., they may not come from a variable
 ##' itself). Provide `NULL` if you do not have a default, in which
 ##' case this parameter will be required.
 ##'
@@ -129,7 +128,7 @@ static_orderly_strict_mode <- function(args) {
 ##'
 ##' @title Declare orderly parameters
 ##'
-##' @param ... Any number of parameters
+##' @param ... Any number of parameters. All arguments must be named.
 ##'
 ##' @return A list of parameters.  This list is "strict" so accessing
 ##'   elements that are not present will throw an error rather than
@@ -354,11 +353,11 @@ static_orderly_artefact <- function(args) {
 
 ##' Declare a dependency on another packet
 ##'
-##' See [orderly::orderly_run] for some details about how search
+##' See [orderly_run()] for some details about how search
 ##' options are used to select which locations packets are found from,
 ##' and if any data is fetched over the network. If you are running
 ##' interactively, this will obviously not work, so you should use
-##' [orderly::orderly_interactive_set_search_options()] to set the
+##' [orderly_interactive_set_search_options()] to set the
 ##' options that this function will respond to.
 ##'
 ##' @title Declare a dependency

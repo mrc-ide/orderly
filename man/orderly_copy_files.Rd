@@ -67,7 +67,7 @@ might in future expand this to allow wildcards or exceptions.}
 \item{allow_remote}{Logical, indicating if we should allow packets
 to be found that are not currently unpacked (i.e., are known
 only to a location that we have metadata from). If this is
-\code{TRUE}, then in conjunction with \link{orderly_dependency}
+\code{TRUE}, then in conjunction with \code{\link[=orderly_dependency]{orderly_dependency()}}
 you might pull a large quantity of data.  The default is \code{NULL}. This is
 \code{TRUE} if remote locations are listed explicitly as a character
 vector in the \code{location} argument, or if you have specified
@@ -76,7 +76,7 @@ vector in the \code{location} argument, or if you have specified
 \item{fetch_metadata}{Logical, indicating if we should pull
 metadata immediately before the search. If \code{location} is given,
 then we will pass this through to
-\link{orderly_location_fetch_metadata} to filter locations
+\code{\link[=orderly_location_fetch_metadata]{orderly_location_fetch_metadata()}} to filter locations
 to update.  If pulling many packets in sequence, you \emph{will} want
 to update this option to \code{FALSE} after the first pull, otherwise
 it will update the metadata between every packet, which will be
@@ -98,7 +98,7 @@ if you want to control where this lookup happens.}
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 Primarily called for its side effect of copying files from
@@ -114,7 +114,7 @@ file in the packet)
 }
 \description{
 Copy files from a packet to anywhere. Similar to
-\link{orderly_dependency} except that this is not used in an
+\code{\link[=orderly_dependency]{orderly_dependency()}} except that this is not used in an
 active packet context. You can use this function to pull files
 from an outpack root to a directory outside of the control of
 outpack, for example. Note that all arguments need must be
@@ -127,7 +127,7 @@ we do not search for the packet and proceed regardless of whether
 or not this id is present.  If called with any other arguments
 (e.g., a string that does not match the id format, or a named
 argument \code{name}, \code{subquery} or \code{parameters}) then we interpret the
-arguments as a query and \link{orderly_search} to find the
+arguments as a query and \code{\link[=orderly_search]{orderly_search()}} to find the
 id. It is an error if this query does not return exactly one
 packet id, so you probably want to use \code{latest()}.
 
@@ -138,7 +138,7 @@ failure):
 it's not unpacked but also not known to be present in some other
 remote) then this will fail because it's impossible to resolve
 the files. Consider refreshing the metadata with
-\link{orderly_location_fetch_metadata} to refresh this.
+\code{\link[=orderly_location_fetch_metadata]{orderly_location_fetch_metadata()}} to refresh this.
 \item if the \code{id} is not unpacked \emph{and} no local copy of the files
 referred to can be found, we error by default (but see the next
 option). However, sometimes the file you refer to might also be
@@ -148,7 +148,7 @@ some other packet version you have locally.
 \item if the \code{id} is not unpacked, there is no local copy of the file
 and if \code{allow_remote} is \code{TRUE} we will try and request the file
 from whatever remote would be selected by
-\link{orderly_location_pull} for this packet.
+\code{\link[=orderly_location_pull]{orderly_location_pull()}} for this packet.
 }
 
 Note that empty directories might be created on failure.

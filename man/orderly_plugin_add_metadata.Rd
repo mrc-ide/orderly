@@ -8,8 +8,8 @@ orderly_plugin_add_metadata(name, field, data)
 }
 \arguments{
 \item{name}{The name of the plugin; must be the same as used in
-\link{orderly_plugin_register} and
-\link{orderly_plugin_context}}
+\code{\link[=orderly_plugin_register]{orderly_plugin_register()}} and
+\code{\link[=orderly_plugin_context]{orderly_plugin_context()}}}
 
 \item{field}{The name of a field to add the data to. This is
 required even if your plugin only produces one sort of data, in

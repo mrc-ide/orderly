@@ -74,7 +74,7 @@ This affects namespaced calls (e.g.,
 
 \subsection{1.99.88}{
 
-Renames '\if{html}{\out{<name>}}/orderly.R' files to '\if{html}{\out{<name>}}/\if{html}{\out{<name>}}.R', a change
+Renames \verb{<name>/orderly.R} files to \verb{<name>/<name>.R}, a change
 that we introduced in early 2024 (version 1.99.13).
 }
 

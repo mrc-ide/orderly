@@ -15,7 +15,7 @@
 ##' already-initialised directory, however, any arguments passed
 ##' through must exactly match the configuration of the current root,
 ##' otherwise an error will be thrown. Please use
-##' [orderly::orderly_config_set] to change the configuration within
+##' [orderly_config_set()] to change the configuration within
 ##' `.outpack`, as this ensures that the change in configuration is
 ##' possible. If configuration options are given but match those that
 ##' the directory already uses, then nothing happens.  You can safely
@@ -45,7 +45,7 @@
 ##'
 ##' @param require_complete_tree Logical, indicating if we require a
 ##'   complete tree of packets.  This currently affects
-##'   [orderly::orderly_location_pull], by requiring that it
+##'   [orderly_location_pull()], by requiring that it
 ##'   always operates in recursive mode.  This is `FALSE` by default,
 ##'   but set to `TRUE` if you want your archive to behave well as a
 ##'   location; if `TRUE` you will always have all the packets that

@@ -38,7 +38,7 @@
 ##'
 ##' ## 1.99.88
 ##'
-##' Renames '<name>/orderly.R' files to '<name>/<name>.R', a change
+##' Renames `<name>/orderly.R` files to `<name>/<name>.R`, a change
 ##' that we introduced in early 2024 (version 1.99.13).
 ##'
 ##' ## Future migrations

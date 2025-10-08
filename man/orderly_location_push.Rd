@@ -17,7 +17,7 @@ orderly_location_push(
 vector of ids, but you can use a query here.}
 
 \item{location}{The name of a location to push to (see
-\link{orderly_location_list} for possible values).}
+\code{\link[=orderly_location_list]{orderly_location_list()}} for possible values).}
 
 \item{name}{Optionally, the name of the packet to scope the query on. This
 will be intersected with \code{scope} arg and is a shorthand way of running
@@ -30,7 +30,7 @@ but not make any changes.}
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 Invisibly, details on the information that was actually

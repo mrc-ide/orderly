@@ -35,7 +35,7 @@
 ##'   deal with issues disambiguating unserialising objects from json
 ##'   (scalars vs arrays of length 1, data.frames vs lists-of-lists
 ##'   etc), and will make your plugin nicer to work with
-##'   [orderly::orderly_metadata_extract()]. This function will be
+##'   [orderly_metadata_extract()]. This function will be
 ##'   given a single argument `data` which is the data from
 ##'   `jsonlite::fromJSON(..., simplifyVector = FALSE)` and you should
 ##'   apply any required simplifications yourself, returning a
@@ -178,8 +178,8 @@ orderly_plugin <- function(package, config, serialise, deserialise, cleanup,
 ##' * `parameters`: the parameters as passed through to the run the
 ##'   report.
 ##'
-##' @seealso [orderly::orderly_plugin_register],
-##' [orderly::orderly_plugin_add_metadata]
+##' @seealso [orderly_plugin_register()],
+##' [orderly_plugin_add_metadata()]
 ##' @export
 ##' @examples
 ##' # The example code from vignette("plugins") is available in the package
@@ -207,8 +207,8 @@ orderly_plugin_context <- function(name, envir) {
 ##' @title Add metadata from plugin
 ##'
 ##' @param name The name of the plugin; must be the same as used in
-##'   [orderly::orderly_plugin_register] and
-##'   [orderly::orderly_plugin_context]
+##'   [orderly_plugin_register()] and
+##'   [orderly_plugin_context()]
 ##'
 ##' @param field The name of a field to add the data to. This is
 ##'   required even if your plugin only produces one sort of data, in

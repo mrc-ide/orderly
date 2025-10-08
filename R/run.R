@@ -7,15 +7,15 @@
 ##' If your packet depends on other packets, you will want to control
 ##'   the locations that are used to find appropriate packets. The
 ##'   control for this is passed through this function and *not* as an
-##'   argument to [orderly::orderly_dependency] because this is a
+##'   argument to [orderly_dependency()] because this is a
 ##'   property of the way that a packet is created and not of a packet
 ##'   itself; importantly different users may have different names for
 ##'   their locations so it makes little sense to encode the location
 ##'   name into the source code. Alternatively, you want to use
-##'   different locations in different contexts (initial development
-##'   where you want to include local copies packets as possible
-##'   dependencies vs resolving dependencies only as they would be
-##'   resolved on one of your locations!
+##'   different locations in different contexts, for example sometimes
+##'   you might want to include local copies packets as possible
+##'   dependencies, but othertimes resolving dependencies only as they
+##'   would be resolved on one of your locations.
 ##'
 ##' Similarly, you might want to include packets that are known by
 ##'   other locations but are not currently downloaded onto this
@@ -31,7 +31,7 @@
 ##'
 ##' This has no effect when running interactively, in which case you
 ##'   can specify the search options (root specific) with
-##'   [orderly::orderly_interactive_set_search_options]
+##'   [orderly_interactive_set_search_options()]
 ##'
 ##' @section Which packets might be selected from locations?:
 ##'
@@ -54,8 +54,9 @@
 ##'
 ##' @section Equivalence to the old `use_draft` option:
 ##'
-##' The above location handling generalises orderly (v1)'s old
-##'   `use_draft` option, in terms of the new `location` argument:
+##' The above location handling generalises the version 1.x of
+##'   orderly's previous `use_draft` option, in terms of the new
+##'   `location` argument:
 ##'
 ##' * `use_draft = TRUE` is `location = "local"`
 ##' * `use_draft = FALSE` is `location = c(...)` where you should provide
@@ -133,7 +134,7 @@
 ##'   default) to search for one from the current working
 ##'   directory. This function **does** require that the directory is
 ##'   configured for orderly, and not just outpack (see
-##'   [orderly::orderly_init] for details).
+##'   [orderly_init()] for details).
 ##'
 ##' @return The id of the created report (a string)
 ##'

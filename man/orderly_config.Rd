@@ -11,7 +11,7 @@ orderly_config(root = NULL)
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 A list of configuration options:
@@ -19,7 +19,7 @@ A list of configuration options:
 \item \code{core}: The most important options about the outpack store, containing:
 \itemize{
 \item \code{path_archive}: The path to the human-readable packet archive,
-or \code{NULL} if disabled (set in \link{orderly_config_set} as
+or \code{NULL} if disabled (set in \code{\link[=orderly_config_set]{orderly_config_set()}} as
 \code{core.path_archive})
 \item \code{use_file_store}: Indicates if a content-addressable file store
 is enabled (\code{core.use_file_store})
@@ -28,10 +28,10 @@ all dependencies to be fully available (\code{core.require_complete_tree})
 \item \code{hash_algorithm}: The hash algorithm used (currently not modifiable)
 }
 \item \code{location}: Information about locations; see
-\link{orderly_location_add},
-\link{orderly_location_rename} and
-\link{orderly_location_remove} to interact with this
-configuration, or \link{orderly_location_list} to more
+\code{\link[=orderly_location_add]{orderly_location_add()}},
+\code{\link[=orderly_location_rename]{orderly_location_rename()}} and
+\code{\link[=orderly_location_remove]{orderly_location_remove()}} to interact with this
+configuration, or \code{\link[=orderly_location_list]{orderly_location_list()}} to more
 simply list available locations. Returns as a \link{data.frame} with
 columns \code{name}, \code{id}, \code{priority}, \code{type} and \code{args}, with \code{args}
 being a list column.
