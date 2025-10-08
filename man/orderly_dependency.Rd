@@ -49,7 +49,7 @@ Undefined
 Declare a dependency on another packet
 }
 \details{
-See \link{orderly_run} for some details about how search
+See \code{\link[=orderly_run]{orderly_run()}} for some details about how search
 options are used to select which locations packets are found from,
 and if any data is fetched over the network. If you are running
 interactively, this will obviously not work, so you should use

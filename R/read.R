@@ -88,7 +88,7 @@ orderly_parse_expr <- function(exprs, filename) {
 
   for (nm in single) {
     if (length(dat[[nm]]) > 1) {
-      cli::cli_abort("Only one call to 'orderly::{nm}' is allowed",
+      cli::cli_abort("Only one call to '{nm}' is allowed",
                      call = NULL)
     }
   }

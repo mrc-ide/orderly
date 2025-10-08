@@ -7,7 +7,7 @@
 orderly_parameters(...)
 }
 \arguments{
-\item{...}{Any number of parameters}
+\item{...}{Any number of parameters. All arguments must be named.}
 }
 \value{
 A list of parameters.  This list is "strict" so accessing
@@ -17,10 +17,9 @@ returning \code{NULL}.
 \description{
 Declare orderly parameters. You should only have one call to this
 within your file! Typically you'd put the call to this function
-very close to the top so that it's easy to scan, though the order
-does not really matter.  Parameters are scalar atomic values
-(e.g. a string, number or boolean) and defaults must be present
-literally (i.e., they may not come from a variable
+very close to the top of the file.  Parameters are scalar atomic
+values (e.g. a string, number or boolean) and defaults must be
+present literally (i.e., they may not come from a variable
 itself). Provide \code{NULL} if you do not have a default, in which
 case this parameter will be required.
 }

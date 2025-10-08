@@ -38,7 +38,7 @@ might in future expand this to allow wildcards or exceptions.}
 \item{allow_remote}{Logical, indicating if we should allow packets
 to be found that are not currently unpacked (i.e., are known
 only to a location that we have metadata from). If this is
-\code{TRUE}, then in conjunction with \link{orderly_dependency}
+\code{TRUE}, then in conjunction with \code{\link[=orderly_dependency]{orderly_dependency()}}
 you might pull a large quantity of data.  The default is \code{NULL}. This is
 \code{TRUE} if remote locations are listed explicitly as a character
 vector in the \code{location} argument, or if you have specified
@@ -47,7 +47,7 @@ vector in the \code{location} argument, or if you have specified
 \item{fetch_metadata}{Logical, indicating if we should pull
 metadata immediately before the search. If \code{location} is given,
 then we will pass this through to
-\link{orderly_location_fetch_metadata} to filter locations
+\code{\link[=orderly_location_fetch_metadata]{orderly_location_fetch_metadata()}} to filter locations
 to update.  If pulling many packets in sequence, you \emph{will} want
 to update this option to \code{FALSE} after the first pull, otherwise
 it will update the metadata between every packet, which will be
@@ -61,7 +61,7 @@ and \code{fetch_metadata} directly.}
 default) to search for one from the current working
 directory. This function \strong{does} require that the directory is
 configured for orderly, and not just outpack (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 The id of the created report (a string)
@@ -77,15 +77,15 @@ your script and check that all expected artefacts were created.
 If your packet depends on other packets, you will want to control
 the locations that are used to find appropriate packets. The
 control for this is passed through this function and \emph{not} as an
-argument to \link{orderly_dependency} because this is a
-property of the way that a packet is created and not of a packet
-itself; importantly different users may have different names for
-their locations so it makes little sense to encode the location
-name into the source code. Alternatively, you want to use
-different locations in different contexts (initial development
-where you want to include local copies packets as possible
-dependencies vs resolving dependencies only as they would be
-resolved on one of your locations!
+argument to \code{\link[=orderly_dependency]{orderly_dependency()}} because this is a property of
+the way that a packet is created and not of a packet itself;
+importantly different users may have different names for their
+locations so it makes little sense to encode the location name
+into the source code. Alternatively, you want to use different
+locations in different contexts, for example sometimes you might
+want to include local copies packets as possible dependencies,
+but at other times you want to resolve dependencies only as they
+would be resolved on one of your locations.
 
 Similarly, you might want to include packets that are known by
 other locations but are not currently downloaded onto this
@@ -101,7 +101,7 @@ are not currently downloaded should be considered candidates.
 
 This has no effect when running interactively, in which case you
 can specify the search options (root specific) with
-\link{orderly_interactive_set_search_options}
+\code{\link[=orderly_interactive_set_search_options]{orderly_interactive_set_search_options()}}
 }
 
 \section{Which packets might be selected from locations?}{
@@ -127,8 +127,9 @@ locations are pulled from.
 \section{Equivalence to the old \code{use_draft} option}{
 
 
-The above location handling generalises orderly (v1)'s old
-\code{use_draft} option, in terms of the new \code{location} argument:
+The above location handling generalises the version 1.x of
+orderly's previous \code{use_draft} option, in terms of the new
+\code{location} argument:
 \itemize{
 \item \code{use_draft = TRUE} is \code{location = "local"}
 \item \code{use_draft = FALSE} is \code{location = c(...)} where you should provide

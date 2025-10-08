@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-The `orderly` package is the reference implementation at the moment of the outpack specification; a collection of schemas and directory structures that outpack requires. Once we release (or possibly before), we will split this specification from the package, though the package will continue to bundle a copy.
+The `orderly` package is the reference implementation at the moment of the outpack specification; a collection of schemas and directory structures that outpack requires.
 
 We make use of [JSON schema](https://json-schema.org) to document the schemas used.
 
@@ -28,7 +28,7 @@ Not all packets are available locally, some are on other outpack repositories, t
 
 We will need to distinguish between packets which are "unpacked" (that is, packets with every file available in the current archive) and packets that are merely known about (those for which we have the metadata but not the files).  We will sometimes refer to these unpacked packets as "local" as they are known to the "local" location which is special.
 
-*We use the terms "archive" and "repository" fairly interchangeably below and will try and nail that down.*
+*We use the terms "archive" and "repository" fairly interchangeably below and we regret our inability to nail that down.*
 
 # What goes into a packet
 
@@ -83,8 +83,6 @@ archive/
 
 The outpack configuration schema is defined in [`config.json`](https://github.com/mrc-ide/orderly/blob/main/inst/schema/outpack/config.json)
 
-The configuration format is still subject to change...
-
 ## Packet metadata (`.outpack/metadata/`)
 
 Each file within this directory has a filename that is an outpack id (matching the regular expression `^[0-9]{8}-[0-9]{6}-[0-9a-f]{8}$`, see below. Each file is a json file conforming to the schema [`metadata.json`](https://github.com/mrc-ide/orderly/blob/main/inst/schema/outpack/metadata.json).
@@ -93,7 +91,7 @@ Being present here means that an outpack implementation can report information b
 
 ## Location information (`.outpack/location/`)
 
-This directory matches the regular expression `^[0-9]{8}$` (e.g., `457f4f2a`) and is a "location id" (see below) corresponding to a "location". Each file within this directory has an outpack id as name, and contains json about when that location unpacked (or installed) the packet, and the hash of the metadata. This file conforms to the schema [`location.json`](https://github.com/mrc-ide/orderly/blob/main/inst/schema/outpack/location.json).
+This directory matches the regular expression `^[0-9a-f]{8}$` (e.g., `457f4f2a`) and is a "location id" (see below) corresponding to a "location". Each file within this directory has an outpack id as name, and contains json about when that location unpacked (or installed) the packet, and the hash of the metadata. This file conforms to the schema [`location.json`](https://github.com/mrc-ide/orderly/blob/main/inst/schema/outpack/location.json).
 
 ## A file store (`.outpack/files`)
 

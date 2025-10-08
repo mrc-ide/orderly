@@ -7,13 +7,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+This page describes some (well, one currently) problems that you might hit.  It's designed to be linked to from error messages or bug reports.
+
 ```{r}
 library(orderly)
 ```
 
 # Outpack files accidentally committed to git
 
-As discussed in [the orderly introduction](/orderly/articles/introduction.html#interaction-with-version-control), you do not want to commit any files from `.outpack/`, `drafts/` or `archive/` (if used) to git as this will create all sorts of problems down the line.
+As discussed in [the `orderly` introduction](https://mrc-ide.github.io/orderly/articles/introduction.html#interaction-with-version-control), you do not want to commit any files from `.outpack/`, `drafts/` or `archive/` (if used) to git as this will create all sorts of problems down the line.
 
 If you were directed here, it is probably because you have ended up with these files in git and want to undo this situation. The least painful way depends on your situation.
 
@@ -57,9 +59,9 @@ orderly_run("data")
 options(orderly.git_error_is_warning = FALSE)
 ```
 
-The rest of this section discusses how you might permanently fix the issue.
+The rest of this section discusses how you might permanently fix the issue.  The solution you might pick depends on what you care about.
 
-## I don't care about my history at all
+## I don't care about my git history at all
 
 This is the case if you have just started a project, and are not yet collaborating on it with anyone else (or if that person is willing to re-clone their sources).  The simplest thing to do is:
 

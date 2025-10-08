@@ -12,8 +12,8 @@ Undefined
 \description{
 Put orderly into "strict mode", which is closer to the defaults
 in orderly 1.0.0; in this mode only explicitly included files (via
-\link{orderly_resource} and
-\link{orderly_shared_resource}) are copied when running a
+\code{\link[=orderly_resource]{orderly_resource()}} and
+\code{\link[=orderly_shared_resource]{orderly_shared_resource()}}) are copied when running a
 packet, and we warn about any unexpected files at the end of the
 run.  Using strict mode allows orderly to be more aggressive in
 how it deletes files within the source directory, more accurate in
@@ -25,7 +25,7 @@ In future, we may extend strict mode to allow requiring that no
 computation occurs within orderly functions (i.e., that the
 requirements to run a packet are fully known before actually
 running it).  Most likely this will \emph{not} be the default behaviour
-and \code{orderly_strict_mode} will gain an argument.
+and \code{orderly_strict_mode()} will gain an argument.
 
 We will allow server processes to either override this value
 (enabling it even when it is not explicitly given) and/or require

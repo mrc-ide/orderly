@@ -27,7 +27,7 @@ might in future expand this to allow wildcards or exceptions.}
 \item{fetch_metadata}{Logical, indicating if we should pull
 metadata immediately before the search. If \code{location} is given,
 then we will pass this through to
-\link{orderly_location_fetch_metadata} to filter locations
+\code{\link[=orderly_location_fetch_metadata]{orderly_location_fetch_metadata()}} to filter locations
 to update.  If pulling many packets in sequence, you \emph{will} want
 to update this option to \code{FALSE} after the first pull, otherwise
 it will update the metadata between every packet, which will be
@@ -47,7 +47,7 @@ instead use the arguments \code{location}, \code{allow_remote} and
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 Invisibly, the ids of packets that were pulled
@@ -56,7 +56,7 @@ Invisibly, the ids of packets that were pulled
 Pull one or more packets (including all their files) into this
 archive from one or more of your locations. This will make files
 available for use as dependencies (e.g., with
-\link{orderly_dependency}).
+\code{\link[=orderly_dependency]{orderly_dependency()}}).
 }
 \details{
 It is possible that it will take a long time to pull packets, if

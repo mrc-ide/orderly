@@ -15,7 +15,7 @@
 ##'   orderly examples, but you may prefer to provide your own path,
 ##'   in which case the path must not already exist.
 ##'
-##' @param ... Arguments passed through to [orderly::orderly_init()]
+##' @param ... Arguments passed through to [orderly_init()]
 ##'
 ##' @return Invisibly, the path to the example.
 ##' @export

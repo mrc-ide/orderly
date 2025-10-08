@@ -47,7 +47,7 @@ orderly_context <- function(envir) {
 ##' information about computed dependencies. This information is in a
 ##' slightly different format to orderly version 1.x and does not
 ##' (currently) include information about dependencies when run
-##' outside of [orderly::orderly_run], but this was never reliable
+##' outside of [orderly_run()], but this was never reliable
 ##' previously.
 ##'
 ##' @title Information about currently running report
@@ -59,8 +59,7 @@ orderly_context <- function(envir) {
 ##' * `root`: The orderly root path
 ##' * `depends`: A data frame with information about the dependencies
 ##'   (not available interactively)
-##'     - `index`: an integer sequence along calls to
-##'       [`orderly::orderly_dependency`]
+##'     - `index`: an integer sequence along calls to [orderly_dependency()]
 ##'     - `name`: the name of the dependency
 ##'     - `query`: the query used to find the dependency
 ##'     - `id`: the computed id of the included packet

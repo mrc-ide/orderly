@@ -15,8 +15,7 @@ A list with elements
 \item \code{depends}: A data frame with information about the dependencies
 (not available interactively)
 \itemize{
-\item \code{index}: an integer sequence along calls to
-\code{\link{orderly_dependency}}
+\item \code{index}: an integer sequence along calls to \code{\link[=orderly_dependency]{orderly_dependency()}}
 \item \code{name}: the name of the dependency
 \item \code{query}: the query used to find the dependency
 \item \code{id}: the computed id of the included packet
@@ -32,7 +31,7 @@ report, for example embedding the current report id, or
 information about computed dependencies. This information is in a
 slightly different format to orderly version 1.x and does not
 (currently) include information about dependencies when run
-outside of \link{orderly_run}, but this was never reliable
+outside of \code{\link[=orderly_run]{orderly_run()}}, but this was never reliable
 previously.
 }
 \examples{

@@ -14,15 +14,15 @@ this id is not known}
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 A list of metadata. See the outpack schema for details
-(https://github.com/mrc-ide/outpack)
+(\url{https://github.com/mrc-ide/outpack})
 }
 \description{
 Read metadata for a particular id. You may want to use
-\link{orderly_search} to find an id corresponding to a
+\code{\link[=orderly_search]{orderly_search()}} to find an id corresponding to a
 particular query.
 }
 \examples{

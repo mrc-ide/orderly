@@ -1,8 +1,8 @@
-# orderly <a href="https://mrc-ide.github.io/orderly"><img src="man/figures/logo.png" align="right" height="139" alt="orderly website" /></a>
+# orderly <a href="https://mrc-ide.github.io/orderly/"><img src="man/figures/logo.png" align="right" height="139" alt="orderly website" /></a>
 
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![R build status](https://github.com/mrc-ide/orderly/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/orderly/actions)
+[![R build status](https://github.com/mrc-ide/orderly/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mrc-ide/orderly/actions/workflows/R-CMD-check.yaml)
 [![CodeFactor](https://www.codefactor.io/repository/github/mrc-ide/orderly/badge)](https://www.codefactor.io/repository/github/mrc-ide/orderly)
 [![codecov.io](https://codecov.io/github/mrc-ide/orderly/coverage.svg?branch=main)](https://app.codecov.io/github/mrc-ide/orderly?branch=main)
 <!-- badges: end -->
@@ -30,7 +30,14 @@ There is also an [orderly tutorial](https://mrc-ide.github.io/orderly-tutorial/)
 
 ## Installation
 
-Please install from our [r-universe](https://mrc-ide.r-universe.dev/):
+Install `orderly` from CRAN with
+
+```
+install.packages("orderly")
+```
+
+
+To get the current development version, please install from our [r-universe](https://mrc-ide.r-universe.dev/):
 
 ```r
 install.packages(
@@ -48,7 +55,7 @@ remotes::install_github("mrc-ide/orderly", upgrade = FALSE)
 
 This package is a ground-up rewrite of our original [`orderly` version 1](https://vimc.github.io/orderly1/) package, which is now ready for use on all projects, including migrating projects created with the original package.
 
-The original `orderly` package has now been renamed `orderly1`, and will be preserved and installable for use with historical projects without the need to migrate.
+The original `orderly` package has now been renamed [`orderly1`](https://vimc.github.io/orderly1/), and will be preserved and installable for use with historical projects without the need to migrate, though this version of the package is no longer available from CRAN.
 
 A migration path for existing users is described in `vignette("migrating")`.
 

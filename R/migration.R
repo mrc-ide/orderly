@@ -33,12 +33,12 @@
 ##'
 ##' Removes references to `orderly2`, replacing them with `orderly`.
 ##' This affects namespaced calls (e.g.,
-##' `orderly2::orderly_parameter`) and calls to `library` (e.g.,
+##' `orderly2::orderly_parameter()`) and calls to `library` (e.g.,
 ##' `library(orderly2)`)
 ##'
 ##' ## 1.99.88
 ##'
-##' Renames '<name>/orderly.R' files to '<name>/<name>.R', a change
+##' Renames `<name>/orderly.R` files to `<name>/<name>.R`, a change
 ##' that we introduced in early 2024 (version 1.99.13).
 ##'
 ##' ## Future migrations

@@ -28,8 +28,9 @@ use, and cannot be one of \code{local} or \code{orphan}}
 
 \item{type}{The type of location to add. Currently supported
 values are \code{path} (a location that exists elsewhere on the
-filesystem) and \code{http} (a location accessed over outpack's http
-API).}
+filesystem), \code{http} (a location accessed over outpack's http
+API) and \code{packit} (a location accessed using the packit web
+app).}
 
 \item{args}{Arguments to the location driver. The arguments here
 will vary depending on the type used, see Details.}
@@ -41,7 +42,7 @@ location can be used before adding.}
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 
 \item{path}{The path to the other archive root. This can be a
 relative or absolute path, with different tradeoffs.  If you use
@@ -69,7 +70,8 @@ authentication is used, this controls whether the GitHub token
 should be saved to disk.  Defaults to \code{TRUE} if \code{NULL}.}
 }
 \value{
-Nothing
+Nothing, called for the side effect of modifying the
+orderly configuration.
 }
 \description{
 Add a new location - a place where other packets might be found
@@ -77,7 +79,7 @@ and pulled into your local archive.  Currently only file and http
 based locations are supported, with limited support for custom
 locations. Note that adding a location does \emph{not} pull metadata
 from it, you need to call
-\link{orderly_location_fetch_metadata} first.  The function
+\code{\link[=orderly_location_fetch_metadata]{orderly_location_fetch_metadata()}} first.  The function
 \code{orderly_location_add} can add any sort of location, but the other
 functions documented here (\code{orderly_location_add_path}, etc) will
 typically be much easier to use in practice.
@@ -128,17 +130,7 @@ of arguments.  We expect an argument 'driver' to be present among
 this list.  For an example of this in action, see the
 \href{https://mrc-ide.github.io/orderly.sharedfile/}{\code{orderly.sharedfile}}
 package.
-
-\emph{Be warned that we may change this interface in future, in which
-case you may need to update your configuration.}
 }
-\section{Warning}{
-
-
-The API here may change as we move to support different types of
-locations.
-}
-
 \examples{
 # Two roots, one local and one representing some remote orderly location:
 local <- orderly_example()

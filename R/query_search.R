@@ -1,11 +1,12 @@
-##' Evaluate a query against the outpack database, returning a vector
-##' of matching packet ids.  Note that by default this only searches
-##' through packets that are unpacked and available for direct use on
-##' this computer; to search within packets known to other locations
-##' (and that we might know about via their metadata) you will need to
-##' use the `options` argument.
+##' Evaluate a query against the orderly database (within
+##' `.outpack/`), returning a vector of matching packet ids.  Note
+##' that by default this only searches through packets that are
+##' unpacked and available for direct use on this computer; to search
+##' within packets known to other locations (and that we might know
+##' about via their metadata) you will need to use the `location`,
+##' `allow_remote` and `fetch_metadata` arguments.
 ##'
-##' @title Query outpack's database
+##' @title Query orderly's database
 ##'
 ##' @param parameters Optionally, a named list of parameters to substitute
 ##'   into the query (using the `this:` prefix)
@@ -22,7 +23,7 @@
 ##' @param fetch_metadata Logical, indicating if we should pull
 ##'   metadata immediately before the search. If `location` is given,
 ##'   then we will pass this through to
-##'   [orderly::orderly_location_fetch_metadata] to filter locations
+##'   [orderly_location_fetch_metadata()] to filter locations
 ##'   to update.  If pulling many packets in sequence, you *will* want
 ##'   to update this option to `FALSE` after the first pull, otherwise
 ##'   it will update the metadata between every packet, which will be
@@ -79,13 +80,13 @@ orderly_search <- function(expr, name = NULL, scope = NULL, subquery = NULL,
 
 
 ##' Options for controlling how packet searches are carried out, for
-##' example via [orderly::orderly_search] and
-##' [orderly::orderly_run]. The details here are never included in
-##' the metadata alongside the query (that is, they're not part of the
-##' query even though they affect it).
+##' example via [orderly_search()] and [orderly_run()]. The details
+##' here are never included in the metadata alongside the query (that
+##' is, they're not part of the query even though they affect it).
+##' (**This function is deprecated, please see below.**)
 ##'
-##' **DEPRECATED**: [orderly::orderly_search] and
-##' [orderly::orderly_run] now accept these arguments directly, which
+##' **DEPRECATED**: [orderly_search()] and
+##' [orderly_run()] now accept these arguments directly, which
 ##' is much easier to reason about and use.  A deprecation warning
 ##' will be thrown by those functions if you pass `options` in.
 ##'
@@ -97,7 +98,7 @@ orderly_search <- function(expr, name = NULL, scope = NULL, subquery = NULL,
 ##' @param allow_remote Logical, indicating if we should allow packets
 ##'   to be found that are not currently unpacked (i.e., are known
 ##'   only to a location that we have metadata from). If this is
-##'   `TRUE`, then in conjunction with [orderly::orderly_dependency]
+##'   `TRUE`, then in conjunction with [orderly_dependency()]
 ##'   you might pull a large quantity of data.  The default is `NULL`. This is
 ##'   `TRUE` if remote locations are listed explicitly as a character
 ##'   vector in the `location` argument, or if you have specified
@@ -106,7 +107,7 @@ orderly_search <- function(expr, name = NULL, scope = NULL, subquery = NULL,
 ##' @param pull_metadata Logical, indicating if we should pull
 ##'   metadata immediately before the search. If `location` is given,
 ##'   then we will pass this through to
-##'   [orderly::orderly_location_fetch_metadata] to filter locations
+##'   [orderly_location_fetch_metadata()] to filter locations
 ##'   to update.  If pulling many packets in sequence, you *will* want
 ##'   to update this option to `FALSE` after the first pull, otherwise
 ##'   it will update the metadata between every packet, which will be

@@ -11,7 +11,7 @@
 ##' another will not have a dependency section, and one that was run
 ##' in a context without git will not have git metadata). If you just
 ##' want the raw tree-structured data, you can always use
-##' [orderly::orderly_metadata] to load the full metadata for any
+##' [orderly_metadata()] to load the full metadata for any
 ##' packet (even one that is not currently available on your computer,
 ##' just known about it) and the structure of the data will remain
 ##' fairly constant across orderly versions.
@@ -75,7 +75,7 @@
 ##'   * role: A [data.frame] of identified roles of files, with columns `path`
 ##'     and `role`.
 ##'   * description: A list of information from
-##'     [orderly::orderly_description] with human-readable descriptions and
+##'     [orderly_description()] with human-readable descriptions and
 ##'     tags.
 ##'   * session: A list of information about the session as run,
 ##'     with a list `platform` containing information about the platform

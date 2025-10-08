@@ -68,13 +68,13 @@ this may happen at any time, without further warning!
 
 Removes references to \code{orderly2}, replacing them with \code{orderly}.
 This affects namespaced calls (e.g.,
-\code{orderly2::orderly_parameter}) and calls to \code{library} (e.g.,
+\code{orderly2::orderly_parameter()}) and calls to \code{library} (e.g.,
 \code{library(orderly2)})
 }
 
 \subsection{1.99.88}{
 
-Renames '\if{html}{\out{<name>}}/orderly.R' files to '\if{html}{\out{<name>}}/\if{html}{\out{<name>}}.R', a change
+Renames \verb{<name>/orderly.R} files to \verb{<name>/<name>.R}, a change
 that we introduced in early 2024 (version 1.99.13).
 }
 

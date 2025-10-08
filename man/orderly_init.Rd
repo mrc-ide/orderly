@@ -31,7 +31,7 @@ exist only for convenience.}
 
 \item{require_complete_tree}{Logical, indicating if we require a
 complete tree of packets.  This currently affects
-\link{orderly_location_pull}, by requiring that it
+\code{\link[=orderly_location_pull]{orderly_location_pull()}}, by requiring that it
 always operates in recursive mode.  This is \code{FALSE} by default,
 but set to \code{TRUE} if you want your archive to behave well as a
 location; if \code{TRUE} you will always have all the packets that
@@ -55,21 +55,21 @@ is defined by the presence of a file \code{orderly_config.json} (or
 It is expected that \code{orderly_config.json} will be saved in version
 control, but that \code{.outpack} will be excluded from version
 control; this means that for every clone of your project you will
-need to call \code{orderly::orderly_init()} to initialise the
+need to call \code{orderly_init()} to initialise the
 \code{.outpack} directory. If you forget to do this, an error will be
 thrown reminding you of what you need to do.
 
-You can safely call \code{orderly::orderly_init()} on an
+You can safely call \code{orderly_init()} on an
 already-initialised directory, however, any arguments passed
 through must exactly match the configuration of the current root,
 otherwise an error will be thrown. Please use
-\link{orderly_config_set} to change the configuration within
+\code{\link[=orderly_config_set]{orderly_config_set()}} to change the configuration within
 \code{.outpack}, as this ensures that the change in configuration is
 possible. If configuration options are given but match those that
 the directory already uses, then nothing happens.  You can safely
 edit \code{orderly_config.json} yourself, at least for now.
 
-If the repository that you call \code{orderly::orderly_init()} on is
+If the repository that you call \code{orderly_init()} on is
 already initialised with an \code{.outpack} directory but not an
 \code{orderly_config.json} file, then we will write that file too.
 }

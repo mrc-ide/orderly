@@ -8,7 +8,7 @@ orderly_comparison_explain(cmp, attributes = NULL, verbose = FALSE)
 }
 \arguments{
 \item{cmp}{An orderly_comparison object, as returned by
-\link{orderly_compare_packets}.}
+\code{\link[=orderly_compare_packets]{orderly_compare_packets()}}.}
 
 \item{attributes}{A character vector of attributes to include in the
 comparison. The values are keys of the packets' metadata, such as

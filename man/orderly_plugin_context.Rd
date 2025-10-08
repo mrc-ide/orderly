@@ -65,6 +65,6 @@ fs::dir_tree(system.file("examples/example.db", package = "orderly"))
 orderly_example_show("R/plugin.R", example = "example.db")
 }
 \seealso{
-\link{orderly_plugin_register},
-\link{orderly_plugin_add_metadata}
+\code{\link[=orderly_plugin_register]{orderly_plugin_register()}},
+\code{\link[=orderly_plugin_add_metadata]{orderly_plugin_add_metadata()}}
 }

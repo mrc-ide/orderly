@@ -11,7 +11,7 @@ orderly_prune_orphans(root = NULL)
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 Invisibly, a character vector of orphaned packet ids
@@ -21,7 +21,7 @@ Prune orphan packets from your metadata store.  This function can
 be used to remove references to packets that are no longer
 reachable; this could have happened because you deleted a packet
 manually from the archive and ran
-\link{orderly_validate_archive} or because you removed a
+\code{\link[=orderly_validate_archive]{orderly_validate_archive()}} or because you removed a
 location.
 }
 \details{

@@ -21,7 +21,7 @@ do}
 default) to search for one from the current working
 directory. This function \strong{does} require that the directory is
 configured for orderly, and not just outpack (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 An (currently unstable) object of class
@@ -74,7 +74,7 @@ fs::dir_tree(path)
 
 # We can detect what might want cleaning up by running
 # "orderly_cleanup_status":
-orderly::orderly_cleanup_status("data", root = path)
+orderly_cleanup_status("data", root = path)
 
 # Soon this will print more nicely to the screen, but for now you
 # can see that the status of "data.rds" is "derived", which means
@@ -82,5 +82,5 @@ orderly::orderly_cleanup_status("data", root = path)
 # "delete" element shows what will be deleted.
 
 # Do the actual deletion:
-orderly::orderly_cleanup("data", root = path)
+orderly_cleanup("data", root = path)
 }

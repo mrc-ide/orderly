@@ -7,14 +7,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
-knitr::opts_chunk$set(
-  collapse = TRUE)
+```{r, include = FALSE}
+source("common.R")
 ```
 
 **This vignette provides a detailed overview of of the query language used to find packets and use them as dependencies of other packets. You may prefer to start with `vignette("dependencies")`**
 
-Orderly includes a query DSL (domain specific language), extending the one used by version 1 of orderly (see [`orderly1::orderly_search()`](https://vimc.github.io/orderly1/reference/orderly_search.html)).
+Orderly includes a query DSL (domain specific language), extending the one used by version 1 of `orderly` (see [`orderly1::orderly_search()`](https://vimc.github.io/orderly1/reference/orderly_search.html)).
 
 Queries are used in identifying ids to pull in as dependencies, so rather than providing an identifier, you might want to depend on
 
@@ -84,7 +83,7 @@ is equivalent to
 orderly_query(quote(parameter:x == 1 && name == "data"))
 ```
 
-`orderly` uses this functionality when resolving dependencies with `orderly::orderly_dependency`.
+`orderly` uses this functionality when resolving dependencies with `orderly_dependency`.
 
 ### Scoping on name
 

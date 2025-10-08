@@ -24,7 +24,7 @@ might in future expand this to allow wildcards or exceptions.}
 \item{allow_remote}{Logical, indicating if we should allow packets
 to be found that are not currently unpacked (i.e., are known
 only to a location that we have metadata from). If this is
-\code{TRUE}, then in conjunction with \link{orderly_dependency}
+\code{TRUE}, then in conjunction with \code{\link[=orderly_dependency]{orderly_dependency()}}
 you might pull a large quantity of data.  The default is \code{NULL}. This is
 \code{TRUE} if remote locations are listed explicitly as a character
 vector in the \code{location} argument, or if you have specified
@@ -33,7 +33,7 @@ vector in the \code{location} argument, or if you have specified
 \item{fetch_metadata}{Logical, indicating if we should pull
 metadata immediately before the search. If \code{location} is given,
 then we will pass this through to
-\link{orderly_location_fetch_metadata} to filter locations
+\code{\link[=orderly_location_fetch_metadata]{orderly_location_fetch_metadata()}} to filter locations
 to update.  If pulling many packets in sequence, you \emph{will} want
 to update this option to \code{FALSE} after the first pull, otherwise
 it will update the metadata between every packet, which will be
@@ -43,12 +43,12 @@ needlessly slow.}
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 An object of class orderly_comparison. The object can be printed to
 get a summary description of the differences, or passed to
-\link{orderly_comparison_explain} to display more details.
+\code{\link[=orderly_comparison_explain]{orderly_comparison_explain()}} to display more details.
 }
 \description{
 Insignificant differences in the metadata (e.g., different dates

@@ -14,7 +14,7 @@ data.frame that includes more information about the location.}
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 Depending on the value of \code{verbose}:
@@ -50,7 +50,7 @@ orderly_location_list(root = local)
 orderly_location_list(root = local)
 }
 \seealso{
-\link{orderly_location_fetch_metadata}, which can
+\code{\link[=orderly_location_fetch_metadata]{orderly_location_fetch_metadata()}}, which can
 update your outpack index with metadata from any of the
 locations listed here.
 }

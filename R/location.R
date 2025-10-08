@@ -3,7 +3,7 @@
 ##' based locations are supported, with limited support for custom
 ##' locations. Note that adding a location does *not* pull metadata
 ##' from it, you need to call
-##' [orderly::orderly_location_fetch_metadata] first.  The function
+##' [orderly_location_fetch_metadata()] first.  The function
 ##' `orderly_location_add` can add any sort of location, but the other
 ##' functions documented here (`orderly_location_add_path`, etc) will
 ##' typically be much easier to use in practice.
@@ -54,14 +54,6 @@
 ##' [`orderly.sharedfile`](https://mrc-ide.github.io/orderly.sharedfile/)
 ##' package.
 ##'
-##' *Be warned that we may change this interface in future, in which
-##' case you may need to update your configuration.*
-##'
-##' @section Warning:
-##'
-##' The API here may change as we move to support different types of
-##'   locations.
-##'
 ##' @title Add a new location
 ##'
 ##' @param name The short name of the location to use.  Cannot be in
@@ -69,8 +61,9 @@
 ##'
 ##' @param type The type of location to add. Currently supported
 ##'   values are `path` (a location that exists elsewhere on the
-##'   filesystem) and `http` (a location accessed over outpack's http
-##'   API).
+##'   filesystem), `http` (a location accessed over outpack's http
+##'   API) and `packit` (a location accessed using the packit web
+##'   app).
 ##'
 ##' @param args Arguments to the location driver. The arguments here
 ##'   will vary depending on the type used, see Details.
@@ -80,7 +73,9 @@
 ##'
 ##' @inheritParams orderly_metadata
 ##'
-##' @return Nothing
+##' @return Nothing, called for the side effect of modifying the
+##'   orderly configuration.
+##'
 ##' @export
 ##' @examples
 ##' # Two roots, one local and one representing some remote orderly location:
@@ -331,7 +326,7 @@ orderly_location_remove <- function(name, root = NULL) {
 ##'   `args`.  The `args` column is a list column, with each element
 ##'   being the key-value pair arguments to the location.
 ##'
-##' @seealso [orderly::orderly_location_fetch_metadata], which can
+##' @seealso [orderly_location_fetch_metadata()], which can
 ##'   update your outpack index with metadata from any of the
 ##'   locations listed here.
 ##'
@@ -369,7 +364,7 @@ orderly_location_list <- function(verbose = FALSE, root = NULL) {
 ##' @title Fetch metadata from a location
 ##'
 ##' @param location The name of a location to pull from (see
-##'   [orderly::orderly_location_list] for possible values).  If not
+##'   [orderly_location_list()] for possible values).  If not
 ##'   given, pulls from all locations.  The "local" and "orphan"
 ##'   locations are always up to date and pulling metadata from them
 ##'   does nothing.
@@ -441,7 +436,7 @@ orderly_location_pull_metadata <- function(...) {
 ##' Pull one or more packets (including all their files) into this
 ##' archive from one or more of your locations. This will make files
 ##' available for use as dependencies (e.g., with
-##' [orderly::orderly_dependency]).
+##' [orderly_dependency()]).
 ##'
 ##' It is possible that it will take a long time to pull packets, if
 ##' you are moving a lot of data or if you are operating over a slow
@@ -593,7 +588,7 @@ orderly_location_pull_packet <- function(...) {
 ##'   vector of ids, but you can use a query here.
 ##'
 ##' @param location The name of a location to push to (see
-##' [orderly::orderly_location_list] for possible values).
+##' [orderly_location_list()] for possible values).
 ##'
 ##' @param dry_run Logical, indicating if we should print a summary
 ##'   but not make any changes.
@@ -749,10 +744,11 @@ location_fetch_metadata <- function(location_name, root,
   index <- root$index$data()
   driver <- location_driver(location_name, root)
 
-  hint_remove <- paste("Probably all you can do at this point is remove this",
-                       "location from your configuration by running",
-                       sprintf('orderly::orderly_location_remove("%s")',
-                               location_name))
+  hint_remove <- paste(
+    "Probably all you can do at this point is remove this",
+    "location from your configuration by running",
+    sprintf('{.run orderly::orderly_location_remove("%s")}',
+            location_name))
 
   known_there <- driver$list()
 

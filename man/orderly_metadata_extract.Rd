@@ -28,7 +28,7 @@ might in future expand this to allow wildcards or exceptions.}
 \item{allow_remote}{Logical, indicating if we should allow packets
 to be found that are not currently unpacked (i.e., are known
 only to a location that we have metadata from). If this is
-\code{TRUE}, then in conjunction with \link{orderly_dependency}
+\code{TRUE}, then in conjunction with \code{\link[=orderly_dependency]{orderly_dependency()}}
 you might pull a large quantity of data.  The default is \code{NULL}. This is
 \code{TRUE} if remote locations are listed explicitly as a character
 vector in the \code{location} argument, or if you have specified
@@ -37,7 +37,7 @@ vector in the \code{location} argument, or if you have specified
 \item{fetch_metadata}{Logical, indicating if we should pull
 metadata immediately before the search. If \code{location} is given,
 then we will pass this through to
-\link{orderly_location_fetch_metadata} to filter locations
+\code{\link[=orderly_location_fetch_metadata]{orderly_location_fetch_metadata()}} to filter locations
 to update.  If pulling many packets in sequence, you \emph{will} want
 to update this option to \code{FALSE} after the first pull, otherwise
 it will update the metadata between every packet, which will be
@@ -54,7 +54,7 @@ instead use the arguments \code{location}, \code{allow_remote} and
 default) to search for one from the current working
 directory. This function does not require that the directory is
 configured for orderly, and can be any \code{outpack} root (see
-\link{orderly_init} for details).}
+\code{\link[=orderly_init]{orderly_init()}} for details).}
 }
 \value{
 A \code{data.frame}, the columns of which vary based on the
@@ -75,7 +75,7 @@ present in all packets (e.g., a packet that does not depend on
 another will not have a dependency section, and one that was run
 in a context without git will not have git metadata). If you just
 want the raw tree-structured data, you can always use
-\link{orderly_metadata} to load the full metadata for any
+\code{\link[=orderly_metadata]{orderly_metadata()}} to load the full metadata for any
 packet (even one that is not currently available on your computer,
 just known about it) and the structure of the data will remain
 fairly constant across orderly versions.
@@ -142,7 +142,7 @@ their original name (\code{there}) and name as copied into the packet
 \item role: A \link{data.frame} of identified roles of files, with columns \code{path}
 and \code{role}.
 \item description: A list of information from
-\link{orderly_description} with human-readable descriptions and
+\code{\link[=orderly_description]{orderly_description()}} with human-readable descriptions and
 tags.
 \item session: A list of information about the session as run,
 with a list \code{platform} containing information about the platform
