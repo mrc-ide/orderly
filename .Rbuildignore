@@ -26,3 +26,4 @@
 ^TODO\.md$
 ^_pkgdown\.yml$
 ^man/figures/logo\.xcf$
+^NEWS\.1\.md$
