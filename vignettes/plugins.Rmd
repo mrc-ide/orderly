@@ -379,7 +379,7 @@ meta$custom$example.db
 
 # Potential uses
 
-Our need for this functionality are similar to this example - pulling out the database functionality from the original version of `orderly` into something that is more independent, as it turns out to be useful only in a fraction of `orderly` use-cases. We can imagine other potential uses though, such as:
+Our need for this functionality is similar to this example - pulling out the database functionality from the original version of `orderly` into something that is more independent, as it turns out to be useful only in a fraction of `orderly` use-cases. We can imagine other potential uses though, such as:
 
 * Non-DBI-based database data extraction, or customised routines for pulling data from a database
 * Download files from some shared location just before use (e.g., SharePoint, OneDrive, AWS). The `orderly_config.json` would contain account connection details and the `orderly` source file would contain mapping between the remote data/files and local files. Rather than writing to the environment as we do above, use the `path` argument to copy files into the correct place.

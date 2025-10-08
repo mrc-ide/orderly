@@ -254,7 +254,7 @@ There is no requirement for different repositories to share configuration option
 
 One of the simplest ways to share packets with a collaborator is through a shared file system, for example on a network share, or on a cloud-synced file system such as Dropbox or OneDrive. You can do this as follows.
 
-1. Create a a new folder for your `orderly` remote in the shared file system. Here Alice has synced to `path_sharepoint_alice`.
+1. Create a new folder for your `orderly` remote in the shared file system. Here Alice has synced to `path_sharepoint_alice`.
 
 2. Initialise an `orderly` location on the shared file system
 
