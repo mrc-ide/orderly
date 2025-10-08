@@ -7,11 +7,11 @@
 ##' It is expected that `orderly_config.json` will be saved in version
 ##' control, but that `.outpack` will be excluded from version
 ##' control; this means that for every clone of your project you will
-##' need to call `orderly::orderly_init()` to initialise the
+##' need to call `orderly_init()` to initialise the
 ##' `.outpack` directory. If you forget to do this, an error will be
 ##' thrown reminding you of what you need to do.
 ##'
-##' You can safely call `orderly::orderly_init()` on an
+##' You can safely call `orderly_init()` on an
 ##' already-initialised directory, however, any arguments passed
 ##' through must exactly match the configuration of the current root,
 ##' otherwise an error will be thrown. Please use
@@ -21,7 +21,7 @@
 ##' the directory already uses, then nothing happens.  You can safely
 ##' edit `orderly_config.json` yourself, at least for now.
 ##'
-##' If the repository that you call `orderly::orderly_init()` on is
+##' If the repository that you call `orderly_init()` on is
 ##' already initialised with an `.outpack` directory but not an
 ##' `orderly_config.json` file, then we will write that file too.
 ##'
@@ -205,7 +205,7 @@ root_validate_same_configuration <- function(args, config, root, call) {
       cli::cli_abort(
         c("Trying to change configuration when re-initialising",
           set_names(err_str, rep("x", length(err_str))),
-          i = "Use 'orderly::orderly_config_set()' to change configuration"),
+          i = "Use 'orderly_config_set()' to change configuration"),
         call = call)
     }
   }
@@ -314,7 +314,7 @@ orderly_find_root <- function(path, require_orderly, require_outpack,
         x = paste("Your directory has an '.outpack/' path, so is a valid",
                   "outpack root, but does not contain 'orderly_config.json' so",
                   "cannot be used as an orderly root"),
-        i = 'Please run orderly::orderly_init("{path}") to initialise',
+        i = 'Please run orderly_init("{path}") to initialise',
         i = "See ?orderly_init for more arguments to this function"),
       call = call)
   }
@@ -323,7 +323,7 @@ orderly_find_root <- function(path, require_orderly, require_outpack,
     cli::cli_abort(
       c(sprintf("orderly directory '%s' not initialised", path),
         x = "Did not find an '.outpack' directory within path",
-        i = 'Please run orderly::orderly_init("{path}") to initialise',
+        i = 'Please run orderly_init("{path}") to initialise',
         i = "See ?orderly_init for more arguments to this function"),
       call = call)
   }

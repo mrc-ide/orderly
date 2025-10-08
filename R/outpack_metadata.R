@@ -51,7 +51,7 @@ orderly_metadata <- function(id, root = NULL) {
 ##' is `TRUE` (the default) then we will deserialise all data that
 ##' matches any loaded plugin.  This means that the behaviour of this
 ##' function depends on if you have loaded the plugin packages. You
-##' can force this by running `orderly::orderly_config()` within any
+##' can force this by running `orderly_config()` within any
 ##' orderly directory, which will load any declared plugins.
 ##'
 ##' @title Read outpack metadata json file

@@ -15,8 +15,7 @@ A list with elements
 \item \code{depends}: A data frame with information about the dependencies
 (not available interactively)
 \itemize{
-\item \code{index}: an integer sequence along calls to
-\code{\link{orderly_dependency}}
+\item \code{index}: an integer sequence along calls to \code{\link[=orderly_dependency]{orderly_dependency()}}
 \item \code{name}: the name of the dependency
 \item \code{query}: the query used to find the dependency
 \item \code{id}: the computed id of the included packet

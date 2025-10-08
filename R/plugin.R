@@ -23,7 +23,7 @@
 ##' @param serialise A function to serialise any metadata added by the
 ##'   plugin's functions to the outpack metadata. It will be passed a
 ##'   list of all entries pushed in via
-##'   [`orderly::orderly_plugin_add_metadata()`]; this is a named
+##'   [`orderly_plugin_add_metadata()`]; this is a named
 ##'   list with names corresponding to the `field` argument to
 ##'   `orderly_plugin_add_metadata` and each list element being an
 ##'   unnamed list with values corresponding to `data`. If `NULL`,
@@ -129,10 +129,10 @@ orderly_plugin <- function(package, config, serialise, deserialise, cleanup,
 ##' here is that within free functions that your plugin makes
 ##' available, you will call this function to get information about
 ##' the state of a packet.  You will then typically call
-##' [`orderly::orderly_plugin_add_metadata()`] afterwards.
+##' [`orderly_plugin_add_metadata()`] afterwards.
 ##'
 ##' When a plugin function is called, orderly will be running in one
-##' of two modes; (1) from within [`orderly::orderly_run()`], in
+##' of two modes; (1) from within [`orderly_run()`], in
 ##' which case we're part way through creating a packet in a brand new
 ##' directory, and possibly using a special environment for
 ##' evaluation, or (2) interactively, with a user developing their
@@ -154,7 +154,7 @@ orderly_plugin <- function(package, config, serialise, deserialise, cleanup,
 ##' @return A list with elements:
 ##'
 ##' * `is_active`: a logical, indicating if we're running under
-##'   [`orderly::orderly_run()`]; you may need to change behaviour
+##'   [`orderly_run()`]; you may need to change behaviour
 ##'   depending on this value.
 ##'
 ##' * `path`: the path of the running packet. This is almost always the
@@ -163,7 +163,7 @@ orderly_plugin <- function(package, config, serialise, deserialise, cleanup,
 ##'
 ##' * `config`: the configuration for this plugin, after processing
 ##'   with the plugin's `read` function (see
-##'   [`orderly::orderly_plugin_register`])
+##'   [`orderly_plugin_register`])
 ##'
 ##' * `envir`: the environment that the packet is running in. Often this
 ##'   will be the global environment, but do not assume this! You may

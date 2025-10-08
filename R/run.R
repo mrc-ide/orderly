@@ -330,7 +330,7 @@ check_parameters <- function(given, spec, call) {
   if (length(given) > 0 && is.null(spec)) {
     cli::cli_abort(
       c("Parameters given, but none declared",
-        i = "Did you forget 'orderly::orderly_parameters()"),
+        i = "Did you forget 'orderly_parameters()"),
       call = call)
   }
 
@@ -458,7 +458,7 @@ check_files_strict <- function(path, known, artefacts) {
     cli::cli_alert_warning("Report produced unexpected files:")
     cli::cli_ul(unknown)
     cli::cli_alert_info(paste("These are probably artefacts, consider using",
-                              "orderly::orderly_artefact to describe them"))
+                              "orderly_artefact to describe them"))
   }
 }
 
@@ -475,7 +475,7 @@ check_files_relaxed <- function(path, inputs_info) {
     cli::cli_alert_warning("The following inputs were modified by the report:")
     cli::cli_ul(inputs_info$path[modified])
     cli::cli_alert_info(paste("These are probably artefacts, consider using",
-                              "orderly::orderly_artefact to describe them"))
+                              "orderly_artefact to describe them"))
   }
   if (any(deleted)) {
     cli::cli_alert_warning("The following inputs were deleted by the report:")

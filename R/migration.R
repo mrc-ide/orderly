@@ -33,7 +33,7 @@
 ##'
 ##' Removes references to `orderly2`, replacing them with `orderly`.
 ##' This affects namespaced calls (e.g.,
-##' `orderly2::orderly_parameter`) and calls to `library` (e.g.,
+##' `orderly2::orderly_parameter()`) and calls to `library` (e.g.,
 ##' `library(orderly2)`)
 ##'
 ##' ## 1.99.88

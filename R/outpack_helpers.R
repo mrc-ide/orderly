@@ -168,7 +168,7 @@ orderly_copy_files <- function(expr, files, dest, overwrite = TRUE,
           file.path(root$path, root$config$core$path_archive, name, id))
         reason <- if (packet_exists) "locally modified" else "deleted"
         cmd <- sprintf(
-          'orderly::orderly_validate_archive("%s", action = "orphan")', id)
+          'orderly_validate_archive("%s", action = "orphan")', id)
         cli::cli_abort(
           c("Unable to copy files, due to {reason} packet {id}",
             i = "Consider '{cmd}' to remove this packet from consideration"),

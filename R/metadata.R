@@ -591,7 +591,7 @@ prevent_multiple_calls <- function(packet, name, call) {
   if (!is.null(packet$orderly[[name]])) {
     entrypoint_filename <- find_entrypoint_filename(packet$orderly$src)
     cli::cli_abort(
-      c("Only one call to 'orderly::orderly_{name}' is allowed",
+      c("Only one call to 'orderly_{name}' is allowed",
         i = paste("You have already called this function earlier",
                   "in your {entrypoint_filename}")),
       call = call)

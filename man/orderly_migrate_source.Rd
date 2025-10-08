@@ -68,7 +68,7 @@ this may happen at any time, without further warning!
 
 Removes references to \code{orderly2}, replacing them with \code{orderly}.
 This affects namespaced calls (e.g.,
-\code{orderly2::orderly_parameter}) and calls to \code{library} (e.g.,
+\code{orderly2::orderly_parameter()}) and calls to \code{library} (e.g.,
 \code{library(orderly2)})
 }
 
