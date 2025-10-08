@@ -77,14 +77,14 @@ your script and check that all expected artefacts were created.
 If your packet depends on other packets, you will want to control
 the locations that are used to find appropriate packets. The
 control for this is passed through this function and \emph{not} as an
-argument to \code{\link[=orderly_dependency]{orderly_dependency()}} because this is a
-property of the way that a packet is created and not of a packet
-itself; importantly different users may have different names for
-their locations so it makes little sense to encode the location
-name into the source code. Alternatively, you want to use
-different locations in different contexts, for example sometimes
-you might want to include local copies packets as possible
-dependencies, but othertimes resolving dependencies only as they
+argument to \code{\link[=orderly_dependency]{orderly_dependency()}} because this is a property of
+the way that a packet is created and not of a packet itself;
+importantly different users may have different names for their
+locations so it makes little sense to encode the location name
+into the source code. Alternatively, you want to use different
+locations in different contexts, for example sometimes you might
+want to include local copies packets as possible dependencies,
+but at other times you want to resolve dependencies only as they
 would be resolved on one of your locations.
 
 Similarly, you might want to include packets that are known by
