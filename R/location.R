@@ -54,14 +54,6 @@
 ##' [`orderly.sharedfile`](https://mrc-ide.github.io/orderly.sharedfile/)
 ##' package.
 ##'
-##' *Be warned that we may change this interface in future, in which
-##' case you may need to update your configuration.*
-##'
-##' @section Warning:
-##'
-##' The API here may change as we move to support different types of
-##'   locations.
-##'
 ##' @title Add a new location
 ##'
 ##' @param name The short name of the location to use.  Cannot be in
@@ -69,8 +61,9 @@
 ##'
 ##' @param type The type of location to add. Currently supported
 ##'   values are `path` (a location that exists elsewhere on the
-##'   filesystem) and `http` (a location accessed over outpack's http
-##'   API).
+##'   filesystem), `http` (a location accessed over outpack's http
+##'   API) and `packit` (a location accessed using the packit web
+##'   app).
 ##'
 ##' @param args Arguments to the location driver. The arguments here
 ##'   will vary depending on the type used, see Details.
@@ -80,7 +73,9 @@
 ##'
 ##' @inheritParams orderly_metadata
 ##'
-##' @return Nothing
+##' @return Nothing, called for the side effect of modifying the
+##'   orderly configuration.
+##'
 ##' @export
 ##' @examples
 ##' # Two roots, one local and one representing some remote orderly location:

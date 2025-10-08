@@ -18,7 +18,7 @@ configured for orderly, and can be any \code{outpack} root (see
 }
 \value{
 A list of metadata. See the outpack schema for details
-(https://github.com/mrc-ide/outpack)
+(\url{https://github.com/mrc-ide/outpack})
 }
 \description{
 Read metadata for a particular id. You may want to use

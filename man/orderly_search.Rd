@@ -2,7 +2,7 @@
 % Please edit documentation in R/query_search.R
 \name{orderly_search}
 \alias{orderly_search}
-\title{Query outpack's database}
+\title{Query orderly's database}
 \usage{
 orderly_search(
   expr,
@@ -77,12 +77,13 @@ or \code{single(...)}) this will be a character missing value
 (\code{NA_character_})
 }
 \description{
-Evaluate a query against the outpack database, returning a vector
-of matching packet ids.  Note that by default this only searches
-through packets that are unpacked and available for direct use on
-this computer; to search within packets known to other locations
-(and that we might know about via their metadata) you will need to
-use the \code{options} argument.
+Evaluate a query against the orderly database (within
+\verb{.outpack/}), returning a vector of matching packet ids.  Note
+that by default this only searches through packets that are
+unpacked and available for direct use on this computer; to search
+within packets known to other locations (and that we might know
+about via their metadata) you will need to use the \code{location},
+\code{allow_remote} and \code{fetch_metadata} arguments.
 }
 \examples{
 path <- orderly_example()

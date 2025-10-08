@@ -1,11 +1,12 @@
-##' Evaluate a query against the outpack database, returning a vector
-##' of matching packet ids.  Note that by default this only searches
-##' through packets that are unpacked and available for direct use on
-##' this computer; to search within packets known to other locations
-##' (and that we might know about via their metadata) you will need to
-##' use the `options` argument.
+##' Evaluate a query against the orderly database (within
+##' `.outpack/`), returning a vector of matching packet ids.  Note
+##' that by default this only searches through packets that are
+##' unpacked and available for direct use on this computer; to search
+##' within packets known to other locations (and that we might know
+##' about via their metadata) you will need to use the `location`,
+##' `allow_remote` and `fetch_metadata` arguments.
 ##'
-##' @title Query outpack's database
+##' @title Query orderly's database
 ##'
 ##' @param parameters Optionally, a named list of parameters to substitute
 ##'   into the query (using the `this:` prefix)
@@ -79,10 +80,10 @@ orderly_search <- function(expr, name = NULL, scope = NULL, subquery = NULL,
 
 
 ##' Options for controlling how packet searches are carried out, for
-##' example via [orderly_search()] and
-##' [orderly_run()]. The details here are never included in
-##' the metadata alongside the query (that is, they're not part of the
-##' query even though they affect it).
+##' example via [orderly_search()] and [orderly_run()]. The details
+##' here are never included in the metadata alongside the query (that
+##' is, they're not part of the query even though they affect it).
+##' (**This function is deprecated, please see below.**)
 ##'
 ##' **DEPRECATED**: [orderly_search()] and
 ##' [orderly_run()] now accept these arguments directly, which

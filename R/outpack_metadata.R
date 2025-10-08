@@ -14,7 +14,7 @@
 ##'   [orderly_init()] for details).
 ##'
 ##' @return A list of metadata. See the outpack schema for details
-##'   (https://github.com/mrc-ide/outpack)
+##'   (<https://github.com/mrc-ide/outpack>)
 ##'
 ##' @export
 ##' @examples

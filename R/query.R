@@ -18,6 +18,10 @@
 ##' @return An `orderly_query` object, which should not be modified,
 ##'   but which can be passed to [orderly_search()]
 ##'
+##' @seealso `vignette("dependencies")` and `vignette("query")`, which
+##'   discuss relationships between dependencies and the query DSL in
+##'   more detail.
+##'
 ##' @export
 ##' @examples
 ##' orderly_query(quote(latest(name == "data")))

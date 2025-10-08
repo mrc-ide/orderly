@@ -30,3 +30,8 @@ Construct an outpack query, typically then passed through to
 \examples{
 orderly_query(quote(latest(name == "data")))
 }
+\seealso{
+\code{vignette("dependencies")} and \code{vignette("query")}, which
+discuss relationships between dependencies and the query DSL in
+more detail.
+}

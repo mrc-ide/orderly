@@ -38,10 +38,10 @@ not be modified after creation (but see note about \code{fetch_metadata})
 }
 \description{
 Options for controlling how packet searches are carried out, for
-example via \code{\link[=orderly_search]{orderly_search()}} and
-\code{\link[=orderly_run]{orderly_run()}}. The details here are never included in
-the metadata alongside the query (that is, they're not part of the
-query even though they affect it).
+example via \code{\link[=orderly_search]{orderly_search()}} and \code{\link[=orderly_run]{orderly_run()}}. The details
+here are never included in the metadata alongside the query (that
+is, they're not part of the query even though they affect it).
+(\strong{This function is deprecated, please see below.})
 }
 \details{
 \strong{DEPRECATED}: \code{\link[=orderly_search]{orderly_search()}} and
