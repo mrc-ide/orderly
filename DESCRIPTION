@@ -1,6 +1,6 @@
 Package: orderly
 Title: Lightweight Reproducible Reporting
-Version: 1.99.93
+Version: 1.99.94
 Authors@R: c(person("Rich", "FitzJohn", role = c("aut", "cre"),
                     email = "rich.fitzjohn@gmail.com"),
              person("Robert", "Ashton", role = "aut"),
@@ -10,6 +10,7 @@ Authors@R: c(person("Rich", "FitzJohn", role = c("aut", "cre"),
              person("Mantra", "Kusumgar", role = "aut"),
              person("Paul", "Liétar", role = "aut"),
              person("James", "Thompson", role = "aut"),
+             person("Katy", "Gaythorpe", role = "aut"),
              person("Imperial College of Science, Technology and Medicine",
                     role = "cph"))
 Description: Distributed reproducible computing framework, adopting
