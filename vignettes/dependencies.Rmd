@@ -28,7 +28,7 @@ Here, we show how to practically use dependencies in a few common scenarios of i
 
 ## Basic use
 
-The primary mechanism for using dependencies is to call `orderly::orderly_dependency()` from within an orderly file; this finds a suitable completed packet and copies files that are found from within that packet into your current report.
+The primary mechanism for using dependencies is to call `orderly::orderly_dependency()` from within an `orderly` file; this finds a suitable completed packet and copies files that are found from within that packet into your current report.
 
 ```{r, include = FALSE}
 path <- tempfile()
@@ -218,7 +218,7 @@ but in practice most people have queries that are a series of restrictions with 
 
 ## Computing dependencies and using many dependencies at once
 
-One common pattern is the map-reduce pattern over a set of orderly reports. With this, a set of packets are created over a vector of parameters, or perhaps a chain of different reports for each parameter, then they are all combined together.  For some parameter `p` that takes values "x", "y" and "z", this might look like:
+One common pattern is the map-reduce pattern over a set of `orderly` reports. With this, a set of packets are created over a vector of parameters, or perhaps a chain of different reports for each parameter, then they are all combined together.  For some parameter `p` that takes values "x", "y" and "z", this might look like:
 
 ```
     B(p = "x") -- C(p = "x")
@@ -272,7 +272,7 @@ There is further discussion of the details in `?orderly_run`
 
 # Other points
 
-If you are used to systems like `targets`, it is easy to make reports smaller than they need to be.  There's on real need to make these very small, and picking the right size is a challenge.
+If you are used to systems like `targets`, it is easy to make reports smaller than they need to be, and most users start by making their `orderly` reports too small.  There's no real need to make these very small, and picking the right size is a challenge.
 
 If they are too small, you'll end up writing a lot of code to orchestrate running different reports and pulling things together.  You'll end spending a lot of time about whether things are "up to date" with one another because really a group of things always wants to run together.
 
