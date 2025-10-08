@@ -220,7 +220,8 @@ pkgload::load_all(path_pkg)
 Now, we can run the report:
 
 ```{r}
-orderly::orderly_run("example", root = path_root)
+library(orderly)
+orderly_run("example", root = path_root)
 ```
 
 # Making the plugin more robust
@@ -371,8 +372,8 @@ pkgload::load_all(path_pkg)
 ```
 
 ```{r}
-id <- orderly::orderly_run("example", root = path_root)
-meta <- orderly::orderly_metadata(id, root = path_root)
+id <- orderly_run("example", root = path_root)
+meta <- orderly_metadata(id, root = path_root)
 meta$custom$example.db
 ```
 
