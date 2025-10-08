@@ -396,7 +396,7 @@ test_that("can't use description twice in one packet", {
   writeLines(c(code, "orderly::orderly_description()"), path_orderly)
   expect_error(
     orderly_run_quietly("description", root = path, envir = envir),
-    "Only one call to 'orderly::orderly_description' is allowed",
+    "Only one call to 'orderly_description' is allowed",
     fixed = TRUE)
 })
 
@@ -410,7 +410,7 @@ test_that("can't use description twice by being sneaky", {
              path_orderly)
   expect_error(
     orderly_run_quietly("description", root = path, envir = envir),
-    "Only one call to 'orderly::orderly_description' is allowed",
+    "Only one call to 'orderly_description' is allowed",
     fixed = TRUE)
 })
 
@@ -503,7 +503,7 @@ test_that("disallow multiple calls to strict mode", {
              path_src)
   expect_error(
     orderly_run_quietly("implicit", root = path, envir = new.env()),
-    "Only one call to 'orderly::orderly_strict_mode' is allowed")
+    "Only one call to 'orderly_strict_mode' is allowed")
 })
 
 
@@ -1195,7 +1195,7 @@ test_that("cope with manually deleted packets, exclude from deps", {
     err$parent$message,
     set_names(paste("Unable to copy files, due to deleted packet", id),
               ""))
-  cmd <- sprintf('orderly::orderly_validate_archive("%s", action = "orphan")',
+  cmd <- sprintf('orderly_validate_archive("%s", action = "orphan")',
                  id)
   expect_equal(
     err$parent$body,
@@ -1230,7 +1230,7 @@ test_that("cope with corrupted packets, exclude from deps", {
     err$parent$message,
     set_names(paste("Unable to copy files, due to locally modified packet", id),
               ""))
-  cmd <- sprintf('orderly::orderly_validate_archive("%s", action = "orphan")',
+  cmd <- sprintf('orderly_validate_archive("%s", action = "orphan")',
                  id)
   expect_equal(
     err$parent$body,

@@ -747,7 +747,8 @@ location_fetch_metadata <- function(location_name, root,
   hint_remove <- paste(
     "Probably all you can do at this point is remove this",
     "location from your configuration by running",
-    '{.run orderly::orderly_location_remove("{location_name}")}')
+    sprintf('{.run orderly::orderly_location_remove("%s")}',
+            location_name))
 
   known_there <- driver$list()
 
