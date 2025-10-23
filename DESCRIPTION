@@ -1,6 +1,6 @@
 Package: orderly
 Title: Lightweight Reproducible Reporting
-Version: 2.0.0
+Version: 2.0.1
 Authors@R: c(person("Rich", "FitzJohn", role = c("aut", "cre"),
                     email = "rich.fitzjohn@gmail.com"),
              person("Robert", "Ashton", role = "aut"),
@@ -36,6 +36,7 @@ Imports:
     httr2 (>= 1.2.1),
     jsonlite,
     openssl,
+    pkgload,
     rlang,
     rstudioapi,
     vctrs,
@@ -48,7 +49,6 @@ Suggests:
     jsonvalidate (>= 1.4.0),
     knitr,
     mockery,
-    pkgload,
     processx,
     rmarkdown,
     testthat (>= 3.0.0),
