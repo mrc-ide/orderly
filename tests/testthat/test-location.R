@@ -880,7 +880,7 @@ test_that("can add a packit location without a token", {
 
 test_that("cope with trailing slash in url if needed", {
   loc <- orderly_location_packit("https://example.com/", "abc123")
-  expect_equal(loc$client$url, "https://example.com/packit/api/outpack")
+  expect_equal(loc$client$url, "https://example.com/api/outpack")
 })
 
 
