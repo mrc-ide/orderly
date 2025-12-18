@@ -20,7 +20,7 @@ packit_app <- function() {
   # We can't use a simple `/instance/:name` pattern because of
   # https://github.com/r-lib/webfakes/issues/120
   app$get(
-    webfakes::new_regexp("/instance/(?<name>[a-z]+)/packit/api/outpack/"),
+    webfakes::new_regexp("/instance/(?<name>[a-z]+)/api/outpack/"),
     function(req, res) {
       # HTTP headers is actually all the tests care about. We could capture more
       # of the request if needed.
@@ -29,7 +29,7 @@ packit_app <- function() {
       )
       res$send_json(list(status = "success"), auto_unbox = TRUE)
     })
-  app$post("/instance/:name/packit/api/deviceAuth", function(req, res) {
+  app$post("/instance/:name/api/deviceAuth", function(req, res) {
     res$send_json(list(
       device_code = "xxx",
       user_code = "yyy",
@@ -38,7 +38,7 @@ packit_app <- function() {
       interval = 0
     ), auto_unbox = TRUE)
   })
-  app$post("/instance/:name/packit/api/deviceAuth/token", function(req, res) {
+  app$post("/instance/:name/api/deviceAuth/token", function(req, res) {
     app$locals$token_count <- app$locals$token_count + 1
     res$send_json(
       list(
