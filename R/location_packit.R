@@ -65,7 +65,7 @@ orderly_location_packit <- function(url, token = NULL, save_token = TRUE) {
   assert_scalar_character(token, allow_null = TRUE)
   assert_scalar_logical(save_token)
 
-  api_url <- url_append(url, "packit/api")
+  api_url <- url_append(url, "api")
 
   orderly_location_http$new(
     url_append(api_url, "outpack"),
