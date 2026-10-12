@@ -988,6 +988,23 @@ test_that("nice error if running nonexistant report", {
 })
 
 
+test_that("nice error if running in non-initialized current directory", {
+  path <- test_prepare_orderly_example(character())
+  unlink(file.path(path, ".outpack"), recursive = TRUE)
+  envir <- new.env()
+  withr::with_dir(path,
+    err <- expect_error(
+      orderly_run_quietly("task", envir = envir),
+      sprintf("orderly directory '%s' not initialised", path))
+  )
+  expect_equal(
+    err$body[1:2],
+    c(x = "Did not find an '.outpack' directory within path",
+    i = sprintf('Please run orderly_init("%s") to initialise', path))
+  )
+})
+
+
 test_that("validation of orderly directories", {
   path <- test_prepare_orderly_example(character())
   root <- root_open(path, require_orderly = TRUE)
