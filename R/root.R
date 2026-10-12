@@ -321,9 +321,9 @@ orderly_find_root <- function(path, require_orderly, require_outpack,
 
   if (require_outpack && is.null(ret$path_outpack)) {
     cli::cli_abort(
-      c(sprintf("orderly directory '%s' not initialised", path),
+      c(sprintf("orderly directory '%s' not initialised", ret$path),
         x = "Did not find an '.outpack' directory within path",
-        i = 'Please run orderly_init("{path}") to initialise',
+        i = 'Please run orderly_init("{ret$path}") to initialise',
         i = "See ?orderly_init for more arguments to this function"),
       call = call)
   }
