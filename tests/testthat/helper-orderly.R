@@ -3,7 +3,7 @@ test_prepare_orderly_example <- function(examples, ...) {
   withr::defer_parent(fs::dir_delete(tmp))
   suppressMessages(orderly_init(tmp, ...))
   copy_examples(examples, tmp)
-  as.character(fs::path_norm(tmp))
+  as.character(fs::path_real(tmp))
 }
 
 

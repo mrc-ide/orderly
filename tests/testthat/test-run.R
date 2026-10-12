@@ -982,9 +982,8 @@ test_that("nice error if running nonexistant report", {
   expect_equal(err$body[1:2],
                c(x = "The path 'src/xplicit' does not exist",
                  i = "Did you mean 'explicit', 'implicit'"))
-  ## Sloppy check here to avoid tedious macOS temporary path location
-  ## being in two places at once.
-  expect_match(err$body[[3]], "Looked relative to orderly root at")
+  expect_match(err$body[[3]],
+               sprintf("Looked relative to orderly root at '%s'", path))
 })
 
 
